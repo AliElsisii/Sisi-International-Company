@@ -1,19 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="icon" href="data:,">
+<style>:root{padding-top:env(safe-area-inset-top,0p);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
 <title>HerbaPharm ERP</title>
-<meta name="description" content="لوحة التحكم التنفيذية لشركة سيسي الدولية — مبيعات، مخزون، مالية، تتبع">
+<meta name="description" content="نظام HerbaPharm الموحّد — كتالوج العملاء، دخول الموظفين حسب الدور، لوحة القيادة التنفيذية، الاعتمادات، وسجل التدقيق بالموقع">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
 <style>
 :root{
   color-scheme:light;
   --ground:#f4f7f4; --surface:#fcfdfc; --surface-2:#eef3ee; --ink:#14201b; --ink-2:#4f5f57; --muted:#84928b;
-  --line:#dde5df; --line-2:#c9d4cc; --brand:#16a851; --brand-2:#0f8f43; --brand-ink:#ffffff; --gold:#b98a1f;
+  --line:#dde5df; --line-2:#c9d4cc; --brand:#16a851; --brand-2:#0f8f43; --brand-ink:#ffffff; --brand-soft:#e3f5ea; --gold:#b98a1f;
   --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#4a3aa7; --s8:#e34948;
-  --good:#0ca30c; --good-text:#006300; --warn:#fab219; --serious:#ec835a; --critical:#d03b3b;
+  --good:#0ca30c; --good-text:#006300; --warn:#fab219; --warn-text:#7a5200; --serious:#ec835a; --critical:#d03b3b;
   --shadow:0 1px 2px rgba(20,32,27,.06),0 8px 24px -12px rgba(20,32,27,.18);
   --radius:14px;
 }
@@ -21,107 +22,135 @@
   :root:not([data-theme="light"]){
     color-scheme:dark;
     --ground:#0f1412; --surface:#171d1a; --surface-2:#1f2825; --ink:#f3f6f4; --ink-2:#bcc7c0; --muted:#8a978f;
-    --line:#26302b; --line-2:#344039; --brand:#22b95d; --brand-2:#3fcc75; --brand-ink:#06140b; --gold:#d8a838;
-    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
-    --good-text:#0ca30c; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+    --line:#26302b; --line-2:#344039; --brand:#22b95d; --brand-2:#3fcc75; --brand-ink:#06140b; --brand-soft:#16311f; --gold:#d8a838;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#3cb043; --s7:#9085e9; --s8:#e66767;
+    --good-text:#3cc04a; --warn-text:#f2c14e; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
   --ground:#0f1412; --surface:#171d1a; --surface-2:#1f2825; --ink:#f3f6f4; --ink-2:#bcc7c0; --muted:#8a978f;
-  --line:#26302b; --line-2:#344039; --brand:#22b95d; --brand-2:#3fcc75; --brand-ink:#06140b; --gold:#d8a838;
-  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
-  --good-text:#0ca30c; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+  --line:#26302b; --line-2:#344039; --brand:#22b95d; --brand-2:#3fcc75; --brand-ink:#06140b; --brand-soft:#16311f; --gold:#d8a838;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#3cb043; --s7:#9085e9; --s8:#e66767;
+  --good-text:#3cc04a; --warn-text:#f2c14e; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.55;direction:rtl;font-variant-numeric:tabular-nums}
-h1,h2,h3{font-family:"Cairo","IBM Plex Sans Arabic",system-ui,sans-serif;margin:0;text-wrap:balance}
-button{font:inherit;cursor:pointer}
+h1,h2,h3,h4{font-family:"Cairo","IBM Plex Sans Arabic",system-ui,sans-serif;margin:0;text-wrap:balance}
+button{font:inherit;cursor:pointer;color:inherit}
 a{color:var(--brand)}
 .num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
-
-/* ---------- login ---------- */
-#login{position:fixed;inset:0;display:grid;place-items:center;background:var(--ground);z-index:50;padding:16px}
-#login[hidden]{display:none}
-.login-card{width:min(420px,100%);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:32px 28px;box-shadow:var(--shadow)}
-.brand-mark{display:flex;align-items:center;gap:12px;margin-bottom:22px}
-.logo{display:block;height:auto}
-.login-card .logo-hp{width:170px;margin:4px auto}
-.login-card .brand-mark{flex-direction:column;text-align:center;gap:4px}
-.login-card .brand-mark h1{font-size:24px}
-.login-card .brand-mark small{font-size:13px;line-height:1.6}
-.topbar .logo-hp{width:40px;border-radius:8px}
-.sisi-mark{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}
-.sisi-mark img{width:34px;height:auto}
-.leaf{width:44px;height:44px;border-radius:12px;background:var(--brand);display:grid;place-items:center;color:var(--brand-ink)}
-.brand-mark h1{font-size:22px;font-weight:800;letter-spacing:-.01em}
-.brand-mark small{display:block;color:var(--ink-2);font-weight:500;font-size:12.5px;font-family:"IBM Plex Sans Arabic",sans-serif}
-label{display:block;font-weight:600;font-size:13px;color:var(--ink-2);margin-bottom:6px}
-.field{margin-bottom:14px}
-input{width:100%;padding:11px 13px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface-2);color:var(--ink);font:inherit;font-size:15px}
-input:focus{outline:2px solid var(--brand);outline-offset:1px;border-color:var(--brand)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:10px;border:1px solid transparent;background:var(--brand);color:var(--brand-ink);font-weight:700;font-size:15px}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:10px;border:1px solid transparent;background:var(--brand);color:var(--brand-ink);font-weight:700;font-size:14px;white-space:nowrap}
 .btn:hover{background:var(--brand-2)}
 .btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-2);font-weight:600;font-size:13px;padding:8px 12px}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-2);font-weight:600}
 .btn.ghost:hover{background:var(--surface-2)}
-.btn.full{width:100%;margin-top:6px}
-.err{color:var(--critical);font-weight:600;font-size:13px;min-height:20px;margin-top:10px}
-.hint{color:var(--muted);font-size:12px;margin-top:14px;line-height:1.6}
+.btn.sm{padding:6px 11px;font-size:13px;border-radius:8px}
+.btn.ok{background:var(--good);color:#fff}.btn.danger{background:var(--critical);color:#fff}
+.btn:disabled{opacity:.55;cursor:default}
+.btn.full{width:100%}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface-2);color:var(--ink);font:inherit;font-size:14px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-offset:1px;border-color:var(--brand)}
+label{display:block;font-weight:600;font-size:12.5px;color:var(--ink-2);margin-bottom:5px}
+.hint{color:var(--muted);font-size:12px}
+.err{color:var(--critical);font-weight:600;font-size:13px;min-height:20px;margin-top:8px}
+.brand-mark{display:flex;align-items:center;gap:12px}
+.logo-hp{width:44px;height:auto;border-radius:9px;flex:none;display:block}
+.login-card .brand-mark{flex-direction:column;text-align:center;gap:4px}
+.login-card .logo-hp{width:170px;margin:4px auto;border-radius:0}
+.sisi-mark img{width:34px;height:auto;vertical-align:middle;margin-inline-end:6px}
+.brand-mark h1{font-size:19px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+.brand-mark small{display:block;color:var(--ink-2);font-weight:500;font-size:12px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.pill.good::before{background:var(--good)}.pill.warn::before{background:var(--warn)}.pill.serious::before{background:var(--serious)}.pill.crit::before{background:var(--critical)}.pill.info::before{background:var(--s1)}
+.empty{color:var(--muted);padding:18px 0;text-align:center;font-size:13px}
+.spin{display:inline-block;width:15px;height:15px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.spin{animation:none}.dot.busy{animation:none}}
 
-/* ---------- shell ---------- */
+/* ---------- public site ---------- */
+.site-top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.site-top .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-block:10px}
+.pnav{display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-inline-start:auto}
+.pnav button{border:1px solid transparent;background:transparent;color:var(--ink-2);padding:7px 12px;border-radius:999px;font-weight:600;font-size:13.5px}
+.pnav button:hover,.pnav button.on{background:var(--surface-2);color:var(--ink)}
+.pnav button.login{background:var(--brand);color:var(--brand-ink);border-color:var(--brand);margin-inline-start:6px}
+.hero{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;padding-block:48px}
+.hero h2{font-size:30px;font-weight:800;margin-bottom:8px}
+.hero p{font-size:15.5px;margin:0 0 18px;opacity:.9;max-width:640px}
+.hero .btn{background:#fff;color:#0f8f43}
+.section{padding-block:22px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:8px 0 12px}
+.sec-head h2{font-size:18px;font-weight:700}
+.sec-head .sub{color:var(--muted);font-size:12.5px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);padding:5px 12px;border-radius:999px;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.chip.on,.chip[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.pc{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:5px}
+.pc .cat{font-size:12px;color:var(--brand);font-weight:700}
+.pc h4{font-size:15.5px;font-weight:700}
+.pc .u{font-size:12.5px;color:var(--muted)}
+.pc .n{font-size:13px;color:var(--ink-2);flex:1}
+.pc .code{font-size:11px;color:var(--muted);direction:ltr;text-align:right}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;min-width:0}
+.card h3{font-size:15px;font-weight:700;margin-bottom:2px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.card .sub{color:var(--muted);font-size:12px;margin-bottom:10px}
+.site-foot{color:var(--muted);font-size:12px;padding-block:20px;border-top:1px solid var(--line);margin-top:20px;text-align:center}
+
+/* ---------- login ---------- */
+#login{min-height:100%;display:grid;place-items:center;padding:16px}
+.login-card{width:min(420px,100%);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:30px 26px;box-shadow:var(--shadow)}
+.field{margin-bottom:13px}
+
+/* ---------- app shell ---------- */
 .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
-.topbar-in{max-width:1280px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.topbar .brand-mark{margin:0}
-.topbar .leaf{width:36px;height:36px;border-radius:10px}
-.topbar h1{font-size:18px}
+.topbar-in{max-width:1280px;margin:0 auto;padding:10px 20px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.topbar .logo-hp{width:38px}
+.topbar h1{font-size:17px}
 .spacer{flex:1}
 .status{display:flex;align-items:center;gap:8px;color:var(--ink-2);font-size:12.5px}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--good)}
 .dot.busy{background:var(--warn);animation:pulse 1s infinite}
 @keyframes pulse{50%{opacity:.35}}
-@media (prefers-reduced-motion: reduce){.dot.busy{animation:none}}
-nav.tabs{max-width:1280px;margin:0 auto;padding:0 20px 10px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.role{display:inline-block;background:var(--brand-soft);color:var(--brand);border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700}
+nav.tabs{max-width:1280px;margin:0 auto;padding:8px 20px 10px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
-.tab{border:1px solid var(--line);background:var(--surface-2);color:var(--ink-2);padding:7px 14px;border-radius:999px;font-weight:600;font-size:13px;white-space:nowrap}
+.tab{border:1px solid var(--line);background:var(--surface-2);color:var(--ink-2);padding:7px 14px;border-radius:999px;font-weight:600;font-size:13px;white-space:nowrap;position:relative}
 .tab[aria-selected="true"]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
-.tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-main{max-width:1280px;margin:0 auto;padding-block:18px 40px;padding-inline:20px}
-section.panel[hidden]{display:none}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:22px 0 12px}
-.sec-head h2{font-size:17px;font-weight:700}
-.sec-head .sub{color:var(--muted);font-size:12.5px}
+.tab .cnt{background:var(--critical);color:#fff;border-radius:999px;font-size:10.5px;padding:0 6px;margin-inline-start:6px;font-weight:800}
+main{max-width:1280px;margin:0 auto;padding-block:16px 40px;padding-inline:20px}
+.subnav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.subnav .chip{cursor:pointer}
+.note{background:#fff8e6;border:1px solid #f1dfae;color:#7a5a00;border-radius:10px;padding:9px 12px;font-size:13px;margin-bottom:12px}
+:root[data-theme="dark"] .note{background:#2b2410;border-color:#5a4a1a;color:#f2c14e}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .note{background:#2b2410;border-color:#5a4a1a;color:#f2c14e}}
 
 /* ---------- KPI tiles ---------- */
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
-.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px 12px;display:flex;flex-direction:column;gap:4px;min-height:96px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px 12px;display:flex;flex-direction:column;gap:4px;min-height:92px}
 .kpi .lbl{color:var(--ink-2);font-size:12.5px;font-weight:600}
 .kpi .val{font-family:"Cairo",sans-serif;font-size:24px;font-weight:800;letter-spacing:-.01em;line-height:1.15}
 .kpi .val small{font-size:12px;font-weight:600;color:var(--muted);margin-inline-start:4px;font-family:"IBM Plex Sans Arabic",sans-serif}
-.kpi .foot{color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:8px;margin-top:auto}
+.kpi .foot{color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:8px;margin-top:auto;flex-wrap:wrap}
 .kpi.hero{grid-column:span 2;background:var(--brand);color:var(--brand-ink);border-color:transparent}
 .kpi.hero .lbl,.kpi.hero .foot,.kpi.hero .val small{color:inherit;opacity:.85}
 .kpi.hero .val{font-size:32px}
+.kpi.warn .val{color:var(--warn-text)}.kpi.bad .val{color:var(--critical)}.kpi.good .val{color:var(--good-text)}
 @media (max-width:560px){.kpi.hero{grid-column:span 1}}
-.delta{font-weight:700}
-.delta.up{color:var(--good-text)} .delta.down{color:var(--critical)}
-.kpi.hero .delta{color:inherit}
+.delta{font-weight:700}.delta.up{color:var(--good-text)}.delta.down{color:var(--critical)}.kpi.hero .delta{color:inherit}
 
-/* ---------- cards / charts ---------- */
+/* ---------- grid / charts ---------- */
 .grid{display:grid;gap:14px;grid-template-columns:repeat(12,1fr)}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;min-width:0}
-.card h3{font-size:15px;font-weight:700;margin-bottom:2px}
-.card .sub{color:var(--muted);font-size:12px;margin-bottom:10px}
 .c12{grid-column:span 12}.c8{grid-column:span 8}.c6{grid-column:span 6}.c4{grid-column:span 4}
-@media (max-width:980px){.c8,.c6,.c4{grid-column:span 12}.c6.half{grid-column:span 6}}
-@media (max-width:600px){.c6.half{grid-column:span 12}}
+@media (max-width:980px){.c8,.c6,.c4{grid-column:span 12}}
 .viz{position:relative}
 .viz svg{display:block;width:100%;height:auto;overflow:visible}
 .viz text{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;fill:var(--muted);font-size:11px}
-.viz .grid-line{stroke:var(--line);stroke-width:1}
-.viz .axis{stroke:var(--line-2);stroke-width:1}
-.viz .lbl-strong{fill:var(--ink);font-weight:600}
+.viz .grid-line{stroke:var(--line);stroke-width:1}.viz .axis{stroke:var(--line-2);stroke-width:1}.viz .lbl-strong{fill:var(--ink);font-weight:600}
 .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:var(--ink-2)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .sw{width:10px;height:10px;border-radius:3px;display:inline-block}
@@ -135,343 +164,702 @@ section.panel[hidden]{display:none}
 .hbar-row .v{font-weight:600;font-size:12.5px;color:var(--ink-2)}
 
 /* ---------- tables ---------- */
-.tbl-wrap{overflow-x:auto;margin-inline:-18px;padding-inline:18px}
+.tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.tools input{max-width:280px}
+.tbl-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
-th{color:var(--muted);font-weight:600;font-size:12px;text-align:start;padding:8px 10px;border-bottom:1px solid var(--line-2);white-space:nowrap}
-td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12px;text-align:start;padding:8px 10px;border-bottom:1px solid var(--line-2);white-space:nowrap;background:var(--surface);position:sticky;top:0}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
 tr:last-child td{border-bottom:0}
+td.clip{max-width:280px;overflow:hidden;text-overflow:ellipsis}
 td.num,th.num{text-align:end}
-.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
-.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--muted)}
-.pill.good::before{background:var(--good)} .pill.warn::before{background:var(--warn)} .pill.serious::before{background:var(--serious)} .pill.crit::before{background:var(--critical)} .pill.info::before{background:var(--s1)}
-.empty{color:var(--muted);padding:18px 0;text-align:center;font-size:13px}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700;background:var(--surface-2);color:var(--ink-2)}
+.b-ok{background:#e3f5ea;color:#0a6b30}.b-warn{background:#fff3df;color:#8a5a00}.b-bad{background:#fde7e4;color:#a12f2f}
+:root[data-theme="dark"] .b-ok,:root[data-theme="dark"] .b-warn,:root[data-theme="dark"] .b-bad{filter:brightness(.85)}
 
-/* ---------- jarvis ---------- */
-.jarvis{background:linear-gradient(135deg,var(--surface),var(--surface-2));border:1px solid var(--line)}
-.jarvis .head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+/* ---------- modal ---------- */
+.ov{position:fixed;inset:0;background:rgba(0,20,10,.5);display:none;align-items:center;justify-content:center;z-index:40;padding:16px}
+.ov.on{display:flex}
+.md{background:var(--surface);border-radius:16px;width:100%;max-width:680px;max-height:92vh;overflow:auto;padding:22px;border:1px solid var(--line)}
+.md h3{margin:0 0 14px;font-size:17px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.fg{grid-template-columns:1fr}}
+.fg .full{grid-column:1/-1}
+.acts{display:flex;gap:10px;justify-content:flex-start;margin-top:16px;flex-wrap:wrap;align-items:center}
+.toast{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:18px;background:var(--ink);color:var(--ground);padding:11px 16px;border-radius:10px;font-weight:600;display:none;z-index:50;max-width:90vw}
+.toast.on{display:block}
+
+/* ---------- jarvis / map ---------- */
+.jarvis{background:linear-gradient(135deg,var(--surface),var(--surface-2))}
 .jarvis .badge{background:var(--gold);color:#1a1200;font-weight:800;font-size:11px;padding:3px 8px;border-radius:6px;letter-spacing:.04em}
 .jarvis .headline{font-family:"Cairo",sans-serif;font-size:19px;font-weight:800;line-height:1.35;margin:4px 0 12px}
 .jarvis dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:0}
 .jarvis dt{font-weight:700;font-size:13px;color:var(--brand);margin-bottom:3px}
 .jarvis dd{margin:0;font-size:13.5px;color:var(--ink-2);white-space:pre-wrap;max-width:65ch}
-
-/* ---------- map ---------- */
 .map{position:relative;background:var(--surface-2);border-radius:12px;overflow:hidden;aspect-ratio:16/9;max-width:100%;min-height:280px}
 .map svg{position:absolute;inset:0;width:100%;height:100%}
 .map .pt{cursor:pointer}
 .map-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin-top:12px}
 .map-item{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12.5px;background:var(--surface)}
 .map-item .k{width:10px;height:10px;border-radius:50%;margin-top:5px;flex:none}
-.map-item b{display:block;font-size:13px}
-.map-item .m{color:var(--muted)}
-.map-item a{font-size:12px}
+.map-item b{display:block;font-size:13px}.map-item .m{color:var(--muted)}.map-item a{font-size:12px}
 .filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.chip{border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
-.chip[aria-pressed="true"]{background:var(--surface-2);color:var(--ink);border-color:var(--ink-2)}
-.chip .sw{border-radius:50%}
-footer{max-width:1280px;margin:0 auto;padding:0 20px 24px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.skeleton{color:var(--muted);text-align:center;padding:60px 0;font-size:14px}
-</style>
+.filters .chip .sw{border-radius:50%}
+.appr{border-inline-start:4px solid var(--warn)}
 
+/* ---------- AI agents ---------- */
+.agent-wrap{display:flex;flex-direction:column;gap:12px}
+.agent-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:0}
+.ag-id{display:flex;gap:12px;align-items:center}.ag-i{font-size:34px;line-height:1;width:54px;height:54px;display:grid;place-items:center;background:var(--brand-soft);border-radius:14px}
+.ag-acts{margin:0}
+.chat{margin:0;min-height:320px;max-height:60vh;overflow:auto;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
+.chat-empty p{margin:0 0 8px;color:var(--ink-2)}
+.msg{display:flex;flex-direction:column;max-width:88%}.msg.me{align-self:flex-start}.msg.ai{align-self:flex-end}
+.msg .bub{padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.7;border:1px solid var(--line);background:var(--surface-2)}
+.msg.me .bub{background:var(--brand);color:#fff;border-color:transparent;border-bottom-right-radius:4px}
+.msg.ai .bub{background:#fff;border-bottom-left-radius:4px}
+.msg .bub.err{background:#fff2f2;border-color:var(--critical);color:var(--critical)}
+.msg .bub h4{margin:8px 0 4px;font-size:14px;color:var(--brand-2)}.msg .bub ul{margin:4px 0;padding-inline-start:18px}.msg .bub pre{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:8px;font-size:12px;overflow:auto;direction:ltr;text-align:left;white-space:pre-wrap}
+.msg .mt{font-size:11px;color:var(--muted);margin-top:3px;padding:0 6px}
+.act-block{border:1px dashed var(--gold);background:#fffbea;border-radius:10px;padding:8px 10px;margin:8px 0}.act-block b{display:block;margin-bottom:4px}
+.chat-in{display:flex;gap:8px;align-items:flex-end}.chat-in textarea{flex:1;resize:vertical;min-height:44px}
+.vc{text-align:center;padding:6px 0}.vc-av{font-size:56px;width:96px;height:96px;margin:0 auto 10px;display:grid;place-items:center;border-radius:50%;background:var(--brand-soft);box-shadow:0 0 0 8px rgba(22,168,81,.12);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(22,168,81,.35)}70%{box-shadow:0 0 0 16px rgba(22,168,81,0)}100%{box-shadow:0 0 0 0 rgba(22,168,81,0)}}
+.vc-st{font-weight:700;color:var(--brand-2);margin:6px 0}.vc-heard{min-height:22px;color:var(--ink-2);font-size:14px}.vc-reply{text-align:start;font-size:13.5px;line-height:1.7;max-height:36vh;overflow:auto;margin:10px 0;background:var(--surface-2);border-radius:10px;padding:10px}
+.meet{position:fixed;inset:0;z-index:60;background:var(--ground);display:flex;flex-direction:column}
+.meet-top{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--line)}.meet-top .acts{margin:0;margin-inline-start:auto}
+.meet-body{flex:1;display:grid;grid-template-columns:1fr 360px;min-height:0}
+.meet-frame{width:100%;height:100%;border:0;background:#111}
+.meet-side{display:flex;flex-direction:column;gap:8px;padding:10px;border-inline-start:1px solid var(--line);background:var(--surface);min-height:0}
+.meet-side-h{font-weight:800}.meet-side .chat{flex:1;max-height:none;min-height:0;border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--surface-2)}
+.meet-side .acts{margin:0}
+body.meeting{overflow:hidden}
+@media(max-width:900px){.meet-body{grid-template-columns:1fr;grid-template-rows:45vh 1fr}.meet-side{border-inline-start:0;border-top:1px solid var(--line)}.msg{max-width:100%}}
+
+/* ---------- public chat widget ---------- */
+.cw-btn{position:fixed;inset-inline-end:18px;bottom:18px;z-index:55;background:var(--brand);color:#fff;border:0;border-radius:999px;padding:12px 18px;font-weight:800;font-size:15px;box-shadow:0 10px 30px -8px rgba(22,168,81,.6);cursor:pointer;display:flex;align-items:center;gap:8px}
+.cw{position:fixed;inset-inline-end:18px;bottom:78px;z-index:56;width:min(380px,calc(100vw - 36px));height:min(560px,calc(100vh - 110px));background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:0 24px 60px -20px rgba(20,32,27,.35);display:flex;flex-direction:column;overflow:hidden}
+.cw[hidden]{display:none}
+.cw-h{background:var(--brand);color:#fff;padding:12px 14px;display:flex;align-items:center;gap:10px}.cw-h b{flex:1;font-size:14px}.cw-h small{display:block;font-weight:400;opacity:.9;font-size:11px}
+.cw-h button{background:rgba(255,255,255,.18);border:0;color:#fff;border-radius:8px;padding:4px 8px;cursor:pointer}
+.cw-m{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--ground)}
+.cw-m .msg{max-width:90%}.cw-m .bub{font-size:13.5px}
+.cw-f{display:flex;gap:6px;padding:8px;border-top:1px solid var(--line);background:var(--surface)}.cw-f input{flex:1}
+.cw-note{font-size:10.5px;color:var(--muted);text-align:center;padding:0 8px 6px;background:var(--surface)}
+
+/* ---------- G1 splash ---------- */
+#splash{position:fixed;inset:0;z-index:9999;background:var(--ground);direction:rtl;transition:opacity .4s ease;cursor:pointer}
+#splash.out{opacity:0;pointer-events:none}
+#splash[hidden]{display:none}
+.sp-logo{position:absolute;left:50%;top:50%;width:160px;height:auto;margin-left:-80px;margin-top:-72px;opacity:0;transform:scale(.96);animation:spIn .7s ease-out forwards,spUp .6s cubic-bezier(.2,.8,.2,1) 2.3s forwards}
+.sp-txt{position:absolute;left:0;right:0;top:calc(50% - 6px);text-align:center;padding:0 16px}
+.sp-en{font-family:Cairo,system-ui,sans-serif;font-weight:800;font-size:26px;letter-spacing:.02em;color:var(--ink);direction:ltr;opacity:0;transform:translateY(24px);animation:spText .5s ease-out 2.5s forwards}
+.sp-ar{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;font-weight:500;font-size:15px;color:var(--muted);margin-top:4px;opacity:0;transform:translateY(24px);animation:spText .5s ease-out 2.75s forwards}
+.sp-skip{position:absolute;bottom:22px;left:0;right:0;text-align:center;font-size:12px;color:var(--muted);opacity:0;animation:spFade .4s ease-out 1s forwards}
+@keyframes spIn{to{opacity:1;transform:scale(1)}}
+@keyframes spUp{from{transform:scale(1) translateY(0)}to{transform:scale(1) translateY(-90px)}}
+@keyframes spText{to{opacity:1;transform:translateY(0)}}
+@keyframes spFade{to{opacity:1}}
+#splash.rm .sp-logo,#splash.rm .sp-en,#splash.rm .sp-ar,#splash.rm .sp-skip{animation:none;opacity:1;transform:none}
+#splash.rm .sp-logo{transform:translateY(-90px)}
+@media (prefers-reduced-motion: reduce){#splash{transition:none}}
+/* ---------- G2 onboarding tour ---------- */
+#tour{position:fixed;inset:0;z-index:9000;cursor:pointer}
+#tour[hidden]{display:none}
+.tour-blur{position:absolute;inset:0;background:rgba(0,0,0,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.tour-ring{position:absolute;border:2px solid var(--brand);border-radius:50%;pointer-events:none;box-sizing:border-box}
+.tour-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.tour-line{fill:none;stroke:var(--brand);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tour-label{position:absolute;max-width:min(32ch,calc(100vw - 24px));color:#fff;font-size:14px;line-height:1.55;direction:rtl;text-align:start;opacity:0;transition:opacity .25s;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.tour-label.on{opacity:1}
+.tour-label b{color:var(--brand);font-weight:800;margin-inline-end:4px;direction:ltr;unicode-bidi:isolate}
+.tour-skip{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-size:12px;color:rgba(255,255,255,.8);padding:10px;cursor:pointer}
+body.touring{overflow:hidden}
+/* ---------- profile menu ---------- */
+.profile{position:relative}
+.pbtn{display:flex;align-items:center;gap:8px;background:transparent;border:1px solid transparent;border-radius:10px;padding:6px 8px;color:var(--ink-2);font-size:12.5px;cursor:pointer;font-family:inherit}
+.pbtn:hover,.pbtn[aria-expanded="true"]{background:var(--surface-2)}
+.pbtn .caret{font-size:11px;color:var(--muted)}
+.pmenu{position:absolute;top:calc(100% + 6px);inset-inline-start:0;min-width:210px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:6px;z-index:30}
+.pm-who{padding:8px 10px;border-bottom:1px solid var(--line);margin-bottom:4px;font-size:13px;line-height:1.5}
+.pm-item{display:block;width:100%;text-align:start;background:transparent;border:0;padding:9px 10px;border-radius:8px;font-size:13.5px;color:var(--ink);cursor:pointer;font-family:inherit}
+.pm-item:hover{background:var(--surface-2)}
+</style>
 </head>
 <body>
-<div id="login">
+
+<!-- ================= PUBLIC SITE ================= -->
+<div id="splash" aria-hidden="true"><img class="sp-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAENBAMAAABHo0XVAAAAMFBMVEUVqFD7/fxuyZOZ2bIAAABGunW248gOpUv8/v0WqFH1+/j6/fwhrFlGunUBkyaO1Ko1v8lKAAAAEHRSTlP+/v7+AP7+oaJqYSIkIiFXroa3hgAAC+xJREFUeNrtnV2MG9UVgD+P45hNUuybQAgEiHdTmiKaxCFUoBaKgVY8IIGzaClSUdmVKtRKqJr2JU3Uh0UClQhE3RaENm3alYoqmm2rSeiPUELYVpWqSllqUCi0aRJvEwjQEk9oyMaZ9bgP82N77F2Pxx7vBOa8eDx35s435557zrnj6zsRFlTi31779UyT/REWWuLPPB9ELOjbN+rcJQUAa+bm+4OIBV+7KZBYPHpTILGcXFWTj13Ve5gNSnX7J883xYpevBBa6r/aJvvzaHCwoP8Vy4EdGa7CVK0svjBY6tIZY6O85ESAtAUkCsbn00qgsCyuvs9bOxbVlq7J95pn7RcUgNOpAsDMZw4Fw28d+dntAJw1vj472szkk+/0HuyN8qdU0JfMAJSvOBEQLPR3Lj8HfPodgL8eSwUm+BxLAtMAlOQAxcRjKeBSAJ4JUqg+BMymAGayAcLSPgA+AOA7QUpsykmopAC0ySDlW9PAhwClXJCw9AzMVlsxKFj8FkgCnBkNEpaWsXx7PhBe3pJ/XkRllQr86coAaQs9BSqAFqRGhNfNtiuNBgrrPOhZAMWRnbpKA2NXEU1rSmPBENprgACoqBuU9gcbKhUVWHaTB6zFS2sZs9qclx98qdAe1uKlRE4B8Vs8YLWR80ufaA9MQNEYMfpqW/rpdFvHpyBreC6fTX66La686egLHtxpe8Pc06tU9wdH47x5DnjtSt8dxP/aSW9Mz1X20IjRNu0r2cbBWXQA3QNWuc3j23k6O2nYfMlDTywXz9y2fKCNE9pQV8HIH8h7sS3tN0emiik/1BWDTGe5/KvOGvtvLRaLxdua4A67rnQWFIBC+16+xiXXSMX2A1KiwaW830ali/4DLPPuIFKOPmR3vTMNnTHbdo/yjqU6HbRteqebdDDXHiICUPaONXdY0Z2O3f1F8qZb9I41Tz5VafF9vibQAHR/go86rx26Cby+gDjVk2nTMko+heqM6wZvfqBPWHs7bBOfsBzxfFG75y9q5cZjpi+cADPTNgcpjnRP3DNeZ+R1WbzWTnKjuLkPbcKTuvLJjrTtV3YqdeYh/MKqEEht6Z5TwVZYA0POlGrQ3ry+sWySOVIKLzKPyU9NwSa7Q0m3KOyyy34NkToNfG7XvFlDOt/VRnyt6omUxgTXfYKhdNe2JM99SfHT5LU5kwJ/xXtPLAcCK91mxbGO+mUrrOzCKFPqkgkrrXL0YHh5n20r353LqMHUVjqYWMrHw7a6I7HeYbVI9OqeZc4GRlvanIzBaUQtmFi+PYNo22izvmJ5TrPyHeWEvjVipqOL+IaldJTkLPKJqs4WU1aLSomhqTrHkdb2nOollt4UK4LjicbhOX5M6MWoWlICY1upzvJnv7DUTryWb1jR5i6sssBYdzfvVXqxeGZ5zcVvLRZP9RJrsmZ7aX3UPpK0t29Requt2l4vFRyFBRcxyS2W1vC0az4ZdtUPpS54+eJ+4V5ZSqfB3g8vX/dDZ2XuuFTpaU+MPTh/ZlTurYOQDLcpPaC4HIhEe9KIa9QVic1TlxxWulBXF7FU9OL+6u8vXkdyPRliZH3WVr9KtOYBRzkfcYaNzGT37sYtVuwV4PCcbgDgd0tbjTTcjx672Ihu04Nob21L66JJdtPkk8HEeiuYWOfPLDf8wUDiw+C4U9COHAFgisUB0lZATf4CwlIDhVUOGzHECrFCrI8QltYFrE5zqKQ3TSzq4i02k2kR2laIFWJdsFiL/L7AoHO4Hz0cAKw1uxp2xZZ13ojpgOfy2UCZvBLwnui0XH9X7rrQ/VYySFhS17pkV7Husbf2BsXLDyD0SftbZeVVFfWofTcpoRdqD77ey/+7PWEV6x/9a0drnXfR8bPAse4aX5hBhFgL0BPFZseMmKEp286n1163p87GLymrPcI6etSxowZSP3y4PiZep9QdHQ1ty0sClFxYrFToILyLtmBYnpN7f+dB5C+ERkx+dEw+5geWO/2kF1Zb6aA0YtqVl2+yP+IrlnIh9MSYh3PKPmA5TtQDoi3H1BXdfaz2czLLvU7/cPYat5FJc2H7Hp4GDuYjKw4faLjYfwUxe4Sb78TmPGEtfhlOzaGHo9YaAknVRVzWu9mIbhKAWGEOE6x3eKlexsTY0MAD1W8rBq6pMbTY4ED1H+Scvv6aOYyw62u7JaYbg6W9JFCTc+vn8kWS3KqEo+qPK1a0F1jt+63ZgWLj6o+xLFOGxV51fKAI9hzVch5E2epKlYEisLlahJBOtdCCEOkFb7yIENnQ5EOsECvECrFCrBArxAqxepydepxfGDZiiHUBYS3s69GayVFCCSWUUEIJJZRQQgmebBErXB7ZyQP1mqQ5NlRdQWdonsV0YrLbyr/cjXHi7H57M7rfsRJ7rwcK9Wfmqpuj4cgnxAqxPvZYLX59jW3YXDZeVTfEBNING39s3MwN6YPWS7nXrkgfNN4cHstOwOCJahGw9g772+CJ9NT7BeNATWFtZhdDmsK9x9e/VAAGT6xv+lK8iBCW34oKMW5+CjOGCJGShEiyRayS7xNCmDFIEkIIIVIAm0SS/mqREDtiI0KIlcaBI9W6togkm4SQI2IFW8y999mlLRtRMmZTTKeALKNrYAlAdB+AvhzAXJHIfLFzfLEKoF9qVnClAmjLATYqRl1ZQIHFBcjFiEUnAd5G2gfWi4VbYa2BbWPPWu+vtf/UdzFslaGSBrLEx56V0YYBldJS2Ir1Il5rtkglC6jEx8Zke+m+rwCUQQcZtPRGkKlOz5wPS1LZft/Uq6o5f2ea+NgPgFKub+L+RA7+DUzu/P2DpxPWv5Mi9E2MPCVbd7CDndoBE6Ww/RcPFhOyuZTMEoVtYzkoJfsm7joJxwvxX911sulshoiolXGIiFUvAjEhhmGTEOJAfCtbhBAHZEAIAcRPGsYigH6zSDaKhBBPnATZtLV3zWtkjSs98e5WOSqEUGTiQggxLhOPCOECa0SslgH6xaWwSYjVOYNgtXW4baFRC2t1zqRMgRDiRaMnVC8mCWGcekXcOO2KgvndrNJFIyo8lgMomPPmfmomWj8yG6y6XqI9S+sxGWCv2Yp9dwLkDbMBQLdSk4e+Yex4KGVAnDWrHG2JFa2ulngRQHyd5YCsK9QeatRnmHoZ4ubuhoTJKOFac9c6865ks8p4MyxtnyF/MCqNG+fGjHeBS7naeqtz1QY3jywzv8Uzxq4sJYCHrUsYPUDaPCLgh3WJa5+Jv24+L//oDebdXwxolB4Rtbdr3bOcM/3FRYC08WWOWrCSWZRniVpbbxJgU6HmLzo5s10zzYNhGzHxrON7GmSkRKFJeqs2OX2k0NCSzDmP3CVWrurQ62UjxMd2/7J1Df0KbNu9uxuhOv5za+v1JqV5IFqg77m7vvlUyz+Wx1Tiz61/qtSVDOJLrbKiuyd5bu/MDmdBsqEVZ+HxQ190vt7QW75VmndEmCGSK7Dk9prebzmNQoMhpogPy+7tWJq3KNcU1va2H1IwKrCnCMumR+G7Tv0RbYOqBVbzfjJpuVAZ87UElpZKihUAGn9AquS6g6Vl55ieaCzEdzXcaBHZHt+wqdU1HqAhcnRsWyp604cbsykj6+m7lqyhLVurETMh6ss21DUDsKELWHtg+rPA4Ei92+BsCikB38oxiZ6GfuywvSKLlICHnHUVYNjISTvG0pPwLyHEy0qdtzqHdlokIL4hx1swvVKocdki1v8oEhC/sSFrgj0rxVLkLjiIY00r6Zsx85s34DygwZNWbWbK8fiLDbeYAg22jzLjaFxbm7XRq/b5VtVOrfxJN7i21aoL+dxJgJ03y0BRBrbfMW6WfX8GYOedjb3ubzKw/avOGJZ0pCNyg5c//5fkCxbOk5njAI9sK40jIuu/B28eml0H8Pbf3yMRHWfxjZcbHXIMseGyvkPntxk3VBqPiOsuB5jNv2dkX09mjmegOIbYcFn8YOWTVA5WnjZLXpAB7eHh40bnf/W9mq4zn2yFHU32pv6Rsw8omZv9at/bdUWOCCs3q8l/6Tcy8vDRSIgVYn1UsLoquye6VVNXF7qaIpRQQgkllFBCCSUUh/wftuQKXZILEO8AAAAASUVORK5CYII=" alt="HerbaPharm" width="160" height="143"><div class="sp-txt"><div class="sp-en">HerbaPharm ERP</div><div class="sp-ar">شركة سيسي إنترناشونال لتجارة الأدوية</div></div><div class="sp-skip">اضغط للتخطي · touch to skip</div></div>
+<div id="tour" hidden><div class="tour-blur"></div><div class="tour-ring"></div><svg class="tour-svg" aria-hidden="true"><path class="tour-line" d=""/></svg><div class="tour-label"></div><div class="tour-skip">اضغط في أي مكان للتالي · touch to skip</div></div>
+<div id="site">
+  <header class="site-top"><div class="wrap">
+    <div class="brand-mark"><img class="logo-hp" src="data:image/png;base64,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" alt="HerbaPharm" width="300" height="269"><div><h1>HerbaPharm</h1><small>شركة سيسي إنترناشونال لتجارة الأدوية</small></div></div>
+    <nav class="pnav" id="pnav">
+      <button type="button" class="on" data-p="home">الرئيسية</button>
+      <button type="button" data-p="catalog">المنتجات</button>
+      <button type="button" data-p="about">عن الشركة</button>
+      <button type="button" data-p="contact">تواصل معنا</button>
+      <button type="button" class="login" id="btnLogin">تسجيل الدخول</button>
+    </nav>
+  </div></header>
+  <section class="hero" id="phome"><div class="wrap">
+    <h2>منتجات عناية طبية بالبشرة والشعر — للصيدليات وشركات التوزيع</h2>
+    <p>خمس علامات تجارية: يوكال، مون لايت، روتاج، ماجيك لوك، بيرلايت. التوزيع حصري عبر الصيدليات والمخازن المسجلة.</p>
+    <button type="button" class="btn" id="btnBrowse">تصفح الكتالوج</button>
+  </div></section>
+  <div class="wrap section" id="pbody"></div>
+  <footer class="site-foot"><div class="wrap"><span class="sisi-mark"><img src="data:image/png;base64,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" alt="Sisi International Company" width="293" height="300"></span>© <span id="yr"></span> شركة سيسي إنترناشونال لتجارة الأدوية — Sisi International Company · HerbaPharm</div></footer>
+</div>
+
+<!-- ================= LOGIN ================= -->
+<div id="login" hidden>
   <form class="login-card" id="loginForm" autocomplete="on">
-    <div class="brand-mark">
-      <h1>HerbaPharm ERP</h1>
-      <img class="logo logo-hp" src="data:image/png;base64,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" alt="Herbapharm" width="300" height="269">
-      <small>شركة سيسي الدولية للتجارة الدوائية<br>Sisi International Company</small>
-    </div>
-    <div class="field"><label for="u">اسم المستخدم</label><input id="u" name="username" autocomplete="username" required></div>
-    <div class="field"><label for="p">كلمة المرور</label><input id="p" name="password" type="password" autocomplete="current-password" required></div>
-    <button class="btn full" type="submit" id="loginBtn">تسجيل الدخول</button>
-    <div class="err" id="loginErr" role="alert"></div>
-    <p class="hint">الدخول مقيّد لإدارة الشركة. البيانات تُقرأ مباشرة من نظام الشركة عند كل تحديث.</p>
+    <div class="brand-mark" style="margin-bottom:20px"><img class="logo-hp" src="data:image/png;base64,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" alt="HerbaPharm" width="300" height="269"><div><h1>HerbaPharm ERP</h1><small>شركة سيسي إنترناشونال لتجارة الأدوية · Sisi International Company</small><small>دخول الموظفين — حسب الدور والصلاحية</small></div></div>
+    <div class="field"><label for="lu">البريد الإلكتروني</label><input id="lu" name="username" autocomplete="username" dir="ltr" required></div>
+    <div class="field"><label for="lp">رمز الدخول (PIN)</label><input id="lp" name="password" type="password" inputmode="numeric" autocomplete="current-password" dir="ltr" required></div>
+    <button class="btn full" type="submit" id="lbtn">دخول</button>
+    <div class="err" id="lerr" role="alert"></div>
+    <p class="hint">كل عملية دخول أو تعديل تُسجَّل في سجل التدقيق مع الوقت والموقع. سيطلب المتصفح الإذن بالوصول لموقعك.</p>
+    <div style="text-align:center;margin-top:10px"><button type="button" class="btn ghost sm" id="btnBackSite">← الرجوع للموقع</button></div>
   </form>
 </div>
 
+<!-- ================= APP ================= -->
 <div id="app" hidden>
   <header class="topbar">
     <div class="topbar-in">
-      <div class="brand-mark">
-        <img class="logo logo-hp" src="data:image/png;base64,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" alt="Herbapharm" width="320" height="287">
-        <div><h1>HerbaPharm ERP</h1></div>
-      </div>
+      <div class="brand-mark"><img class="logo-hp" src="data:image/png;base64,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" alt="HerbaPharm" width="300" height="269"><div><h1>HerbaPharm ERP</h1></div></div>
       <div class="spacer"></div>
-      <div class="status"><span class="dot" id="dot"></span><span id="statusTxt">—</span></div>
-      <button class="btn ghost" id="refreshBtn" type="button">تحديث</button>
-      <button class="btn ghost" id="logoutBtn" type="button">خروج</button>
+      <div class="status profile"><button type="button" class="pbtn" id="profileBtn" aria-haspopup="menu" aria-expanded="false"><span class="dot" id="dot"></span><span id="statusTxt">—</span><span class="caret">▾</span></button><div class="pmenu" id="profileMenu" hidden role="menu"><div class="pm-who" id="pmWho"></div><button type="button" class="pm-item" id="tourBtn" role="menuitem">🧭 جولة تعريفية</button><button type="button" class="pm-item" id="pmLogout" role="menuitem">🚪 تسجيل الخروج</button></div></div>
+      <button class="btn ghost sm" id="refreshBtn" type="button">تحديث</button>
+      <button class="btn ghost sm" id="siteBtn" type="button">الموقع</button>
+      <button class="btn ghost sm" id="logoutBtn" type="button">خروج</button>
     </div>
-    <nav class="tabs" role="tablist" id="tabs">
-      <button class="tab" role="tab" data-panel="overview" aria-selected="true">نظرة عامة</button>
-      <button class="tab" role="tab" data-panel="sales" aria-selected="false">المبيعات والعملاء</button>
-      <button class="tab" role="tab" data-panel="inventory" aria-selected="false">المخزون والمشتريات</button>
-      <button class="tab" role="tab" data-panel="finance" aria-selected="false">الحسابات والمالية</button>
-      <button class="tab" role="tab" data-panel="tracking" aria-selected="false">التتبع والمواقع</button>
-      <button class="tab" role="tab" data-panel="jarvis" aria-selected="false">جارفيس الاستراتيجي</button>
-    </nav>
+    <nav class="tabs" role="tablist" id="tabs"></nav>
   </header>
-
   <main>
-    <div class="skeleton" id="loading">جارٍ قراءة البيانات من نظام الشركة…</div>
-
-    <section class="panel" id="panel-overview" hidden>
-      <div class="kpis" id="kpiRow"></div>
-      <div class="sec-head"><h2>الأداء الشهري</h2><span class="sub">الإيرادات مقابل تكلفة البضاعة المباعة والمشتريات — ج.م</span></div>
-      <div class="grid">
-        <div class="card c8"><h3>الإيرادات والتكلفة والمشتريات</h3><div class="sub">حسب الشهر</div><div class="viz" id="chartMonthly"></div></div>
-        <div class="card c4"><h3>حالة أوامر البيع</h3><div class="sub">عدد الطلبات لكل حالة</div><div id="chartOrders"></div></div>
-        <div class="card c6"><h3>أعلى المنتجات إيراداً</h3><div class="sub">الإيراد وهامش الربح الإجمالي لكل منتج</div><div id="chartTopProducts"></div></div>
-        <div class="card c6"><h3>أعمار المستحقات على العملاء</h3><div class="sub">المبالغ غير المسددة حسب مدة التأخير — ج.م</div><div class="viz" id="chartAging"></div></div>
-      </div>
-      <div class="sec-head"><h2>يحتاج انتباهك</h2><span class="sub" id="attnSub"></span></div>
-      <div class="grid">
-        <div class="card c6"><h3>طلبات قيد التنفيذ</h3><div class="sub">أوامر بيع لم تُسلَّم بعد</div><div class="tbl-wrap" id="tblPendingOrders"></div></div>
-        <div class="card c6"><h3>نواقص المخزون</h3><div class="sub">منتجات وصلت الحد الأدنى أو أقل</div><div class="tbl-wrap" id="tblLowStock"></div></div>
-      </div>
-    </section>
-
-    <section class="panel" id="panel-sales" hidden>
-      <div class="kpis" id="kpiSales"></div>
-      <div class="grid" style="margin-top:14px">
-        <div class="card c8"><h3>فواتير غير مسددة</h3><div class="sub">مرتبة حسب المبلغ المتبقي</div><div class="tbl-wrap" id="tblUnpaid"></div></div>
-        <div class="card c4"><h3>تصنيف العملاء</h3><div class="sub">عدد العملاء لكل نوع</div><div id="chartCustTypes"></div></div>
-        <div class="card c12"><h3>أهم العملاء</h3><div class="sub">إجمالي الفواتير والتحصيلات والرصيد المستحق</div><div class="tbl-wrap" id="tblCustomers"></div></div>
-      </div>
-    </section>
-
-    <section class="panel" id="panel-inventory" hidden>
-      <div class="kpis" id="kpiInv"></div>
-      <div class="grid" style="margin-top:14px">
-        <div class="card c6"><h3>قيمة المخزون حسب الفئة</h3><div class="sub">بتكلفة الشراء — ج.م</div><div id="chartStockCat"></div></div>
-        <div class="card c6"><h3>أوامر شراء مفتوحة</h3><div class="sub">حسب الحالة</div><div class="tbl-wrap" id="tblPO"></div></div>
-        <div class="card c6"><h3>باتشات قريبة من انتهاء الصلاحية</h3><div class="sub">خلال 180 يوماً</div><div class="tbl-wrap" id="tblExpiring"></div></div>
-        <div class="card c6"><h3>آخر حركات المخزن</h3><div class="sub">دخول وخروج</div><div class="tbl-wrap" id="tblMoves"></div></div>
-      </div>
-    </section>
-
-    <section class="panel" id="panel-finance" hidden>
-      <div class="kpis" id="kpiFin"></div>
-      <div class="grid" style="margin-top:14px">
-        <div class="card c8"><h3>التدفق النقدي الشهري</h3><div class="sub">التحصيلات مقابل المدفوعات — ج.م</div><div class="viz" id="chartCash"></div></div>
-        <div class="card c4"><h3>هيكل الربحية</h3><div class="sub">من الإيراد إلى مجمل الربح</div><div class="viz" id="chartProfit"></div></div>
-        <div class="card c12"><h3>آخر السندات</h3><div class="sub">قبض وصرف</div><div class="tbl-wrap" id="tblPayments"></div></div>
-      </div>
-    </section>
-
-    <section class="panel" id="panel-tracking" hidden>
-      <div class="grid">
-        <div class="card c12">
-          <h3>خريطة النشاط والمواقع</h3><div class="sub">مواقع الطلبات والفواتير والتحصيلات والعملاء المسجلة من التطبيق (GPS)</div>
-          <div class="filters" id="mapFilters"></div>
-          <div class="map" id="map"></div>
-          <div class="map-list" id="mapList"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel" id="panel-jarvis" hidden>
-      <div class="grid"><div class="card c12 jarvis" id="jarvisCard"></div></div>
-    </section>
+    <div class="subnav" id="subnav"></div>
+    <div id="view"></div>
   </main>
-  <footer><span>آخر تحديث: <span id="lastUpdated">—</span></span><span class="sisi-mark"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANcAAADcCAMAAADUZMREAAAAYFBMVEUMezkOez4Oez4YRocYRYUOblQYRYYOez4YRYbtHC3sHS8PN3zsHS8OfEDuHTAOfEAaNpIOfUAGl0sIkjUA/wAAAP//AFUPgEEPgUF/AAAAAAAOfD4ZR4kPgUHuHjAOfkAmQRWvAAAAIHRSTlMbn14iXhSf0NAZYQigXdWjCNMHBwEBA9CjAgD9+v79/BxepesAABqlSURBVHja3V0Le6M6ki1JCHBs4keSO7MmtP7/vxy9VXoAwpDuvsvON9vjJIajqjr1lIDnz12nt7fL5fL+6y3/gfxY/ujt9H8/dW/4SVy/zPWWovrlr/e3078Q17t5+Ev86eX91y+M7F+H61nEdfmVXG9/N65TrlGXAq6TF5QHdvprcUkieH9/v6TGYnG9/4M+s8Z1OZ28nV3+TlwSlJdBDOytIJALUr634l+dTn8FrreIBk6VuC4nrZPv+R+dDiHJvbhOCQ1Ea1/C5UleIdP+7b2wGJe90OBYWDG7nRY+Cw9/ihTvn/eicv5mXE6r3oyNJRpUdMxvvxbd8unXX4DrFJFApjxFXLGIM7d8Ocar7cNl1v7dPnBlwBFJLAVwOsipwRFqeDr9o9yRumKSvpQdVCyyopZenn8Brl/v72WTcY65wDfvRd/gJLw7BjlCD5Prcspw+U9UcmKEegp+7+14cR3DGymweQdmBfsW5SuXw1ljP8+/l4CdZnFdosfOaOUgkj/AL78vCuw0A9Q+92VOvvsj4aPjqHi5Mwd2+hWFh+lP3w/LXPbHvYrfDRn4wH4Bl2dQySCzantA4nJsvnxKcc1aUNF/XY7LoA/KK09R5n9ZqASkruE9uIXjWOMYXMoVnbJ4EfPlZd4ikbd7O7DgAftFdXFr7F0telRreVnVwKcqPxBrHIIr1AD8w77VrMYpCyYPLXfsxvW2EG68tkJvfwWurB74to9LD2GNQ/zXZYYGXqz/HFMmrcTFbkt0eEi13bHO4lc0zaG4WM9WKoi6O/LP/kLk+6J1su/v9nYcLvl1zfO3XKdFibP++7s/Flf7/PMXV7DYgXoo16n/+vOw2u/vb3aofclv5H8cl4JVbQ51uJr6hfqxq9kCq5YPfxtxLD3Cd3s+HtcfJg5NhfWwVnDdgm737I/D2vIEi7iavm3YzxgYbOKhEhWy5kVcXFmqXCaF7QgDg0/03XQvZ0gJNq/hOjdt/22utt1vYECQiIDuhKXXnL1qX2cWsO01MN6hexG6EVYb6e2tXXuidT5kDlu7Dxjt0F27LbjaFAJrjRbt53nWbHMfhYsQhHHkm1gjhqV1sP1+1b7WlGGjeY0IFxm3fVMGq2crDA3btLxOFaHwrSAowti9nKefW/Mc7VG4DLA6UypYD50G9G+yx0Ergzj3y88Cm3ipkhNp4bGJ4IEZX8alTaupiOyg6JBnHr+pZETaZebz0QWTAjHR13XQrG2zEihAeVGaXdRHR8hpI5gUmV7Dpendchc2r3MdLpVuf/d7wiYqIDevLjgvMcKruBruA/Gz89El64C5ddnjhnkuDxJMigoxvuYwWNtkiZMKiQv+B2YCeW2fryojCJIFUQEXmV6UVynRbWYeFJZi+VdFxseUOGD0IuSjEN3n/qIA8z662cLze5SRj6lAaKBAOo2vu684z3U+epv/agx/nF/BlRIHmRxSxRq7cd20V3Y+eqtfflkZoUuJowu4xnF80X0l5uV99PZ4wyrjVpFlAQWMniqk5EZBDzCvZjEDm7cvmZs0rcnfblvv201xYCup3TKJQjiOfLd5fffL+QXM4Oldmvz9SmUjmJPjCidAqsRVoPlNxM/MwzW8Mo5iCtA3vvq2bV6IPKSLGuL/7XBpNczDR4CN5vW9IT7kbcCjAUnZvZgbxxGg5Ef7vxVrSFzp73/SzbhS07rFdTdIk4B+D55cPs6fWVxKDQs0T+lW3shMi8V5JmTs1xzQOZF6iHVNojEUyDtRwsXJ1riKlaL1dtZem92hvLmGKeI8ZVRgeHEsuS9K9y9lUpKGg0P5ECuhckYnLAUqgLn7gu6IaaZbVACGsiuujJ4+yTCLiyCvLKkCvPPKgkdcgXsCgZcF1vMFv2Gip0plJF3RGgchkXxglJ1Tz9x9xdk1eTmHiXoIO/PKqCqI1kZgqRAnPauGsdp9dCSS9Iu2xhQ3tCt+3jj0mjINKT5HFNz6CJ4bLZy6RGdxP0J0L9GxrWwH5ljMKyt0kYuS0QNmcw/SiCuhefkFD7xM8IqoWhtMBIEt5ZVV1UJSSqYUQXjAyhcrXNCJAi6C6qUvFUyZKVp8t80ZUf1SXllFHTAKKCWWwcC0mMA5r8R9URz5gxD8VVTM+ObmlTi6GJ2SqYOSvNzzqxhDF6CsGkbuK85AyaK48rt/ObNyHBcq0ltwASFFgeVPo1XOfqxkp6jdOa8oEqE4oaHTkoPmY8pQZ2tWgd8C1W/CNY5lgWV5osYlQuykbI06caEvgdh9L3J8wfZ0J6TBWW/bv4CLTjOkPmXk3E3ekJT6yUeCzuEKv/wp42O+qNCRxmaryvrUyfLz8yVcpCIr8VwRnLHCZZUQS4gKBIVOi6QBopBms/o6gIogz6wpkaHSJEpBXTy5ZaGuZjXOUAjxrIFwSW0NCgAz1bcHl3fjlKrUZ4MQ4l/lprYx45O1VxLCahi9YoEl9zQo1K9x8/u8c6wRoOBHhYKVev1Td91YdQQHSCHCtY0koP9A8d00kg8VxBIEOLmpxSVNSdOFAOe8cHyF/4rO9o4ksGK4XIErRqSLNSxNSMAsqrxGm0lIbwNh5WNNtFonLcb8C7waevfFfbapVXmeNDjtRnlb/XfV8yzqy849Kj61OItBBKefGygdKEfVTwhLHz0XdaGgiTxG6p2Xd184R5MYI2+dlHEAKNEfQVcbFoPxZr2v1bTlaBczMgzcLTJ5hFSE5riEBGQAelSu96WNlSKmRV4tylyeg7/xx5wRzuDqQyTCZsYHFDVwoxVX766IfxxQps0zXIXLUYV8RJ96Qtzpu0YPLxnnanREubstuHThsGdJhFXI7PkHJ2IKFv7ReWBKYEgTPU2IFJfVPZyhQewA09SSKpvuKHBV1lrVQ0Xpng+ZnwluZ8YHdJTXSQOO+FYu9GTG1NSS41LNnLjsX5vow1saZh1adPKShLu1Toyb5FIEATjUuuFIv+CUje8ij1SMTq/C0y3goj4nI4F0KMozs7zHkqlY4HrGMKcz5JfNmBCbnc55mPhOiKheBLp2AU6xvJbwZVxc4DwGF1F5SSRA9IrKm9M1SLrR0uB4Q4/QzrC8vb+87jTXTwOMTGPURJ7jDfe7bu2jWqPUz6IFDfrmxb5Zgx2vpHXD6JCmM5l5wcPT+5VQXtJPDQz0ggJKLIuwfObsCESIIC4g04ymSRomV3jO4pKQWj8i0Bb6KWlzUiaTfLk06oDpf1hO/FjCZUjDLL76t6ALmUHR1jFClUtq39tYmTRqZAXyRI1VFGaynF8C0zZlqzAhzM3clwsZjfMKxPM0bc31IBCuEX2cey8nM4KjOQIKnaXmaz6bLMyHW63i2GpgDpfOxIIaKvcQog4h5jrPqLYBafbgXJPjPF2oh1JFlCXy8HcDWrJqk0ReH2Ce98MnzGVcNgTmhovkJ5/IGc7VM8cg1HT+w+mfbzy0BVyFuqEK1o0t0LFo1mC7WpzE2X8ZF7X6+HjGwwGK72dTEZl12jRCSxuSfsMtCm2VAAu1vzbxzNQ4DiAy2Cjbmm1rEf3/zcPN4TK+3aohaCdhxPVIQ+cs7jbISDau431uII6WlxbonOuZGBWqWX/vAwLzyLCAC7kxkwrT4OAXSAO0Jx8JyYOOGyIObjw1q6rbaC6exIy/D+EeDilWcGmXZRwDDzHgsMTtJoibCg/h9I83jEd5SisTysVakM6fpCLQxeXEKRZdxqVUyWgt9Zq84k+oXtrS2jaFWB28w2bLLkNGMVdY7LxGT72GixoXZ5spdBTjamolDVwUYylWaGiBHfJYmRb65MPyiMUj0cRlXMpEEHka1z6sGwQdhtq8UqVebdP0ezdCRRGhpBmxooaD8EUBbZ0TOfToFrCletaWt/klBRReqYlCrKghhEkOfp1qqmj1T6J/7smxnHkNUfN3KXp7rFE7vgAFHaQ8g5P5EmzeA1nD1aZRSIIr6AdfbgzM5yaFqwvO2UbBq3ZDolr+2jKAh1MusHEfbqu6K11h4mpcwju6QYixatKSej8j0+fVqYE1XL72rt0HX1vScculczEhqrRQMa4M95UuZgH988zk/51TXGwRl0yDpzuoguz6WO4WTTRouEkxRQ0XKgaVgBTNJE+iyoTqas3VyAvUplD9z16VbRjj7FyIDg0TP9Z1ZZO8qIFVO8es4y71nylhjfY7uyD/qM2rXDrorCmNb9JEMYS2S82l8yBVp0zpKxlyrcOlzVQGMNe6EHmLxJyXq/XIyrJk8nlPf//GpIGpPaB9oy/pi0E1vtQ/9aWUtBBEDteuo3Vruk0TC3MqK4HUfbzPBiY+/pUA0985n4szsB/Vt97IidkY2BqyhQnndgHX2reuG0G3EZgY6u7NV+6typ+9F9wmXFVDdJvJvm5vEb8vB8a6ddK7zXyruLCEhqnKwum00TfX4eqiiL9UR+tdiCtjjVVc4cto5XbPjy0mVj9GCSMOVemzUNC1BqbG2mBdq0JQ1n1UPkG1Jk4bxijp5Bg+269k69SN+u+zjDD6NWPUNKC8O/gq4qGauGVnkY8Lh3GKAq+z2zHOer+jBtaKBbq8CkC27LKDWk3cNkaptoMIgKtIyvjMj9FYYO1XOm+jWmRtplRTpyptG/xMpSZu3T9KhQtVh6Qw6vfJyufXWwxxw8WOySZHYKnCnf4P3fYEh5IGKqkLNabzEXMhi3IWzJce1HdWSqQi9Aqr511qNHFLqcZs9QA9jiCSxILN7cv2oPq2NFseGpVwv9Zq4noAvGl3thvUhut1qArAbwjU2vYoICuaw2GDJmLSWOVlOt03jTQDc9rHeI16r+ghWsvVzgNyXcNqMAWbXJ3D1VedQEFFmcAAp35Qq4n4/JR1TvqsbD2HZ2qXBPZA9cd8ytDC/Q8qcZOQ9PHF4ij6qg903A3A56yvx/M8fBXX0891FFhDLtN14L5lXFxXaXV3n3UCmltZ0kRMGqEyyOl9ruCpjhVwId1w/Q9a4CYeycY6xD15tFm4oYauCIWFxhtXAQ71uxtIuSs267qoUwMY7gvUbwaV1CiiaqvQuGqTSQSwW+7z8gaYoSvp5pVrnpM+lREboVnUP6+JiATc1DMM3bTk0XR3cVSjo3FPyQWFMbToe7ja7ZG0H/h9ciUWt6cVisVYi0zePmjrfACM6GVSTTCgnfyKshLaXImbwEd3GJG4vkJIIelvZn6+yU9zg7sqAgl3Vz6z40vCN8goCvznAmBEGmZwjKpirphx+mD1X5Wc9YOMaekgHJHXW2PL522avAh01a0CtwO57Ju1XFXLXgWnAkr92ZLrMhKVsloIQNX2ARPukG5Uxl6SKmfh9D+W4Grm2rHc7wSIyR4+0uRkSsynGHYEBBa37vUjFn/wuKfjBcxhITLx7JfPs61uZYvzMLjer3oHhPmZKPBCQRNDqSaMUbksSG9tuF95lp5Uhcjc7AbjGNe5rThYLj0VBIZRT+13RLoC3HvFI+hZlZfjwrT9DBSkK1F8l9ZgeWVKYzWxb7B96T7z6q5lmp0KoulZ6PRBFKkh00S8kSN8qkxH5UNTXlnWG0/XslqngzZ4B+QF2i+vqGwGofYhoCOD4IAURS943kQTZ2xPL4sI/t0+SWjpQJWokv2VzM4D+I03DFEGDFQa0YcrCtjdTwNmTDJOeVOBFgNgQeeKBQLFY+5PtW8B5zwf+lFSgXIvqnS/ueb3Bp8q0qBuih4HGburjGHcwmW1ROkLpvQxHcPFciEzUZZElWWMYFpd3LAVl7pqFJ4siSrgapJOUd+jmTZ3fzXB7ndYS80bsigxRRad1ZOValL1HAtxDLVNUjUD2ZFxysayzwVRlXDprURJ2qx7sK5fZZqW5aobXLMoEFLR4OOxoiVAsgo9k6AfavLMWyKNO5VtcY7IFKrsuS9lch+cJISblTdyU/fng1Z5c6VTNh5YmOF7hBw1ikD0n6ur68iV2taA3z4AYW3xqDv/ntvvDyZ0XKlsALnrLVjCmKy9He/0tj2j9Poq7EbhWDo+Di9whvl7GSVRE1Lwu5mKs0GXqYqpjSo8rogmAe9MX2K+r0KHYUD2onDZreYfQBW6MfNhgSZcg5yU4mFheEm5drxZSqqsnhi2FilJ93qlcRj1xbKAdyOu2IsZ3gXsLTmHgRTQuYOIhECtyRBnKBEoIQ1py1DH19F+/NmoMAS8DduDy0wOQjiOB/WIOB+Io+PIX1E0EKq3ahtIUgRQKlYoxiV2f/fqM3JU1eWv49KVDjNBWK4RSU8+6Elck7kNrljggvLR6J2ExBcCUb9Jve7dGhYa24HL0qHecjc/qwKcDjrqM9oHnjTofyQ5wGMtEFW/rxxXdVlYGVu7oIc6lmryIg+XF8j/EJM5Prqa/EESDsUl9vXFfDgLFHaumxgnko4C3Aocfuazt7A5THakI72iYTR9TsjocNEjRz0h2nWld0QYdVYpe7R/Y2lyN+/roZkctAVHj7q4Ao5JmanwW+W7A9+uQvyZMSaECrlCPGqz/AqDrK9u3RzTdujT5wcR3ukKG8gYp6l1ZRqOE1eYtjQ8w+9+RaNpbLb4wgAoSMs1wBr09iYOLq5QgT32znowcITjxKW/bAgD9TK/M8rfEZockzefCKeTYVGJIxa14jdtviggN3bm58X3oDM1IG631Zj9t54FVOEodQrnpaP1IdNCFi8JW2J7zcFcOC6nkxtvX+sLcB5nxH5k1+8wIuuea0kTs/phtALn2W2/wIewudXzh6/Y+rYK/S8tFvSJryFw3IMyAQa1FSIZ5XO+jKv9qsGVHcLflPbHygiUdKG+CW56K5yGxX05UJpLXnP3J0mrWjJ1sJxO28jL7cZWYUn52duFs7tSXG22JCzPHm1oa/NW7nZh8BGd7CX802WlJOqOhFUj1n4jmDmsZPIBvE0BFAmW396hlGtWEzfjoiJkz+Z2D3eokgbod0CZH+ufxQOepssCdsRcn9ZGHBx8XGzIsoUgRS1sNSe+iKvJ2CJNxx3h250LgzveRtU/zcFEeDABHIiwf9QsiBKh94lWS8X8pIfZeDLHiRlv8PSDdLOl881o0M3FBv5UVGrnkR/uQBgSVduNVMOPzN91PD434Gm2Ppo9jhk1Nv49D8XaOyyLJyUSrqtu8lZXyvPiNrh1tyVD+SEVcek6bASA0AkLW6Z4sggwdOaooLQz5o9JndHEzC9H/Ff4I9UYQMktqGqLt3Wjf/6MOWkp4AoA4BvWFg0JP+icXWqyEKoiEM7OUjfE7pCpitk5bH8qayIUjHG5HZZwo0l7bYuETvFZhyqVtzW/qEbqd2drjvj0TssamPrK2bH21h7a4KZoeF/a4VVQWxcTnldfBEOdYbtGHoSTKPzuJ48k1LSV9wa0WZKEaTkIBlx2Wyw6OKlp2Ln4KhUoLIcM5zk3Bwsu9sN8DVBE0rATYn5Xvdc8L9DOMbqgvq/QpR1OMV1LscY5PemqL77WMj9TsLVHWsYJWCGFgwwWR8foWdHo+U7fdPdnJMRbzamI2hFTxdQlY7id0K7jci/jiBNm1mZ/yn3d3oYDfLBU94kCY+qeG2VVjmLCKSR6PQgNEwKVU7I3I7yePStwqWJ+m5z5xfITfQ33ySjHVkudsTlKV8dJuIhcdVK72JDUP++Ai/WTuNpaI73bvcqVefjtWYVrrnHbJHVLlce6oJQTEZ+KCmg3qN6erIa5tfJ5eY3+lHrbkPVbpGVkrc8ue/0FF9WZ4Dl+dSAnVxlo+yYIdUbhHJX5wDSViK/1Ek8bdp+vIz0XC06+r/IAXWCFn8Y1H4qF84JGd5rUw1Kl0klApXknFuo+Fm77Fff8jk8Gwjly0/4QrtlXpNF74nNcV0f3kuwPfQrqCNRCn7ohWRtBZrKS9odwyey5ULJTR5sZBhnDzlmvk541w85y16J1vSPP9o54ijMN7bYXaGzS3+LLxMDkzqOfJ8aw/LEBlgGoCPMaTqqhwT7czahDqdNwbn/gPcVpEJ18rMpFkPg1czCYawhNaYfIZCVpvxgUWZDyIYfnH3ivNAr31waNHB/o+oYXTziYMhKgVb105Ku8vYdvAbYNV8VrfW25hUTmhGeUHcloqGDGI+p6JlsktjzFwioZMQoawwmkgztwHosjIkh1msNd1DrgSGLLLXFYlE5aZOvXcEku6MgAkezSQhuYWr8vY6gO571uU88tAON9/+p7ObPERkWJX8srSvkDtxCmsTRgzfXocfSegMoSuD+Akvc73jea8DrfeKgKqHb4YwY/Jf9dHb37yicz9MsaG90fYa/zRhQ6abPd9V7LjZfaL3kr9ueadYNYD3Z5ogK/D1fxhrbxyHbwoZ2NbRi/mbLAb4VVnA5/Vr6bHmq++/UXnO27tLqUNHH9jRpQR0HzL4ppm/Pv1URW9ar1GnpVr3FrZ3ZSsdpNVkdpYh2sJ+znrJ9EpjUx6aBWvdZlf7/7oFdr+epZHB8lmvhV+baa5xF9fMOVLds5xMHDXq15TeSVqnHMfMJNIev34TJlyz6aSntWblf4KVw6It7lBczZweo4JPxW7Hnv/JtwNV5crGGvED/mh6Tf0axHFz+FC4+I1Fr2QrUp7k+9pInH4MITIk2l2nzxSNeiSldcg31FE4/BhZ8jLfQxdvsquoe+nS108Vj1XtBEOFpcaTYa4gN1POtM3JDVF+LaslyD5k/gitUmekiUi8Z0cEYpFM8KrokAt7tGOFpcpjKrT7jnFvIZZQZNCb6S3XmBR164jsCVPESD27/f0dNjYBhXn89l7T3G9fhkQhkY6pE22KK+sT+IMDZ/Ha4m0SJlLTaGjSxK4UVrgB89U7s2Hfz5/bhufWFI5+YlxDF590i4TSzKSBHZXvM6AFeeETXh4H78tIoBeYglIhm1kWNeraL9BlyFoiLz786JV908rQPGEh1F8WG/v5QCR7DGOYPaljJ2y4AWWD6ypMfbzT6T3RWi/fJibZP7aWlW574QRLAQ1jJ/XCEqC5p5mAOS70MP20aLzwtt9hZRxjc7JzR6btypLUeUFH4El5qeLVBaE4VUSkCxAt/UUafsmLLdz+CSBlYoXiJmb75ritF/G66ZCfAmzmb+hbjKk4ss8Vj/Plwq1Tov43r+bHsGnr/vStKRpm3Y/wtct75vf1df8H/XE2TaeskqJwAAAABJRU5ErkJggg==" alt="Sisi International Company" width="293" height="300"> شركة سيسي الدولية — Sisi International Company</span></footer>
 </div>
 
+<div class="ov" id="ov"><div class="md" id="md"></div></div>
+<div class="toast" id="toast"></div>
+
 <script>
-const API = 'https://alielsisi.app.n8n.cloud/webhook/sisi-dashboard';
+/* ======================= CONFIG ======================= */
+const API = 'https://alielsisi.app.n8n.cloud/webhook/erp-api';
+const CONTACT = { phone: '', whatsapp: '', email: '', address: 'القاهرة، مصر' };
+const TABLES = {
+  'Products':{t:'المنتجات',key:'كود المنتج'}, 'Stock Movements':{t:'حركات المخزون',key:'رقم الحركة',special:'movement'}, 'Raw_Materials':{t:'المواد الخام'}, 'Product_BOM':{t:'تركيبات المنتجات (BOM)'},
+  'Customers':{t:'العملاء'}, 'Sales_Leads':{t:'العملاء المحتملون'}, 'Sales_Orders':{t:'أوردرات البيع'}, 'Sales_Invoices':{t:'فواتير البيع'}, 'Sales_Invoice_Items':{t:'بنود فواتير البيع'}, 'Payments':{t:'المدفوعات'},
+  'Suppliers':{t:'الموردون'}, 'Purchase_Orders':{t:'أوامر الشراء'}, 'Purchase_Invoices':{t:'فواتير الشراء'}, 'Purchase_Invoice_Items':{t:'بنود فواتير الشراء'}, 'Ledger':{t:'دفتر الأستاذ'},
+  'Marketing_Insights':{t:'تحليلات التسويق'}, 'Complaints':{t:'شكاوى العملاء'}, 'Alerts':{t:'التنبيهات'}, 'Strategic_Insights':{t:'التقارير الاستراتيجية',readonly:true}, 'Approvals':{t:'طلبات الاعتماد',special:'approvals'}, 'Audit_Log':{t:'سجل التدقيق',readonly:true}, 'Users_Security':{t:'المستخدمون والصلاحيات'},
+};
+const GROUPS = [
+  {k:'overview', t:'نظرة عامة', exec:'overview', tables:[]},
+  {k:'sales', t:'المبيعات والعملاء', exec:'sales', tables:['Customers','Sales_Leads','Sales_Orders','Sales_Invoices','Sales_Invoice_Items','Payments','Complaints','Alerts']},
+  {k:'inventory', t:'المخزون والمشتريات', exec:'inventory', tables:['Products','Stock Movements','Raw_Materials','Product_BOM','Suppliers','Purchase_Orders','Purchase_Invoices','Purchase_Invoice_Items']},
+  {k:'finance', t:'الحسابات والمالية', exec:'finance', tables:['Ledger','Payments','Sales_Invoices','Purchase_Invoices']},
+  {k:'tracking', t:'التتبع والمواقع', exec:'tracking', tables:[]},
+  {k:'jarvis', t:'جارفيس الاستراتيجي', exec:'jarvis', tables:['Strategic_Insights','Marketing_Insights']},
+  {k:'agents', t:'الوكلاء الأذكياء 🤖', agents:true, tables:[]},
+  {k:'admin', t:'الإدارة', tables:['Approvals','Alerts','Complaints','Audit_Log','Users_Security'], admin:true},
+];
+const EXEC_ROLES = ['admin','accounts'];
+const ROLE_AR = {admin:'مدير النظام', accounts:'الحسابات والمالية', warehouse:'المخازن', sales:'المبيعات', purchasing:'المشتريات'};
+const SERIES = ['--s1','--s2','--s3','--s4','--s5','--s6','--s7','--s8'].map(v=>`var(${v})`);
 const $ = s => document.querySelector(s);
+
+/* ======================= state & helpers ======================= */
+const store = { load(){ try{ return JSON.parse(localStorage.getItem('hp_erp')||'{}'); }catch(e){ return {}; } }, save(o){ try{ localStorage.setItem('hp_erp', JSON.stringify(o||{})); }catch(e){} } };
+const __st = store.load();
+let S = { token: __st.token||'', user: __st.user||null, cache:{}, exec:null, geo:null, group:'overview', sub:'', pending:0 };
+function toast(m, ms=2800){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('on'),ms); }
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const numv = v => { if(v===null||v===undefined||v==='') return 0; const n=typeof v==='number'?v:parseFloat(String(v).replace(/[^\d.\-]/g,'')); return isNaN(n)?0:n; };
 const fmt = n => Math.round(n||0).toLocaleString('en');
 const fmtK = n => { n=n||0; const a=Math.abs(n); if(a>=1e6) return (n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M'; if(a>=1e4) return (n/1e3).toFixed(1).replace(/\.0$/,'')+'K'; return fmt(n); };
 const money = n => `<span class="num">${fmt(n)}</span> <small>ج.م</small>`;
-const esc = s => String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const SERIES = ['--s1','--s2','--s3','--s4','--s5','--s6','--s7','--s8'].map(v=>`var(${v})`);
-let TOKEN = null, DATA = null, mapKinds = new Set(['order','invoice','payment','customer']);
-
-async function sha256(str){ const b=new TextEncoder().encode(str); const h=await crypto.subtle.digest('SHA-256',b); return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
-function store(k,v){ try{ v===null?sessionStorage.removeItem(k):sessionStorage.setItem(k,v);}catch(e){} }
-function load(k){ try{ return sessionStorage.getItem(k);}catch(e){ return null; } }
-
-async function api(action){
-  const r = await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action,token:TOKEN,user:load('hp_user')||''})});
-  if(r.status===401) throw new Error('unauthorized');
-  if(!r.ok) throw new Error('server '+r.status);
-  return r.json();
-}
-
-/* ---------- login ---------- */
-$('#loginForm').addEventListener('submit', async e=>{
-  e.preventDefault();
-  const u=$('#u').value.trim(), p=$('#p').value; const btn=$('#loginBtn'); const err=$('#loginErr');
-  err.textContent=''; btn.disabled=true; btn.textContent='جارٍ التحقق…';
-  try{
-    TOKEN = await sha256(u+':'+p);
-    const d = await api('kpis');
-    store('hp_token',TOKEN); store('hp_user',u);
-    enter(d);
-  }catch(ex){
-    TOKEN=null;
-    err.textContent = ex.message==='unauthorized' ? 'اسم المستخدم أو كلمة المرور غير صحيحة.' : 'تعذّر الاتصال بالخادم. حاول مرة أخرى.';
-  }finally{ btn.disabled=false; btn.textContent='تسجيل الدخول'; }
-});
-$('#logoutBtn').addEventListener('click',()=>{ TOKEN=null; DATA=null; store('hp_token',null); $('#app').hidden=true; $('#login').hidden=false; $('#p').value=''; });
-$('#refreshBtn').addEventListener('click',()=>refresh());
-
-function enter(d){ $('#login').hidden=true; $('#app').hidden=false; render(d); }
-async function refresh(){
-  setStatus('busy','جارٍ التحديث…');
-  try{ const d=await api('kpis'); render(d); }
-  catch(ex){ if(ex.message==='unauthorized'){ $('#logoutBtn').click(); } else setStatus('err','فشل التحديث'); }
-}
-function setStatus(state,txt){ const dot=$('#dot'); dot.className='dot'+(state==='busy'?' busy':''); if(state==='err') dot.style.background='var(--critical)'; else dot.style.background=''; $('#statusTxt').textContent=txt; }
-
-/* ---------- tabs ---------- */
-$('#tabs').addEventListener('click',e=>{ const t=e.target.closest('.tab'); if(!t) return; showPanel(t.dataset.panel); });
-function showPanel(name){
-  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected', String(t.dataset.panel===name)));
-  document.querySelectorAll('section.panel').forEach(s=>s.hidden = s.id!=='panel-'+name);
-  store('hp_tab',name);
-}
-
-/* ---------- render ---------- */
-function render(d){
-  DATA=d; const k=d.kpis;
-  $('#loading').hidden=true;
-  setStatus('ok','متصل · '+(load('hp_user')||''));
-  $('#lastUpdated').textContent = new Date(d.generated_at).toLocaleString('ar-EG',{dateStyle:'medium',timeStyle:'short'});
-
-  const mm=d.monthly, cur=mm[mm.length-1]||{}, prev=mm[mm.length-2]||null;
-  const delta=(a,b)=> b? Math.round((a-b)/b*100):null;
-  const dRev=prev?delta(cur.revenue,prev.revenue):null;
-
-  $('#kpiRow').innerHTML = [
-    tile('إجمالي الإيرادات',money(k.revenue),`${k.invoices} فاتورة`, dRev!==null?deltaHtml(dRev,'عن الشهر السابق'):'', 'hero'),
-    tile('مجمل الربح',money(k.grossProfit),`هامش <span class="num">${k.grossMargin.toFixed(1)}%</span>`,'تكلفة البضاعة المباعة '+fmtK(k.cogs)),
-    tile('تكلفة البضاعة المباعة (COGS)',money(k.cogs),`<span class="num">${(k.revenue?k.cogs/k.revenue*100:0).toFixed(1)}%</span> من الإيراد`,''),
-    tile('مستحقات على العملاء',money(k.receivables),`${k.unpaidInvoices} فاتورة غير مسددة`, k.receivables>0?'<span class="pill warn">تحصيل مطلوب</span>':'<span class="pill good">لا مستحقات</span>'),
-    tile('قيمة المخزون',money(k.inventoryValue),`${k.products} منتج`, `قيمة بيعية ${fmtK(k.inventoryRetail)}`),
-    tile('طلبات قيد التنفيذ',`<span class="num">${k.pendingOrders}</span> <small>من ${k.orders}</small>`,'أوامر بيع', k.lowStockCount?`<span class="pill crit">${k.lowStockCount} نواقص مخزون</span>`:'<span class="pill good">المخزون سليم</span>'),
-  ].join('');
-  $('#attnSub').textContent = `${k.pendingOrders} طلب مفتوح · ${k.lowStockCount} منتج ناقص · ${k.unpaidInvoices} فاتورة غير مسددة`;
-
-  $('#kpiSales').innerHTML=[
-    tile('الإيرادات',money(k.revenue),`${k.invoices} فاتورة`,''),
-    tile('المحصَّل',money(k.collected),`<span class="num">${(k.revenue?k.collected/k.revenue*100:0).toFixed(0)}%</span> نسبة التحصيل`,''),
-    tile('المستحقات',money(k.receivables),`${k.unpaidInvoices} فاتورة`,''),
-    tile('العملاء',`<span class="num">${k.customers}</span>`,'عميل نشط',''),
-    tile('متوسط الفاتورة',money(k.invoices?k.revenue/k.invoices:0),'لكل فاتورة بيع',''),
-  ].join('');
-  $('#kpiInv').innerHTML=[
-    tile('قيمة المخزون (تكلفة)',money(k.inventoryValue),`${k.products} منتج`,''),
-    tile('قيمة المخزون (بيع)',money(k.inventoryRetail),`ربح كامن ${fmtK(k.inventoryRetail-k.inventoryValue)}`,''),
-    tile('نواقص المخزون',`<span class="num">${k.lowStockCount}</span>`,'منتج تحت الحد الأدنى',''),
-    tile('إجمالي المشتريات',money(k.purchases),'فواتير الموردين',''),
-    tile('مستحق للموردين',money(k.payables),`${k.suppliers} مورد`,''),
-  ].join('');
-  $('#kpiFin').innerHTML=[
-    tile('التحصيلات النقدية',money(k.cashIn),'سندات قبض',''),
-    tile('المدفوعات النقدية',money(k.cashOut),'سندات صرف',''),
-    tile('صافي التدفق النقدي',money(k.netCash),k.netCash>=0?'فائض':'عجز', k.netCash>=0?'<span class="pill good">إيجابي</span>':'<span class="pill serious">سالب</span>'),
-    tile('مجمل الربح',money(k.grossProfit),`هامش <span class="num">${k.grossMargin.toFixed(1)}%</span>`,''),
-    tile('مستحقات − التزامات',money(k.receivables-k.payables),'صافي المركز مع الأطراف',''),
-  ].join('');
-
-  monthlyChart(d.monthly); agingChart(d.aging); cashChart(d.monthly); profitChart(k);
-  hbars('#chartOrders', Object.entries(d.ordersByStatus).map(([n,v],i)=>({n,v,color:SERIES[i%8]})), v=>v+' طلب');
-  hbars('#chartTopProducts', d.topProducts.slice(0,6).map(p=>({n:p.name,v:p.revenue,color:SERIES[0],extra:`ربح ${fmtK(p.profit)}`})), v=>fmtK(v)+' ج.م');
-  hbars('#chartCustTypes', Object.entries(d.customerTypes).map(([n,v],i)=>({n,v,color:SERIES[i%8]})), v=>v+' عميل');
-  hbars('#chartStockCat', Object.entries(d.stockByCategory).sort((a,b)=>b[1]-a[1]).map(([n,v],i)=>({n,v,color:SERIES[2]})), v=>fmtK(v)+' ج.م');
-
-  table('#tblPendingOrders',['الطلب','العميل','المنتج','الكمية','القيمة','المسؤول','الحالة'], d.pendingOrders.map(o=>[o.order,o.customer,o.product,num(o.qty),num(fmt(o.value)),o.assignee||'—',pill(o.status)]));
-  table('#tblLowStock',['المنتج','الرصيد','الحد الأدنى','المورد'], d.lowStock.map(p=>[p.name,num(p.stock),num(p.min),p.supplier||'—']));
-  table('#tblUnpaid',['الفاتورة','التاريخ','العميل','الإجمالي','المتبقي','التأخير','الحالة'], d.unpaid.map(u=>[u.invoice,num(u.date),u.customer,num(fmt(u.total)),num(fmt(u.due)),num((u.days??'—')+' يوم'),pill(u.status)]));
-  table('#tblCustomers',['العميل','النوع','إجمالي الفواتير','التحصيلات','الرصيد المستحق'], d.topCustomers.map(c=>[c.name,c.type||'—',num(fmt(c.invoiced)),num(fmt(c.collected)),c.due>0?`<span class="num" style="color:var(--critical);font-weight:600">${fmt(c.due)}</span>`:num('0')]));
-  table('#tblPO',['أمر الشراء','التاريخ','المورد','المنتج','الكمية','التكلفة','الحالة'], d.openPO.map(o=>[o.po,num(o.date),o.supplier,o.product,num(o.qty),num(fmt(o.cost)),pill(o.status)]));
-  table('#tblExpiring',['المنتج','الباتش','الصلاحية','الكمية','متبقي'], d.expiring.map(e=>[e.product,e.batch,num(e.expiry),num(e.qty),`<span class="pill ${e.days<60?'crit':e.days<120?'serious':'warn'}">${e.days} يوم</span>`]));
-  table('#tblMoves',['الحركة','الوقت','المنتج','النوع','الكمية','المخزن','المستخدم'], d.recentMoves.map(m=>[m.id,num(m.at),m.product,pill(m.type),num(m.qty),m.warehouse||'—',m.user||'—']));
-  table('#tblPayments',['السند','التاريخ','النوع','الطرف','المبلغ','الطريقة'], d.recentPayments.map(p=>[p.id,num(p.date),pill(p.type),p.party,num(fmt(p.amount)),p.method||'—']));
-
-  renderJarvis(d.jarvis); renderMap(d.tracking);
-  const t=load('hp_tab'); showPanel(t && document.getElementById('panel-'+t) ? t : 'overview');
-}
 const num = s => `<span class="num">${esc(s)}</span>`;
+const pad = x => String(x).padStart(2,'0');
+function nowLocal(){ const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; }
+function today(){ const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+const isAdmin = () => !!S.user && S.user.role==='admin';
+const canExec = () => !!S.user && EXEC_ROLES.includes(S.user.role);
+function can(k){ if(!S.user) return false; if(isAdmin()) return true; return (S.user.sheets||[]).includes(k); }
+function getGeo(){ return new Promise(res=>{ if(!navigator.geolocation) return res(null); navigator.geolocation.getCurrentPosition(p=>{ S.geo={lat:+p.coords.latitude.toFixed(6), lng:+p.coords.longitude.toFixed(6), acc:Math.round(p.coords.accuracy)}; res(S.geo); }, ()=>res(S.geo), {timeout:7000, maximumAge:120000}); }); }
+async function api(body){
+  const r = await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body, token:S.token, geo:S.geo||{}})});
+  let j; try{ j = await r.json(); }catch(e){ throw new Error('استجابة غير صالحة من الخادم'); }
+  if(j && j.ok===false){ if(j.error==='unauthorized'){ logout(true); showLogin(); throw new Error('انتهت الجلسة، سجّل الدخول مرة أخرى'); } throw new Error(j.error||'خطأ'); }
+  return j;
+}
+async function rows(sheet, force){ if(!force && S.cache[sheet]) return S.cache[sheet]; const j = await api({action:'read', sheet}); S.cache[sheet]=j.rows||[]; return S.cache[sheet]; }
+function col(arr, ...cands){ if(!arr.length) return null; const keys=Object.keys(arr[0]); for(const c of cands){ const k=keys.find(x=>x.trim()===c); if(k) return k; } for(const c of cands){ const k=keys.find(x=>x.includes(c)); if(k) return k; } return null; }
+function isPending(v){ v=String(v??'').toLowerCase().replace(/[ً-ْ]/g,''); if(v==='true'||v==='false') return v==='false'; return v==='' || /معلق|قيد|جديد|مفتوح|انتظار|pending|open|new/.test(v); }
+function pill(s){ s=String(s||'—'); const c=/مدفوع|مكتمل|تم|دخول|قبض|تحصيل|معتمد|ناجح/.test(s)?'good':/جزئ|قيد|جديد|معلق|شحن/.test(s.replace(/[ً-ْ]/g,''))?'warn':/غير|متأخر|ملغ|خروج|صرف|دفع|مرفوض|فشل/.test(s)?'serious':'info'; return `<span class="pill ${c}">${esc(s)}</span>`; }
+function cell(c,v){ const s=String(v??''); if(c==='PIN_Code') return '••••'; if(/نوع الحركة|حالة|الحدث/.test(c||'')) return pill(s); if(/رابط|الموقع$/.test(c||'')&&/^https?:/.test(s)) return `<a href="${esc(s)}" target="_blank" rel="noopener">🗺️ خريطة</a>`; if(s.length>70) return `<span title="${esc(s)}">${esc(s.slice(0,70))}…</span>`; return esc(s); }
+function tableHtml(heads, rowsArr){ if(!rowsArr.length) return '<div class="empty">لا توجد بيانات حالياً</div>'; return `<div class="tbl-wrap"><table><thead><tr>${heads.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rowsArr.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; }
+function miniTable(list, cols){ cols=(cols||[]).filter(Boolean); return tableHtml(cols, list.map(r=>cols.map(c=>cell(c,r[c])))); }
 function tile(lbl,val,foot1,foot2,cls=''){ return `<div class="kpi ${cls}"><div class="lbl">${lbl}</div><div class="val">${val}</div><div class="foot"><span>${foot1||''}</span><span>${foot2||''}</span></div></div>`; }
-function deltaHtml(p,label){ return `<span class="delta ${p>=0?'up':'down'}">${p>=0?'▲':'▼'} <span class="num">${Math.abs(p)}%</span></span> ${label}`; }
-function pill(s){ s=String(s||'—'); const c=/مدفوع|مكتمل|تم|دخول|قبض|تحصيل/.test(s)?'good':/جزئ|قيد|جديد|معلق|معلّق|شحن/.test(s)?'warn':/غير|متأخر|ملغ|خروج|صرف|دفع/.test(s)?'serious':'info'; return `<span class="pill ${c}">${esc(s)}</span>`; }
-function table(sel,heads,rows){ const el=$(sel); if(!rows.length){ el.innerHTML='<div class="empty">لا توجد بيانات حالياً</div>'; return; } el.innerHTML=`<table><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`; }
-function hbars(sel,items,fmtV){ const el=$(sel); if(!items.length){ el.innerHTML='<div class="empty">لا توجد بيانات</div>'; return; } const max=Math.max(...items.map(i=>i.v),1); el.innerHTML=items.map(i=>`<div class="hbar-row" title="${esc(i.n)}: ${esc(fmtV(i.v))}"><div class="n">${esc(i.n)}</div><div class="hbar"><i style="width:${Math.max(2,i.v/max*100)}%;background:${i.color}"></i></div><div class="v"><span class="num">${esc(fmtV(i.v))}</span>${i.extra?` <span style="color:var(--muted);font-weight:500">· ${esc(i.extra)}</span>`:''}</div></div>`).join(''); }
+function openModal(html){ $('#md').innerHTML=html; $('#ov').classList.add('on'); }
+function closeModal(){ $('#ov').classList.remove('on'); }
+$('#ov').addEventListener('click',e=>{ if(e.target.id==='ov') closeModal(); });
+function setStatus(state,txt){ const dot=$('#dot'); dot.className='dot'+(state==='busy'?' busy':''); dot.style.background = state==='err'?'var(--critical)':''; $('#statusTxt').textContent=txt; }
 
-/* ---------- SVG charts ---------- */
+/* ======================= public site ======================= */
+let CAT=null, catFilter='';
+function show(id){ for(const x of ['site','login','app']) document.getElementById(x).hidden = x!==id; window.scrollTo(0,0); }
+function showSite(){ show('site'); pgo('home'); }
+function showLogin(){ if(S.token&&S.user){ show('app'); boot(); return; } show('login'); getGeo(); setTimeout(()=>$('#lu').focus(),60); }
+function pgo(p){ document.querySelectorAll('#pnav button[data-p]').forEach(b=>b.classList.toggle('on',b.dataset.p===p)); $('#phome').hidden = p!=='home'; const b=$('#pbody');
+  if(p==='home'||p==='catalog') renderCatalog(b, p==='home');
+  else if(p==='about') b.innerHTML=`<div class="card"><h3>عن شركة سيسي إنترناشونال</h3><p>شركة سيسي إنترناشونال لتجارة الأدوية متخصصة في منتجات العناية الطبية بالبشرة والشعر تحت مظلة HerbaPharm، وتوزّع منتجاتها حصرياً للصيدليات وشركات التوزيع والمخازن المسجلة.</p><p>علاماتنا: <b>يوكال (Eucal)</b> · <b>مون لايت (Moonlight)</b> · <b>روتاج (Rootage)</b> · <b>ماجيك لوك (Magic Look)</b> · <b>بيرلايت (Pearlite)</b>.</p></div>`;
+  else if(p==='contact') b.innerHTML=`<div class="card"><h3>تواصل معنا (للصيدليات والموزعين)</h3><p>للاستفسار أو فتح حساب توزيع:</p><p>${CONTACT.phone?`📞 <a href="tel:${esc(CONTACT.phone)}">${esc(CONTACT.phone)}</a><br>`:''}${CONTACT.whatsapp?`💬 <a href="https://wa.me/${esc(CONTACT.whatsapp.replace(/\D/g,''))}" target="_blank" rel="noopener">واتساب</a><br>`:''}${CONTACT.email?`✉️ <a href="mailto:${esc(CONTACT.email)}">${esc(CONTACT.email)}</a><br>`:''}📍 ${esc(CONTACT.address)}</p><p class="hint">بيانات التواصل تُعدَّل من CONTACT في أعلى كود الصفحة.</p></div>`;
+  window.scrollTo({top:0,behavior:'smooth'}); }
+async function renderCatalog(b, brief){
+  b.innerHTML='<div class="empty"><span class="spin"></span> جاري تحميل الكتالوج…</div>';
+  try{ if(!CAT){ const j=await api({action:'catalog'}); CAT=j.rows||[]; } }catch(e){ b.innerHTML='<div class="card empty">تعذّر تحميل الكتالوج حالياً — حاول لاحقاً.</div>'; return; }
+  const cCat=col(CAT,'الفئة'), cName=col(CAT,'اسم المنتج'), cUnit=col(CAT,'الوحدة'), cNote=col(CAT,'ملاحظات'), cCode=col(CAT,'كود المنتج');
+  const cats=[...new Set(CAT.map(p=>p[cCat]).filter(Boolean))];
+  const list=CAT.filter(p=>!catFilter||p[cCat]===catFilter).slice(0, brief?8:999);
+  b.innerHTML=`<div class="sec-head"><h2>${brief?'أحدث المنتجات':'كتالوج المنتجات'}</h2><span class="sub">${CAT.length} منتج</span></div>
+  ${brief?'':`<div class="chips"><button type="button" class="chip ${!catFilter?'on':''}" data-cat="">الكل</button>${cats.map(c=>`<button type="button" class="chip ${catFilter===c?'on':''}" data-cat="${esc(c)}">${esc(c)}</button>`).join('')}</div>`}
+  <div class="pgrid">${list.map(p=>`<div class="pc"><div class="cat">${esc(p[cCat]||'')}</div><h4>${esc(p[cName]||'')}</h4><div class="u">${esc(p[cUnit]||'')}</div><div class="n">${esc(p[cNote]||'')}</div><div class="code">${esc(p[cCode]||'')}</div><button type="button" class="btn ghost sm" data-p="contact">للطلب — تواصل معنا</button></div>`).join('')}</div>
+  ${brief?`<div style="text-align:center;margin-top:16px"><button type="button" class="btn" data-p="catalog">عرض الكتالوج كاملاً</button></div>`:''}`;
+  b.querySelectorAll('[data-cat]').forEach(x=>x.addEventListener('click',()=>{ catFilter=x.dataset.cat; pgo('catalog'); }));
+  b.querySelectorAll('[data-p]').forEach(x=>x.addEventListener('click',()=>pgo(x.dataset.p)));
+}
+$('#pnav').addEventListener('click',e=>{ const b=e.target.closest('button[data-p]'); if(b) pgo(b.dataset.p); });
+$('#btnLogin').addEventListener('click',showLogin); $('#btnBrowse').addEventListener('click',()=>pgo('catalog')); $('#btnBackSite').addEventListener('click',showSite);
+
+/* ======================= auth ======================= */
+$('#loginForm').addEventListener('submit', async e=>{
+  e.preventDefault(); const u=$('#lu').value.trim(), p=$('#lp').value; const b=$('#lbtn'); b.disabled=true; b.innerHTML='<span class="spin"></span>'; $('#lerr').textContent='';
+  try{ await getGeo(); const j=await api({action:'login', user:u, password:p}); S.token=j.token; S.user=j.user; store.save({token:j.token,user:j.user}); $('#lp').value=''; show('app'); boot(); }
+  catch(ex){ $('#lerr').textContent = ex.message==='invalid_login'?'البريد الإلكتروني أو رمز الدخول غير صحيح.':(ex.message==='no_role'?'هذا الحساب ليس له دور محدد — راجع مدير النظام.':ex.message); }
+  finally{ b.disabled=false; b.textContent='دخول'; }
+});
+function logout(silent){ if(S.token && !silent) api({action:'logout'}).catch(()=>{}); S.token=''; S.user=null; S.cache={}; S.exec=null; store.save({}); if(typeof chatStore!=='undefined'){ S.chats={}; chatStore.save({}); } showSite(); if(!silent) toast('تم تسجيل الخروج'); }
+$('#logoutBtn').addEventListener('click',()=>logout(false)); $('#siteBtn').addEventListener('click',showSite);
+$('#refreshBtn').addEventListener('click',()=>{ S.cache={}; S.exec=null; CAT=null; toast('جاري التحديث…'); go(S.group, S.sub); if(isAdmin()) refreshPending(); if(can('Alerts')) refreshAlerts(); });
+
+/* ======================= app shell ======================= */
+function visibleGroups(){ return GROUPS.filter(g=>{ if(g.admin) return isAdmin(); if(g.agents) return visibleAgents().length>0; if(g.exec && canExec()) return true; return g.tables.some(t=>can(t)); }); }
+function boot(){
+  setStatus('ok', (S.user.name||S.user.user)); $('#statusTxt').innerHTML = `${esc(S.user.name||S.user.user)} <span class="role">${esc(ROLE_AR[S.user.role]||S.user.role)}</span>`;
+  const gs=visibleGroups(); const alertG=gs.find(g=>g.tables.includes('Alerts')&&can('Alerts')); $('#tabs').innerHTML = gs.map(g=>`<button type="button" class="tab" role="tab" data-g="${g.k}" aria-selected="false">${esc(g.t)}${g.k==='admin'?'<span class="cnt" id="pcnt" hidden></span>':''}${alertG&&g.k===alertG.k?'<span class="cnt" id="acnt" hidden title="تنبيهات جديدة من الشات"></span>':''}</button>`).join('');
+  $('#tabs').onclick = e=>{ const t=e.target.closest('.tab'); if(t) go(t.dataset.g); };
+  go(gs[0].k); if(isAdmin()) refreshPending(); if(can('Alerts')) refreshAlerts(); getGeo(); maybeStartTour();
+}
+async function refreshAlerts(){ try{ const R=await rows('Alerts',true); const cSt=col(R,'الحالة'); const n=R.filter(r=>String(r[cSt]||'').trim()==='جديد').length; const el=$('#acnt'); if(el){ el.textContent=n; el.hidden=!n; } }catch(e){} }
+async function refreshPending(){ try{ const R=await rows('Approvals',true); const cSt=col(R,'الحالة'); S.pending=R.filter(r=>String(r[cSt]).trim()==='معلق').length; const el=$('#pcnt'); if(el){ el.textContent=S.pending; el.hidden=!S.pending; } }catch(e){} }
+function go(gk, sub){
+  const g=GROUPS.find(x=>x.k===gk) || visibleGroups()[0]; S.group=g.k;
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected', String(t.dataset.g===g.k)));
+  const tables=g.tables.filter(t=>can(t)||(g.admin&&isAdmin()));
+  const hasExec = g.exec && canExec();
+  if(g.agents){ const ags=visibleAgents(); if(!sub||!ags.some(a=>a.k===sub)) sub=ags.length?ags[0].k:''; S.sub=sub; $('#subnav').innerHTML=ags.map(a=>`<button type="button" class="chip ${a.k===sub?'on':''}" data-s="${a.k}">${a.i} ${esc(a.t)}</button>`).join(''); $('#subnav').querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>go('agents',b.dataset.s))); return agentPanel(sub); }
+  const subs = [...(hasExec?[{k:'__exec', t:'لوحة المؤشرات'}]:[]), ...(g.exec==='overview'&&!hasExec?[{k:'__mine', t:'ملخصي'}]:[]), ...tables.map(t=>({k:t, t:TABLES[t].t}))];
+  if(!sub || !subs.some(s=>s.k===sub)) sub = subs.length?subs[0].k:'';
+  S.sub=sub;
+  $('#subnav').innerHTML = subs.length>1 ? subs.map(s=>`<button type="button" class="chip ${s.k===sub?'on':''}" data-s="${esc(s.k)}">${esc(s.t)}</button>`).join('') : '';
+  $('#subnav').querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>go(g.k,b.dataset.s)));
+  if(sub==='__exec') return execPanel(g.exec);
+  if(sub==='__mine') return myDash();
+  if(sub==='Approvals') return approvals();
+  if(sub) return table(sub);
+  $('#view').innerHTML='<div class="empty">لا توجد صلاحيات لهذا القسم</div>';
+}
+
+/* ======================= executive dashboard (unified) ======================= */
+async function execData(force){ if(S.exec && !force) return S.exec; setStatus('busy','جارٍ قراءة البيانات…'); const j=await api({action:'kpis'}); S.exec=j.data; setStatus('ok',''); $('#statusTxt').innerHTML=`${esc(S.user.name||S.user.user)} <span class="role">${esc(ROLE_AR[S.user.role]||S.user.role)}</span>`; return S.exec; }
+async function execPanel(which){
+  const v=$('#view'); v.innerHTML='<div class="empty"><span class="spin"></span> جارٍ قراءة البيانات من نظام الشركة…</div>';
+  let d; try{ d=await execData(); }catch(e){ v.innerHTML=`<div class="card"><b style="color:var(--critical)">تعذّر تحميل لوحة المؤشرات:</b> ${esc(e.message)}</div>`; return; }
+  const k=d.kpis||{}; const mm=d.monthly||[]; const cur=mm[mm.length-1]||{}, prev=mm[mm.length-2]||null; const delta=(a,b)=>b?Math.round((a-b)/b*100):null; const dRev=prev?delta(cur.revenue,prev.revenue):null;
+  const gen = d.generated_at ? new Date(d.generated_at).toLocaleString('ar-EG',{dateStyle:'medium',timeStyle:'short'}) : '';
+  if(which==='overview'){
+    let pendA=''; if(isAdmin()){ try{ const A=await rows('Approvals'); const cSt=col(A,'الحالة'); const pend=A.filter(r=>String(r[cSt]).trim()==='معلق'); if(pend.length) pendA=`<div class="card c12 appr"><h3>⏳ طلبات بانتظار اعتمادك (${pend.length}) <button type="button" class="btn sm" id="goAppr">مراجعة الطلبات</button></h3>${miniTable(pend.slice(0,6),[col(A,'رقم الطلب'),col(A,'التاريخ والوقت'),col(A,'المستخدم'),col(A,'نوع العملية'),col(A,'الجدول'),col(A,'المفتاح')])}</div>`; }catch(e){} }
+    v.innerHTML=`<div class="kpis">${[
+      tile('إجمالي الإيرادات',money(k.revenue),`${k.invoices||0} فاتورة`, dRev!==null?deltaHtml(dRev,'عن الشهر السابق'):'', 'hero'),
+      tile('مجمل الربح',money(k.grossProfit),`هامش <span class="num">${(k.grossMargin||0).toFixed(1)}%</span>`,'تكلفة البضاعة المباعة '+fmtK(k.cogs)),
+      tile('مستحقات على العملاء',money(k.receivables),`${k.unpaidInvoices||0} فاتورة غير مسددة`, k.receivables>0?'<span class="pill warn">تحصيل مطلوب</span>':'<span class="pill good">لا مستحقات</span>'),
+      tile('قيمة المخزون',money(k.inventoryValue),`${k.products||0} منتج`, `قيمة بيعية ${fmtK(k.inventoryRetail)}`),
+      tile('طلبات قيد التنفيذ',`<span class="num">${k.pendingOrders||0}</span> <small>من ${k.orders||0}</small>`,'أوامر بيع', k.lowStockCount?`<span class="pill crit">${k.lowStockCount} نواقص مخزون</span>`:'<span class="pill good">المخزون سليم</span>'),
+      tile('صافي التدفق النقدي',money(k.netCash),(k.netCash||0)>=0?'فائض':'عجز',(k.netCash||0)>=0?'<span class="pill good">إيجابي</span>':'<span class="pill serious">سالب</span>'),
+    ].join('')}</div>
+    <div class="grid">${pendA}
+      <div class="card c8"><h3>الإيرادات والتكلفة والمشتريات</h3><div class="sub">حسب الشهر — ج.م</div><div class="viz" id="chartMonthly"></div></div>
+      <div class="card c4"><h3>حالة أوامر البيع</h3><div class="sub">عدد الطلبات لكل حالة</div><div id="chartOrders"></div></div>
+      <div class="card c6"><h3>أعلى المنتجات إيراداً</h3><div class="sub">الإيراد وهامش الربح لكل منتج</div><div id="chartTopProducts"></div></div>
+      <div class="card c6"><h3>أعمار المستحقات على العملاء</h3><div class="sub">حسب مدة التأخير — ج.م</div><div class="viz" id="chartAging"></div></div>
+      <div class="card c6"><h3>طلبات قيد التنفيذ</h3><div class="sub">أوامر بيع لم تُسلَّم بعد</div>${tableHtml(['الطلب','العميل','المنتج','الكمية','القيمة','المسؤول','الحالة'], (d.pendingOrders||[]).map(o=>[esc(o.order),esc(o.customer),esc(o.product),num(o.qty),num(fmt(o.value)),esc(o.assignee||'—'),pill(o.status)]))}</div>
+      <div class="card c6"><h3>نواقص المخزون</h3><div class="sub">منتجات وصلت الحد الأدنى أو أقل</div>${tableHtml(['المنتج','الرصيد','الحد الأدنى','المورد'], (d.lowStock||[]).map(p=>[esc(p.name),num(p.stock),num(p.min),esc(p.supplier||'—')]))}</div>
+    </div><p class="hint" style="margin-top:12px">آخر قراءة للبيانات: ${esc(gen)}</p>`;
+    groupedBars('#chartMonthly', mm, [{key:'revenue',label:'الإيرادات',color:SERIES[0]},{key:'cogs',label:'تكلفة البضاعة المباعة',color:SERIES[1]},{key:'purchases',label:'المشتريات',color:SERIES[2]}], x=>fmt(x)+' ج.م');
+    hbars('#chartOrders', Object.entries(d.ordersByStatus||{}).map(([n,x],i)=>({n,v:x,color:SERIES[i%8]})), x=>x+' طلب');
+    hbars('#chartTopProducts', (d.topProducts||[]).slice(0,6).map(p=>({n:p.name,v:p.revenue,color:SERIES[0],extra:`ربح ${fmtK(p.profit)}`})), x=>fmtK(x)+' ج.م');
+    agingChart(d.aging||{});
+    const ga=$('#goAppr'); if(ga) ga.addEventListener('click',()=>go('admin','Approvals'));
+  } else if(which==='sales'){
+    v.innerHTML=`<div class="kpis">${[tile('الإيرادات',money(k.revenue),`${k.invoices||0} فاتورة`,''),tile('المحصَّل',money(k.collected),`<span class="num">${(k.revenue?k.collected/k.revenue*100:0).toFixed(0)}%</span> نسبة التحصيل`,''),tile('المستحقات',money(k.receivables),`${k.unpaidInvoices||0} فاتورة`,''),tile('العملاء',`<span class="num">${k.customers||0}</span>`,'عميل نشط',''),tile('متوسط الفاتورة',money(k.invoices?k.revenue/k.invoices:0),'لكل فاتورة بيع','')].join('')}</div>
+    <div class="grid"><div class="card c8"><h3>فواتير غير مسددة</h3><div class="sub">مرتبة حسب المبلغ المتبقي</div>${tableHtml(['الفاتورة','التاريخ','العميل','الإجمالي','المتبقي','التأخير','الحالة'], (d.unpaid||[]).map(u=>[esc(u.invoice),num(u.date),esc(u.customer),num(fmt(u.total)),num(fmt(u.due)),num((u.days??'—')+' يوم'),pill(u.status)]))}</div>
+    <div class="card c4"><h3>تصنيف العملاء</h3><div class="sub">عدد العملاء لكل نوع</div><div id="chartCustTypes"></div></div>
+    <div class="card c12"><h3>أهم العملاء</h3><div class="sub">إجمالي الفواتير والتحصيلات والرصيد المستحق</div>${tableHtml(['العميل','النوع','إجمالي الفواتير','التحصيلات','الرصيد المستحق'], (d.topCustomers||[]).map(c=>[esc(c.name),esc(c.type||'—'),num(fmt(c.invoiced)),num(fmt(c.collected)),c.due>0?`<span class="num" style="color:var(--critical);font-weight:600">${fmt(c.due)}</span>`:num('0')]))}</div></div>`;
+    hbars('#chartCustTypes', Object.entries(d.customerTypes||{}).map(([n,x],i)=>({n,v:x,color:SERIES[i%8]})), x=>x+' عميل');
+  } else if(which==='inventory'){
+    v.innerHTML=`<div class="kpis">${[tile('قيمة المخزون (تكلفة)',money(k.inventoryValue),`${k.products||0} منتج`,''),tile('قيمة المخزون (بيع)',money(k.inventoryRetail),`ربح كامن ${fmtK((k.inventoryRetail||0)-(k.inventoryValue||0))}`,''),tile('نواقص المخزون',`<span class="num">${k.lowStockCount||0}</span>`,'منتج تحت الحد الأدنى','',k.lowStockCount?'bad':'good'),tile('إجمالي المشتريات',money(k.purchases),'فواتير الموردين',''),tile('مستحق للموردين',money(k.payables),`${k.suppliers||0} مورد`,'')].join('')}</div>
+    <div class="grid"><div class="card c6"><h3>قيمة المخزون حسب الفئة</h3><div class="sub">بتكلفة الشراء — ج.م</div><div id="chartStockCat"></div></div>
+    <div class="card c6"><h3>أوامر شراء مفتوحة</h3><div class="sub">حسب الحالة</div>${tableHtml(['أمر الشراء','التاريخ','المورد','المنتج','الكمية','التكلفة','الحالة'], (d.openPO||[]).map(o=>[esc(o.po),num(o.date),esc(o.supplier),esc(o.product),num(o.qty),num(fmt(o.cost)),pill(o.status)]))}</div>
+    <div class="card c6"><h3>باتشات قريبة من انتهاء الصلاحية</h3><div class="sub">خلال 180 يوماً</div>${tableHtml(['المنتج','الباتش','الصلاحية','الكمية','متبقي'], (d.expiring||[]).map(e=>[esc(e.product),esc(e.batch),num(e.expiry),num(e.qty),`<span class="pill ${e.days<60?'crit':e.days<120?'serious':'warn'}">${e.days} يوم</span>`]))}</div>
+    <div class="card c6"><h3>آخر حركات المخزن</h3><div class="sub">دخول وخروج</div>${tableHtml(['الحركة','الوقت','المنتج','النوع','الكمية','المخزن','المستخدم'], (d.recentMoves||[]).map(m=>[esc(m.id),num(m.at),esc(m.product),pill(m.type),num(m.qty),esc(m.warehouse||'—'),esc(m.user||'—')]))}</div></div>`;
+    hbars('#chartStockCat', Object.entries(d.stockByCategory||{}).sort((a,b)=>b[1]-a[1]).map(([n,x])=>({n,v:x,color:SERIES[2]})), x=>fmtK(x)+' ج.م');
+  } else if(which==='finance'){
+    v.innerHTML=`<div class="kpis">${[tile('التحصيلات النقدية',money(k.cashIn),'سندات قبض',''),tile('المدفوعات النقدية',money(k.cashOut),'سندات صرف',''),tile('صافي التدفق النقدي',money(k.netCash),(k.netCash||0)>=0?'فائض':'عجز',(k.netCash||0)>=0?'<span class="pill good">إيجابي</span>':'<span class="pill serious">سالب</span>'),tile('مجمل الربح',money(k.grossProfit),`هامش <span class="num">${(k.grossMargin||0).toFixed(1)}%</span>`,''),tile('مستحقات − التزامات',money((k.receivables||0)-(k.payables||0)),'صافي المركز مع الأطراف','')].join('')}</div>
+    <div class="grid"><div class="card c8"><h3>التدفق النقدي الشهري</h3><div class="sub">التحصيلات مقابل المدفوعات — ج.م</div><div class="viz" id="chartCash"></div></div>
+    <div class="card c4"><h3>هيكل الربحية</h3><div class="sub">من الإيراد إلى مجمل الربح</div><div class="viz" id="chartProfit"></div></div>
+    <div class="card c12"><h3>آخر السندات</h3><div class="sub">قبض وصرف</div>${tableHtml(['السند','التاريخ','النوع','الطرف','المبلغ','الطريقة'], (d.recentPayments||[]).map(p=>[esc(p.id),num(p.date),pill(p.type),esc(p.party),num(fmt(p.amount)),esc(p.method||'—')]))}</div></div>`;
+    groupedBars('#chartCash', mm, [{key:'collected',label:'التحصيلات',color:SERIES[2]},{key:'paid_out',label:'المدفوعات',color:SERIES[1]}], x=>fmt(x)+' ج.م'); profitChart(k);
+  } else if(which==='tracking'){
+    let audit=[]; if(isAdmin()){ try{ audit=await rows('Audit_Log'); }catch(e){} }
+    const pts=(d.tracking||[]).slice();
+    for(const a of audit){ const lat=parseFloat(a['خط العرض']), lng=parseFloat(a['خط الطول']); if(isNaN(lat)||isNaN(lng)) continue; pts.push({kind:'audit', lat, lng, title:a['الحدث'], label:a['المستخدم'], sub:(a['مصدر الموقع']||'')+(a['المدينة']?' · '+a['المدينة']:''), at:a['التاريخ والوقت']}); }
+    v.innerHTML=`<div class="grid"><div class="card c12"><h3>خريطة النشاط والمواقع</h3><div class="sub">مواقع الطلبات والفواتير والتحصيلات والعملاء + تحركات الموظفين المسجلة في سجل التدقيق (GPS أو IP)</div><div class="filters" id="mapFilters"></div><div class="map" id="map"></div><div class="map-list" id="mapList"></div></div></div>`;
+    renderMap(pts);
+  } else if(which==='jarvis'){
+    v.innerHTML=`<div class="grid"><div class="card c12 jarvis" id="jarvisCard"></div></div>`; renderJarvis(d.jarvis);
+  }
+}
+function deltaHtml(p,label){ return `<span class="delta ${p>=0?'up':'down'}">${p>=0?'▲':'▼'} <span class="num">${Math.abs(p)}%</span></span> ${label}`; }
+function hbars(sel,items,fmtV){ const el=$(sel); if(!el) return; if(!items.length){ el.innerHTML='<div class="empty">لا توجد بيانات</div>'; return; } const max=Math.max(...items.map(i=>i.v),1); el.innerHTML=items.map(i=>`<div class="hbar-row" title="${esc(i.n)}: ${esc(fmtV(i.v))}"><div class="n">${esc(i.n)}</div><div class="hbar"><i style="width:${Math.max(2,i.v/max*100)}%;background:${i.color}"></i></div><div class="v"><span class="num">${esc(fmtV(i.v))}</span>${i.extra?` <span style="color:var(--muted);font-weight:500">· ${esc(i.extra)}</span>`:''}</div></div>`).join(''); }
 const AR_MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-const mLabel = m => { const [y,mo]=m.split('-'); return AR_MONTHS[+mo-1]+' '+y.slice(2); };
+const mLabel = m => { const [y,mo]=String(m||'').split('-'); return (AR_MONTHS[+mo-1]||m)+' '+(y||'').slice(2); };
 function groupedBars(sel, months, series, fmtV){
-  const el=$(sel); if(!months.length){ el.innerHTML='<div class="empty">لا توجد بيانات شهرية بعد</div>'; return; }
+  const el=$(sel); if(!el) return; if(!months.length){ el.innerHTML='<div class="empty">لا توجد بيانات شهرية بعد</div>'; return; }
   const W=720,H=280,pl=54,pr=12,pt=14,pb=34; const iw=W-pl-pr, ih=H-pt-pb;
-  const max=Math.max(1,...series.flatMap(s=>months.map(m=>m[s.key]||0)))*1.12;
-  const ticks=5; const ty=[...Array(ticks+1)].map((_,i)=>max/ticks*i);
+  const max=Math.max(1,...series.flatMap(s=>months.map(m=>m[s.key]||0)))*1.12; const ticks=5; const ty=[...Array(ticks+1)].map((_,i)=>max/ticks*i);
   const gw=iw/months.length, bw=Math.min(28,(gw*0.7)/series.length), gap=2;
   let g=''; ty.forEach(v=>{ const y=pt+ih-v/max*ih; g+=`<line class="grid-line" x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}"/><text x="${pl-8}" y="${y+4}" text-anchor="end">${fmtK(v)}</text>`; });
-  let bars='';
-  months.forEach((m,i)=>{ const cx=pl+gw*i+gw/2; const total=series.length*bw+(series.length-1)*gap; series.forEach((s,j)=>{ const v=m[s.key]||0; const h=v/max*ih; const x=cx-total/2+j*(bw+gap); const y=pt+ih-h; bars+=`<rect data-i="${i}" data-j="${j}" x="${x}" y="${y}" width="${bw}" height="${Math.max(h,0)}" rx="4" fill="${s.color}" style="clip-path:inset(0 0 -4px 0 round 4px 4px 0 0)"/>`; }); bars+=`<text x="${cx}" y="${H-10}" text-anchor="middle" class="lbl-strong">${mLabel(m.month)}</text>`; });
-  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="رسم أعمدة شهري">${g}<line class="axis" x1="${pl}" x2="${W-pr}" y1="${pt+ih}" y2="${pt+ih}"/>${bars}</svg><div class="tip" id="tip-${sel.slice(1)}"></div><div class="legend">${series.map(s=>`<span><i class="sw" style="background:${s.color}"></i>${s.label}</span>`).join('')}</div>`;
+  let bars=''; months.forEach((m,i)=>{ const cx=pl+gw*i+gw/2; const total=series.length*bw+(series.length-1)*gap; series.forEach((s,j)=>{ const v=m[s.key]||0; const h=v/max*ih; const x=cx-total/2+j*(bw+gap); const y=pt+ih-h; bars+=`<rect data-i="${i}" data-j="${j}" x="${x}" y="${y}" width="${bw}" height="${Math.max(h,0)}" rx="4" fill="${s.color}"/>`; }); bars+=`<text x="${cx}" y="${H-10}" text-anchor="middle" class="lbl-strong">${mLabel(m.month)}</text>`; });
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="رسم أعمدة شهري">${g}<line class="axis" x1="${pl}" x2="${W-pr}" y1="${pt+ih}" y2="${pt+ih}"/>${bars}</svg><div class="tip"></div><div class="legend">${series.map(s=>`<span><i class="sw" style="background:${s.color}"></i>${s.label}</span>`).join('')}</div>`;
   const tip=el.querySelector('.tip'); const svg=el.querySelector('svg');
   svg.addEventListener('mousemove',e=>{ const r=e.target.closest('rect'); if(!r){tip.classList.remove('on');return;} const m=months[+r.dataset.i], s=series[+r.dataset.j]; tip.innerHTML=`<b>${mLabel(m.month)}</b><br>${s.label}: ${fmtV(m[s.key]||0)}`; const b=el.getBoundingClientRect(); tip.style.left=(e.clientX-b.left)+'px'; tip.style.top=(e.clientY-b.top)+'px'; tip.classList.add('on'); });
   svg.addEventListener('mouseleave',()=>tip.classList.remove('on'));
 }
-function monthlyChart(mm){ groupedBars('#chartMonthly', mm, [{key:'revenue',label:'الإيرادات',color:SERIES[0]},{key:'cogs',label:'تكلفة البضاعة المباعة',color:SERIES[1]},{key:'purchases',label:'المشتريات',color:SERIES[2]}], v=>fmt(v)+' ج.م'); }
-function cashChart(mm){ groupedBars('#chartCash', mm, [{key:'collected',label:'التحصيلات',color:SERIES[2]},{key:'paid_out',label:'المدفوعات',color:SERIES[1]}], v=>fmt(v)+' ج.م'); }
-function agingChart(aging){
-  const el=$('#chartAging'); const keys=['0-30','31-60','61-90','90+']; const labels={'0-30':'حتى 30 يوماً','31-60':'31–60 يوماً','61-90':'61–90 يوماً','90+':'أكثر من 90 يوماً'};
-  const colors={'0-30':'var(--good)','31-60':'var(--warn)','61-90':'var(--serious)','90+':'var(--critical)'};
-  const total=keys.reduce((a,k)=>a+(aging[k]||0),0);
-  if(!total){ el.innerHTML='<div class="empty">لا توجد مستحقات متأخرة — ممتاز</div>'; return; }
-  el.innerHTML=keys.map(k=>{ const v=aging[k]||0; return `<div class="hbar-row"><div class="n">${labels[k]}</div><div class="hbar"><i style="width:${Math.max(v?2:0,v/total*100)}%;background:${colors[k]}"></i></div><div class="v"><span class="num">${fmt(v)}</span> <span style="color:var(--muted)">(${Math.round(v/total*100)}%)</span></div></div>`; }).join('')+`<div class="legend" style="margin-top:10px"><span>الإجمالي المستحق: <b class="num">${fmt(total)}</b> ج.م</span></div>`;
+function agingChart(aging){ const el=$('#chartAging'); if(!el) return; const keys=['0-30','31-60','61-90','90+']; const labels={'0-30':'حتى 30 يوماً','31-60':'31–60 يوماً','61-90':'61–90 يوماً','90+':'أكثر من 90 يوماً'}; const colors={'0-30':'var(--good)','31-60':'var(--warn)','61-90':'var(--serious)','90+':'var(--critical)'}; const total=keys.reduce((a,k)=>a+(aging[k]||0),0); if(!total){ el.innerHTML='<div class="empty">لا توجد مستحقات متأخرة — ممتاز</div>'; return; } el.innerHTML=keys.map(k=>{ const v=aging[k]||0; return `<div class="hbar-row"><div class="n">${labels[k]}</div><div class="hbar"><i style="width:${Math.max(v?2:0,v/total*100)}%;background:${colors[k]}"></i></div><div class="v"><span class="num">${fmt(v)}</span> <span style="color:var(--muted)">(${Math.round(v/total*100)}%)</span></div></div>`; }).join('')+`<div class="legend" style="margin-top:10px"><span>الإجمالي المستحق: <b class="num">${fmt(total)}</b> ج.م</span></div>`; }
+function profitChart(k){ const el=$('#chartProfit'); if(!el) return; const rowsP=[{n:'الإيرادات',v:k.revenue||0,c:SERIES[0]},{n:'تكلفة البضاعة المباعة',v:k.cogs||0,c:SERIES[1]},{n:'مجمل الربح',v:k.grossProfit||0,c:SERIES[2]}]; const max=Math.max(1,...rowsP.map(r=>Math.abs(r.v))); el.innerHTML=rowsP.map(r=>`<div class="hbar-row"><div class="n">${r.n}</div><div class="hbar" style="height:14px"><i style="width:${Math.abs(r.v)/max*100}%;background:${r.c}"></i></div><div class="v"><span class="num">${fmt(r.v)}</span></div></div>`).join('')+`<div class="legend" style="margin-top:12px"><span>هامش الربح الإجمالي: <b class="num">${(k.grossMargin||0).toFixed(1)}%</b></span></div>`; }
+function renderJarvis(j){ const el=$('#jarvisCard'); if(!el) return; const btn = isAdmin()?`<button type="button" class="btn sm" id="jarvisGen">توليد تقرير استراتيجي جديد</button>`:'';
+  if(!j){ el.innerHTML=`<h3><span><span class="badge">JARVIS</span> المستشار الاستراتيجي</span>${btn}</h3><p class="empty" style="text-align:start">لم يُنشأ تقرير استراتيجي بعد. اضغط «توليد تقرير» وسيظهر هنا بعد دقائق (يقرأ جارفيس المبيعات والمخزون والعملاء ويكتب توصياته).</p>`; }
+  else { const secs=[['أهم عائق تشغيلي',j.top_bottleneck],['استراتيجيات النمو',j.growth_strategies],['توزيع الموارد',j.resource_allocation],['الاحتياجات التشغيلية',j.operational_needs],['تقييم المخاطر',j.risk_assessment],['إجراءات موصى بها',j.recommended_actions]].filter(s=>s[1]);
+    el.innerHTML=`<h3><span><span class="badge">JARVIS</span> التقرير الاستراتيجي الأخير <span class="hint">${esc(j.report_id)} · ${esc(j.generated_at)}</span></span>${btn}</h3><div class="headline">${esc(j.headline)}</div><dl>${secs.map(s=>`<div><dt>${s[0]}</dt><dd>${esc(s[1])}</dd></div>`).join('')}</dl>`; }
+  const b=$('#jarvisGen'); if(b) b.addEventListener('click', async ()=>{ b.disabled=true; b.textContent='جارٍ الإرسال…'; try{ await api({action:'jarvis'}); toast('تم إرسال الطلب لجارفيس — التقرير يظهر خلال دقائق بعد التحديث ⏳',5000); }catch(e){ toast('خطأ: '+e.message,4000); } b.disabled=false; b.textContent='توليد تقرير استراتيجي جديد'; });
 }
-function profitChart(k){
-  const el=$('#chartProfit'); const rows=[{n:'الإيرادات',v:k.revenue,c:SERIES[0]},{n:'تكلفة البضاعة المباعة',v:k.cogs,c:SERIES[1]},{n:'مجمل الربح',v:k.grossProfit,c:SERIES[2]}];
-  const max=Math.max(1,...rows.map(r=>Math.abs(r.v)));
-  el.innerHTML=rows.map(r=>`<div class="hbar-row"><div class="n">${r.n}</div><div class="hbar" style="height:14px"><i style="width:${Math.abs(r.v)/max*100}%;background:${r.c}"></i></div><div class="v"><span class="num">${fmt(r.v)}</span></div></div>`).join('')+`<div class="legend" style="margin-top:12px"><span>هامش الربح الإجمالي: <b class="num">${k.grossMargin.toFixed(1)}%</b></span></div>`;
-}
-
-/* ---------- jarvis ---------- */
-function renderJarvis(j){
-  const el=$('#jarvisCard');
-  if(!j){ el.innerHTML=`<div class="head"><span class="badge">JARVIS</span><h3>المستشار الاستراتيجي</h3></div><p class="empty" style="text-align:start">لم يُنشأ تقرير استراتيجي بعد. من تطبيق HerbaPharm اضغط «Generate Strategy Report» وسيظهر التقرير هنا بعد دقائق.</p>`; return; }
-  const secs=[['أهم عائق تشغيلي',j.top_bottleneck],['استراتيجيات النمو',j.growth_strategies],['توزيع الموارد',j.resource_allocation],['الاحتياجات التشغيلية',j.operational_needs],['تقييم المخاطر',j.risk_assessment],['إجراءات موصى بها',j.recommended_actions]].filter(s=>s[1]);
-  el.innerHTML=`<div class="head"><span class="badge">JARVIS</span><h3>التقرير الاستراتيجي الأخير</h3><span class="sub" style="margin:0">${esc(j.report_id)} · ${esc(j.generated_at)}</span></div><div class="headline">${esc(j.headline)}</div><dl>${secs.map(s=>`<div><dt>${s[0]}</dt><dd>${esc(s[1])}</dd></div>`).join('')}</dl>`;
-}
-
-/* ---------- map ---------- */
-const KIND={order:{l:'طلبات',c:SERIES[0]},invoice:{l:'فواتير',c:SERIES[2]},payment:{l:'تحصيلات/مدفوعات',c:SERIES[1]},customer:{l:'عملاء',c:SERIES[6]}};
+const KIND={order:{l:'طلبات',c:SERIES[0]},invoice:{l:'فواتير',c:SERIES[2]},payment:{l:'تحصيلات/مدفوعات',c:SERIES[1]},customer:{l:'عملاء',c:SERIES[6]},audit:{l:'تحركات الموظفين',c:SERIES[7]}};
+let mapKinds=new Set(Object.keys(KIND));
 function renderMap(points){
-  const f=$('#mapFilters'); f.innerHTML=Object.entries(KIND).map(([k,v])=>`<button type="button" class="chip" data-k="${k}" aria-pressed="${mapKinds.has(k)}"><i class="sw" style="background:${v.c}"></i>${v.l} <span class="num">(${points.filter(p=>p.kind===k).length})</span></button>`).join('');
+  const f=$('#mapFilters'); if(!f) return; f.innerHTML=Object.entries(KIND).map(([k,v])=>`<button type="button" class="chip" data-k="${k}" aria-pressed="${mapKinds.has(k)}"><i class="sw" style="background:${v.c}"></i>${v.l} <span class="num">(${points.filter(p=>p.kind===k).length})</span></button>`).join('');
   f.onclick=e=>{ const b=e.target.closest('.chip'); if(!b) return; const k=b.dataset.k; mapKinds.has(k)?mapKinds.delete(k):mapKinds.add(k); renderMap(points); };
-  const pts=points.filter(p=>mapKinds.has(p.kind));
-  const map=$('#map'); const list=$('#mapList');
+  const pts=points.filter(p=>mapKinds.has(p.kind) && isFinite(p.lat) && isFinite(p.lng)); const map=$('#map'); const list=$('#mapList');
   if(!pts.length){ map.innerHTML='<div class="empty" style="position:absolute;inset:0;display:grid;place-items:center">لا توجد مواقع مسجلة لهذا التصنيف</div>'; list.innerHTML=''; return; }
-  const lats=pts.map(p=>p.lat), lngs=pts.map(p=>p.lng);
-  let minLat=Math.min(...lats),maxLat=Math.max(...lats),minLng=Math.min(...lngs),maxLng=Math.max(...lngs);
+  const lats=pts.map(p=>p.lat), lngs=pts.map(p=>p.lng); let minLat=Math.min(...lats),maxLat=Math.max(...lats),minLng=Math.min(...lngs),maxLng=Math.max(...lngs);
   const padLat=Math.max((maxLat-minLat)*0.15,0.02), padLng=Math.max((maxLng-minLng)*0.15,0.02); minLat-=padLat;maxLat+=padLat;minLng-=padLng;maxLng+=padLng;
-  const W=800,H=450; const cos=Math.cos((minLat+maxLat)/2*Math.PI/180);
-  const sx=W/((maxLng-minLng)*cos), sy=H/(maxLat-minLat); const s=Math.min(sx,sy);
-  const ox=(W-(maxLng-minLng)*cos*s)/2, oy=(H-(maxLat-minLat)*s)/2;
-  const X=lng=>ox+(lng-minLng)*cos*s, Y=lat=>oy+(maxLat-lat)*s;
-  let grid=''; for(let i=1;i<8;i++){ grid+=`<line x1="${W/8*i}" x2="${W/8*i}" y1="0" y2="${H}" stroke="var(--line)" stroke-width="1"/>`; } for(let i=1;i<5;i++){ grid+=`<line x1="0" x2="${W}" y1="${H/5*i}" y2="${H/5*i}" stroke="var(--line)" stroke-width="1"/>`; }
+  const W=800,H=450; const cos=Math.cos((minLat+maxLat)/2*Math.PI/180); const s=Math.min(W/((maxLng-minLng)*cos), H/(maxLat-minLat)); const ox=(W-(maxLng-minLng)*cos*s)/2, oy=(H-(maxLat-minLat)*s)/2; const X=lng=>ox+(lng-minLng)*cos*s, Y=lat=>oy+(maxLat-lat)*s;
+  let grid=''; for(let i=1;i<8;i++) grid+=`<line x1="${W/8*i}" x2="${W/8*i}" y1="0" y2="${H}" stroke="var(--line)" stroke-width="1"/>`; for(let i=1;i<5;i++) grid+=`<line x1="0" x2="${W}" y1="${H/5*i}" y2="${H/5*i}" stroke="var(--line)" stroke-width="1"/>`;
   const dots=pts.map((p,i)=>`<g class="pt" data-i="${i}"><circle cx="${X(p.lng)}" cy="${Y(p.lat)}" r="9" fill="${KIND[p.kind].c}" fill-opacity=".18"/><circle cx="${X(p.lng)}" cy="${Y(p.lat)}" r="5" fill="${KIND[p.kind].c}" stroke="var(--surface)" stroke-width="2"/></g>`).join('');
-  const labels=pts.slice(0,12).map(p=>`<text x="${X(p.lng)+9}" y="${Y(p.lat)-8}" font-size="11" fill="var(--ink-2)" font-weight="600" style="direction:rtl">${esc(p.title||p.label)}</text>`).join('');
-  map.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${dots}${labels}</svg><div class="tip" id="mapTip"></div><div style="position:absolute;inset-inline-start:10px;bottom:8px;font-size:11px;color:var(--muted)">شمال ↑ · خريطة مبسطة من إحداثيات GPS المسجلة</div>`;
-  const tip=$('#mapTip'); const svg=map.querySelector('svg');
-  svg.addEventListener('mousemove',e=>{ const g=e.target.closest('.pt'); if(!g){tip.classList.remove('on');return;} const p=pts[+g.dataset.i]; tip.innerHTML=`<b>${esc(p.title)}</b><br>${esc(p.label)} · ${esc(p.sub)}<br><span style="opacity:.7">${esc(p.at||'')}</span>`; const b=map.getBoundingClientRect(); tip.style.left=(e.clientX-b.left)+'px'; tip.style.top=(e.clientY-b.top)+'px'; tip.classList.add('on'); });
+  const labels=pts.slice(0,12).map(p=>`<text x="${X(p.lng)+9}" y="${Y(p.lat)-8}" font-size="11" fill="var(--ink-2)" font-weight="600" style="direction:rtl">${esc(p.title||p.label||'')}</text>`).join('');
+  map.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${dots}${labels}</svg><div class="tip"></div><div style="position:absolute;inset-inline-start:10px;bottom:8px;font-size:11px;color:var(--muted)">شمال ↑ · خريطة مبسطة من الإحداثيات المسجلة</div>`;
+  const tip=map.querySelector('.tip'); const svg=map.querySelector('svg');
+  svg.addEventListener('mousemove',e=>{ const g=e.target.closest('.pt'); if(!g){tip.classList.remove('on');return;} const p=pts[+g.dataset.i]; tip.innerHTML=`<b>${esc(p.title||'')}</b><br>${esc(p.label||'')} · ${esc(p.sub||'')}<br><span style="opacity:.7">${esc(p.at||'')}</span>`; const b=map.getBoundingClientRect(); tip.style.left=(e.clientX-b.left)+'px'; tip.style.top=(e.clientY-b.top)+'px'; tip.classList.add('on'); });
   svg.addEventListener('mouseleave',()=>tip.classList.remove('on'));
-  list.innerHTML=pts.slice().sort((a,b)=>String(b.at).localeCompare(String(a.at))).slice(0,24).map(p=>`<div class="map-item"><span class="k" style="background:${KIND[p.kind].c}"></span><div><b>${esc(p.title)}</b><span class="m">${esc(p.label)} · ${esc(p.sub)}</span><br><span class="m num">${esc(p.at||'')}</span> · <a href="https://www.google.com/maps?q=${p.lat},${p.lng}" target="_blank" rel="noopener">افتح في الخرائط</a></div></div>`).join('');
+  list.innerHTML=pts.slice().sort((a,b)=>String(b.at||'').localeCompare(String(a.at||''))).slice(0,30).map(p=>`<div class="map-item"><span class="k" style="background:${KIND[p.kind].c}"></span><div><b>${esc(p.title||'')}</b><span class="m">${esc(p.label||'')} · ${esc(p.sub||'')}</span><br><span class="m num">${esc(p.at||'')}</span> · <a href="https://www.google.com/maps?q=${p.lat},${p.lng}" target="_blank" rel="noopener">افتح في الخرائط</a></div></div>`).join('');
 }
 
-/* ---------- boot ---------- */
-(async()=>{
-  const t=load('hp_token'); if(!t) return;
-  TOKEN=t; $('#login').hidden=true; $('#app').hidden=false; setStatus('busy','جارٍ التحميل…');
-  try{ render(await api('kpis')); }catch(ex){ TOKEN=null; store('hp_token',null); $('#app').hidden=true; $('#login').hidden=false; }
+/* ======================= role dashboard (non-executive roles) ======================= */
+async function myDash(){
+  const v=$('#view'); v.innerHTML='<div class="empty"><span class="spin"></span> جاري تحميل البيانات…</div>';
+  const get=k=>can(k)?rows(k).catch(()=>[]):Promise.resolve([]);
+  try{ const [P,M,SO,SL,SI,PO] = await Promise.all([get('Products'),get('Stock Movements'),get('Sales_Orders'),get('Sales_Leads'),get('Sales_Invoices'),get('Purchase_Orders')]); let k='', cards='';
+    if(P.length){ const cBal=col(P,'الرصيد الحالي'), cMin=col(P,'الحد الأدنى للمخزون'), cName=col(P,'اسم المنتج'), cCode=col(P,'كود المنتج'); let units=0,low=[]; for(const p of P){ const b=numv(p[cBal]); units+=b; if(cMin && b<numv(p[cMin])) low.push(p); } k+=tile('عدد المنتجات',num(P.length),'','')+tile('إجمالي الوحدات',num(fmt(units)),'','')+tile('أصناف تحت الحد الأدنى',num(low.length),'','',low.length?'warn':'good'); cards+=`<div class="card c6"><h3>⚠️ أصناف تحت الحد الأدنى</h3>${miniTable(low,[cCode,cName,cMin,cBal])}</div>`; if(M.length) cards+=`<div class="card c6"><h3>🕒 آخر حركات المخزون</h3>${miniTable(M.slice(-8).reverse(),[col(M,'رقم الحركة'),col(M,'التاريخ والوقت'),col(M,'كود المنتج'),col(M,'نوع الحركة'),col(M,'الكمية')])}</div>`; }
+    if(SO.length){ const st=col(SO,'حالة الطلب'); const pend=SO.filter(r=>isPending(r[st])); k+=tile('أوردرات بيع معلقة',num(pend.length),`من ${SO.length}`,'',pend.length?'warn':'good'); cards+=`<div class="card c6"><h3>🛒 أوردرات معلقة</h3>${miniTable(pend.slice(0,8),['رقم الطلب','تاريخ الطلب','اسم العميل أو الصيدلية','اسم المنتج','الكمية المطلوبة','حالة الطلب'])}</div>`; }
+    if(SL.length){ const st=col(SL,'all_fields_captured'); const pend=SL.filter(r=>isPending(st?r[st]:'')); k+=tile('عملاء محتملون قيد المتابعة',num(pend.length),`من ${SL.length}`,''); }
+    if(SI.length){ const st=col(SI,'حالة السداد'); const cRem=col(SI,'المتبقي'); const unpaid=SI.filter(r=>!/^مدفوع$/.test(String(r[st]).trim())); const due=unpaid.reduce((a,r)=>a+numv(r[cRem]),0); k+=tile('فواتير غير مسددة',num(unpaid.length),`مستحقات ${fmt(due)} ج.م`,'',unpaid.length?'bad':'good'); }
+    if(PO.length){ const st=col(PO,'الحالة'); const pend=PO.filter(r=>isPending(r[st])); k+=tile('أوامر شراء مفتوحة',num(pend.length),`من ${PO.length}`,''); }
+    v.innerHTML=`<div class="kpis">${k||'<div class="empty">لا توجد مؤشرات لهذا الدور</div>'}</div><div class="grid">${cards}</div>`;
+  }catch(e){ v.innerHTML=`<div class="card"><b style="color:var(--critical)">تعذّر تحميل البيانات:</b> ${esc(e.message)}</div>`; }
+}
+
+/* ======================= generic tables & forms ======================= */
+async function table(k, force){
+  const def=TABLES[k]||{t:k}; const v=$('#view'); v.innerHTML='<div class="empty"><span class="spin"></span> جاري التحميل…</div>';
+  let R; try{ R=await rows(k,force); }catch(e){ v.innerHTML=`<div class="card"><b style="color:var(--critical)">خطأ:</b> ${esc(e.message)}</div>`; return; }
+  const cols=Object.keys(R[0]||{}).filter(c=>c!=='row_number'); const ro=def.readonly;
+  v.innerHTML=`${!isAdmin()?'<div class="note">أي إضافة أو تعديل من حسابك يُرسل كطلب اعتماد ولا يُنفَّذ إلا بعد موافقة المدير.</div>':''}<div class="card"><h3><span>${esc(def.t)} <span class="hint">${R.length} سجل</span></span><span class="tools" style="margin:0"><input id="q" placeholder="🔎 بحث…">${ro?'':`<button type="button" class="btn sm" id="addBtn">＋ ${def.special==='movement'?'تسجيل حركة مخزون':'إضافة'}</button>`}<button type="button" class="btn ghost sm" id="reloadBtn">تحديث</button></span></h3>
+  <div class="tbl-wrap"><table id="tbl"><thead><tr>${cols.map(c=>`<th>${esc(c)}</th>`).join('')}${ro?'':'<th></th>'}</tr></thead><tbody>${R.length?R.map((r,i)=>`<tr data-i="${i}">${cols.map(c=>`<td class="clip">${cell(c,r[c])}</td>`).join('')}${ro?'':`<td><button type="button" class="btn ghost sm" data-edit="${i}">تعديل</button></td>`}</tr>`).join(''):`<tr><td colspan="${cols.length+1}" class="empty">لا توجد بيانات</td></tr>`}</tbody></table></div></div>`;
+  $('#q').addEventListener('input',()=>{ const q=$('#q').value.trim().toLowerCase(); document.querySelectorAll('#tbl tbody tr').forEach(tr=>{ tr.style.display=!q||tr.textContent.toLowerCase().includes(q)?'':'none'; }); });
+  $('#reloadBtn').addEventListener('click',()=>table(k,true));
+  const ab=$('#addBtn'); if(ab) ab.addEventListener('click',()=>def.special==='movement'?movementForm():addForm(k));
+  v.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>editForm(k,+b.dataset.edit)));
+}
+function fieldHtml(c,val){ const isLong=/ملاحظات|وصف|تفاصيل|البيانات|insights|summary/i.test(c); const isDate=/تاريخ|date/i.test(c); const id='f_'+c.replace(/\W+/g,'_'); return `<div class="${isLong?'full':''}"><label for="${id}">${esc(c)}</label>${isLong?`<textarea id="${id}" data-c="${esc(c)}" rows="2">${esc(val)}</textarea>`:`<input id="${id}" data-c="${esc(c)}" value="${esc(val)}" ${isDate&&!val?'placeholder="YYYY-MM-DD"':''}>`}</div>`; }
+function collect(){ const o={}; document.querySelectorAll('#md [data-c]').forEach(el=>{ o[el.dataset.c]=el.value; }); return o; }
+function nextId(R,kc){ const vals=R.map(r=>String(r[kc]||'')).filter(Boolean); if(!vals.length) return ''; const last=vals[vals.length-1]; const m=last.match(/^(.*?)(\d+)$/); if(!m) return ''; const mx=Math.max(...vals.map(v=>{ const mm=v.match(/(\d+)$/); return mm?parseInt(mm[1]):0; })); return m[1]+String(mx+1).padStart(m[2].length,'0'); }
+function saveLabel(){ return isAdmin()?'حفظ':'إرسال للاعتماد'; }
+async function addForm(k){ const R=await rows(k); const def=TABLES[k]||{t:k}; const cols=Object.keys(R[0]||{}).filter(c=>c!=='row_number'); if(!cols.length){ toast('لا يمكن تحديد أعمدة الجدول'); return; }
+  const defaults={}; cols.forEach(c=>{ if(/التاريخ والوقت|Last_Updated|timestamp/i.test(c)) defaults[c]=nowLocal(); else if(/^التاريخ$|تاريخ الطلب|تاريخ الفاتورة|تاريخ الدفع|تاريخ أول تعامل/.test(c)) defaults[c]=today(); });
+  const kc=def.key||cols[0]; defaults[kc]=nextId(R,kc);
+  openModal(`<h3>إضافة في ${esc(def.t)}</h3><div class="fg">${cols.map(c=>fieldHtml(c,defaults[c]||'')).join('')}</div><div class="acts"><button type="button" class="btn" id="svbtn">${saveLabel()}</button><button type="button" class="btn ghost" id="cancelBtn">إلغاء</button></div>`);
+  $('#cancelBtn').addEventListener('click',closeModal);
+  $('#svbtn').addEventListener('click', async ()=>{ const row=collect(); const b=$('#svbtn'); b.disabled=true; try{ const j=await api({action:'append', sheet:k, row}); closeModal(); toast(j.queued?'تم إرسال الطلب للاعتماد ⏳':'تم الحفظ ✅'); S.cache={}; S.exec=null; if(!j.queued) table(k,true); }catch(e){ b.disabled=false; toast('خطأ: '+e.message,4000); } }); }
+async function editForm(k,i){ const R=await rows(k); const r=R[i]; const def=TABLES[k]||{t:k}; const cols=Object.keys(r).filter(c=>c!=='row_number');
+  openModal(`<h3>تعديل — ${esc(def.t)}</h3><div class="fg">${cols.map(c=>fieldHtml(c,r[c]??'')).join('')}</div><div class="acts"><button type="button" class="btn" id="svbtn">${isAdmin()?'حفظ التعديل':'إرسال التعديل للاعتماد'}</button><button type="button" class="btn ghost" id="cancelBtn">إلغاء</button></div>`);
+  $('#cancelBtn').addEventListener('click',closeModal);
+  $('#svbtn').addEventListener('click', async ()=>{ const row=collect(); const b=$('#svbtn'); b.disabled=true; try{ const j=await api({action:'update', sheet:k, row_number:r.row_number, row}); closeModal(); toast(j.queued?'تم إرسال التعديل للاعتماد ⏳':'تم التعديل ✅'); S.cache={}; S.exec=null; if(!j.queued) table(k,true); }catch(e){ b.disabled=false; toast('خطأ: '+e.message,4000); } }); }
+async function movementForm(){ const [P,M]=await Promise.all([rows('Products'),rows('Stock Movements')]); const cCode=col(P,'كود المنتج'), cName=col(P,'اسم المنتج'), cBal=col(P,'الرصيد الحالي'); const cols=Object.keys(M[0]||{}).filter(c=>c!=='row_number'); const idc=col(M,'رقم الحركة');
+  const opts=P.map(p=>`<option value="${esc(p[cCode])}">${esc(p[cCode])} — ${esc(p[cName])} (رصيد ${esc(p[cBal])})</option>`).join('');
+  const f=cols.map(c=>{ if(c===idc) return fieldHtml(c,nextId(M,idc)); if(/التاريخ والوقت/.test(c)) return fieldHtml(c,nowLocal()); if(/كود المنتج/.test(c)) return `<div><label for="f_code">${esc(c)}</label><select id="f_code" data-c="${esc(c)}">${opts}</select></div>`; if(/نوع الحركة/.test(c)) return `<div><label for="f_type">${esc(c)}</label><select id="f_type" data-c="${esc(c)}"><option value="خروج">خروج (بيع / صرف)</option><option value="دخول">دخول (توريد / إرجاع)</option></select></div>`; if(/الكمية/.test(c)) return `<div><label for="f_qty">${esc(c)}</label><input id="f_qty" data-c="${esc(c)}" type="number" min="1" value="1"></div>`; if(/المستخدم/.test(c)) return fieldHtml(c,S.user.name||S.user.user||''); return fieldHtml(c,''); }).join('');
+  openModal(`<h3>تسجيل حركة مخزون</h3><p class="hint" style="margin:0 0 10px">${isAdmin()?'سيُحدَّث "الرصيد الحالي" للمنتج تلقائياً.':'تُنفَّذ الحركة ويُحدَّث الرصيد بعد اعتماد المدير.'}</p><div class="fg">${f}</div><div class="acts"><button type="button" class="btn" id="svbtn">${isAdmin()?'حفظ الحركة':'إرسال للاعتماد'}</button><button type="button" class="btn ghost" id="cancelBtn">إلغاء</button></div>`);
+  $('#cancelBtn').addEventListener('click',closeModal);
+  $('#svbtn').addEventListener('click', async ()=>{ const row=collect(); const b=$('#svbtn'); b.disabled=true; b.innerHTML='<span class="spin"></span>'; try{ const j=await api({action:'add_movement', row}); closeModal(); if(j.queued) toast('تم إرسال الحركة للاعتماد ⏳'); else toast(`تم تسجيل الحركة ✅ الرصيد: ${j.deduction&&j.deduction.previous_balance!==undefined?j.deduction.previous_balance+' ← '+j.deduction.new_balance:'تم التحديث'}`,4500); S.cache={}; S.exec=null; go('inventory','Stock Movements'); }catch(e){ b.disabled=false; b.textContent='حفظ الحركة'; toast('خطأ: '+e.message,4500); } }); }
+
+/* ======================= approvals (admin) ======================= */
+async function approvals(){ const v=$('#view'); v.innerHTML='<div class="empty"><span class="spin"></span> جاري التحميل…</div>';
+  let R; try{ R=await rows('Approvals',true); }catch(e){ v.innerHTML=`<div class="card empty">تعذّر قراءة جدول Approvals: ${esc(e.message)}</div>`; return; }
+  const cSt=col(R,'الحالة'); const pend=R.filter(r=>String(r[cSt]).trim()==='معلق'); const done=R.filter(r=>String(r[cSt]).trim()!=='معلق').slice(-30).reverse();
+  const cardHtml=r=>{ let d={}; try{ d=JSON.parse(r['البيانات']||'{}'); }catch(e){} const det=Object.entries(d.row||{}).filter(([a,b])=>b!=='').map(([a,b])=>`<b>${esc(a)}</b>: ${esc(b)}`).join(' · ');
+    if(d.action==='urgent'){ const ag=(typeof AGENTS!=='undefined'?AGENTS.find(a=>a.k===d.agent):null); return `<div class="card c12 appr urgent"><h3><span>🚨 ${esc(r['رقم الطلب'])} — حالة عاجلة من وكيل <b>${esc(ag?ag.t:d.agent)}</b></span><span class="hint">${esc(r['التاريخ والوقت'])}</span></h3><div class="sub">بواسطة ${esc(r['المستخدم'])} (${esc(ROLE_AR[r['الدور']]||r['الدور'])}) · IP ${esc(r['IP'])} ${r['الموقع']&&/^https?:/.test(r['الموقع'])?`· <a href="${esc(r['الموقع'])}" target="_blank" rel="noopener">🗺️ الموقع</a>`:''}</div><div style="margin:6px 0 8px;font-size:13.5px;white-space:pre-wrap">${esc(d.summary||'')}</div><div class="acts">${d.meeting?`<button type="button" class="btn sm" data-join="${esc(d.meeting)}" data-ag="${esc(d.agent)}">📹 الانضمام للاجتماع</button>`:''}${ag?`<button type="button" class="btn sm ghost" data-chat="${esc(d.agent)}">💬 فتح الوكيل</button>`:''}<button type="button" class="btn ok sm" data-approve="${r.row_number}">✅ تم التعامل</button><button type="button" class="btn danger sm" data-reject="${r.row_number}">✖ إغلاق بدون إجراء</button><input id="note_${r.row_number}" placeholder="ما تم اتخاذه" style="max-width:320px"></div></div>`; }
+    return `<div class="card c12 appr"><h3><span>${esc(r['رقم الطلب'])} — ${esc(r['نوع العملية'])} في <b>${esc(r['الجدول'])}</b></span><span class="hint">${esc(r['التاريخ والوقت'])}</span></h3><div class="sub">بواسطة ${esc(r['المستخدم'])} (${esc(ROLE_AR[r['الدور']]||r['الدور'])}) · IP ${esc(r['IP'])} ${r['الموقع']&&/^https?:/.test(r['الموقع'])?`· <a href="${esc(r['الموقع'])}" target="_blank" rel="noopener">🗺️ الموقع</a>`:''}</div><div style="margin:6px 0 8px;font-size:13px">${det||esc(r['البيانات'])}</div><div class="acts"><button type="button" class="btn ok sm" data-approve="${r.row_number}">✅ اعتماد وتنفيذ</button><button type="button" class="btn danger sm" data-reject="${r.row_number}">✖ رفض</button><input id="note_${r.row_number}" placeholder="ملاحظة / سبب الرفض (اختياري)" style="max-width:320px"></div></div>`; };
+  v.innerHTML=`<div class="sec-head"><h2>بانتظار الاعتماد</h2><span class="sub">${pend.length} طلب</span></div><div class="grid">${pend.length?pend.map(cardHtml).join(''):'<div class="card c12 empty">لا توجد طلبات معلقة 🎉</div>'}</div><div class="sec-head"><h2>آخر القرارات</h2></div><div class="card">${miniTable(done,[col(R,'رقم الطلب'),col(R,'التاريخ والوقت'),col(R,'المستخدم'),col(R,'نوع العملية'),col(R,'الجدول'),cSt,col(R,'تم الاعتماد بواسطة'),col(R,'تاريخ الاعتماد'),col(R,'ملاحظات')])}</div>`;
+  v.querySelectorAll('[data-approve]').forEach(b=>b.addEventListener('click',()=>decide(R,+b.dataset.approve,'approve')));
+  v.querySelectorAll('[data-join]').forEach(b=>b.addEventListener('click',()=>{ const ag=AGENTS.find(a=>a.k===b.dataset.ag)||AGENTS[0]; startMeeting(ag,{room:b.dataset.join.split('/').pop(), urgent:true}); }));
+  v.querySelectorAll('[data-chat]').forEach(b=>b.addEventListener('click',()=>go('agents',b.dataset.chat)));
+  v.querySelectorAll('[data-reject]').forEach(b=>b.addEventListener('click',()=>decide(R,+b.dataset.reject,'reject')));
+}
+async function decide(R, rn, what){ const r=R.find(x=>x.row_number===rn); if(!r) return; let payload={}; try{ payload=JSON.parse(r['البيانات']||'{}'); }catch(e){} const ne=document.getElementById('note_'+rn); const note=ne?ne.value.trim():'';
+  try{ toast(what==='approve'?'جاري التنفيذ…':'جاري الرفض…'); let res={}; const isUrg=payload.action==='urgent'; if(what==='approve'&&!isUrg) res=await api({action:'apply', request_id:r['رقم الطلب'], payload});
+    await api({action:'update', sheet:'Approvals', row_number:rn, row:{'الحالة': isUrg?(what==='approve'?'تم التعامل':'مغلق'):(what==='approve'?'معتمد':'مرفوض'), 'تم الاعتماد بواسطة': S.user.name||S.user.user, 'تاريخ الاعتماد': nowLocal(), 'ملاحظات': note}});
+    toast(what==='approve'?`تم الاعتماد والتنفيذ ✅ ${res.deduction&&res.deduction.previous_balance!==undefined?('الرصيد '+res.deduction.previous_balance+' ← '+res.deduction.new_balance):''}`:'تم الرفض'); S.cache={}; S.exec=null; approvals(); refreshPending();
+  }catch(e){ toast('خطأ: '+e.message,4500); } }
+
+/* ======================= AI agents (chat / voice / meeting / urgent) ======================= */
+const AGENTS = [
+  {k:'accounting', t:'المحاسبة والقيود', i:'📒', sheets:['Ledger','Payments','Sales_Invoices','Sales_Invoice_Items','Purchase_Invoices','Purchase_Invoice_Items'], d:'القيود، الذمم، الضرائب، الإقفال الشهري', q:['راجع آخر القيود واكتشف أي خلل','ما هي الفواتير غير المحصلة الأقدم؟','جهّز قيد فاتورة بيع جديدة']},
+  {k:'financial', t:'القوائم المالية والتحليل', i:'📊', sheets:['Ledger','Sales_Invoices','Purchase_Invoices','Payments','Sales_Invoice_Items'], d:'قائمة الدخل، النسب المالية، التعادل', q:['اعمل قائمة دخل مبسطة لهذا الشهر','احسب هامش مجمل الربح وDSO','أين نقطة التعادل؟']},
+  {k:'costing', t:'التكاليف والتسعير', i:'🧮', sheets:['Products','Product_BOM','Raw_Materials','Sales_Invoice_Items','Purchase_Invoice_Items'], d:'تكلفة الوحدة من BOM، الهوامش، قوائم الأسعار', q:['احسب تكلفة الوحدة لكل منتج من BOM','أي منتج هامشه الأضعف؟','اقترح سعر جملة بهامش 40%']},
+  {k:'cash', t:'النقدية ورأس المال العامل', i:'💵', sheets:['Payments','Sales_Invoices','Purchase_Invoices','Customers','Suppliers','Sales_Orders','Purchase_Orders'], d:'التحصيل، أعمار الذمم، دورة النقد', q:['خطة تحصيل لهذا الأسبوع','أعمار الذمم المدينة الآن','أولويات سداد الموردين']},
+  {k:'inventory', t:'المخزون والجرد', i:'📦', sheets:['Products','Stock Movements','Raw_Materials','Product_BOM','Purchase_Orders'], d:'FEFO/WAC، نقطة إعادة الطلب، الجرد', q:['الأصناف تحت الحد الأدنى','احسب نقطة إعادة الطلب للأصناف الأسرع حركة','حلل حركات المخزون الأخيرة']},
+  {k:'sales', t:'المبيعات والعملاء', i:'🤝', sheets:['Customers','Sales_Leads','Sales_Orders','Sales_Invoices','Sales_Invoice_Items','Products','Complaints','Alerts'], d:'القمع البيعي، العملاء، الأوردرات', q:['أفضل 5 عملاء والعملاء الخاملون','متابعة العملاء المحتملين من الشات (Sales_Leads)','الشكاوى الجديدة وخطة الرد عليها','الأوردرات المعلقة وماذا نفعل بها']},
+  {k:'marketing', t:'التسويق', i:'📣', sheets:['Customers','Sales_Leads','Products','Marketing_Insights','Sales_Invoice_Items','Complaints'], d:'حملات B2B للصيدليات والموزعين', q:['اقترح حملة شهرية بميزانية 10 آلاف جنيه','أي المنتجات تستحق تركيز التسويق؟','رسالة واتساب للصيدليات الخاملة']},
+  {k:'procurement', t:'المشتريات والموردين', i:'🛒', sheets:['Suppliers','Purchase_Orders','Purchase_Invoices','Purchase_Invoice_Items','Raw_Materials','Products'], d:'أوامر الشراء، تقييم الموردين، MOQ', q:['أوامر الشراء المتأخرة','ما الخامات التي يجب طلبها الآن؟','قيّم الموردين حسب الالتزام']},
+  {k:'logistics', t:'اللوجستيات والشحن', i:'🚚', sheets:['Sales_Orders','Purchase_Orders','Stock Movements','Customers','Suppliers'], d:'الشحن، Incoterms، الجمارك، OTIF', q:['خطة شحن الأوردرات المفتوحة','اشرح فرق CIF وFOB لصفقة استيراد','احسب الوزن الحجمي لشحنة']},
+  {k:'production', t:'التصنيع والجودة', i:'🏭', sheets:['Product_BOM','Raw_Materials','Products','Stock Movements'], d:'BOM، MRP، الدفعات، GMP/CAPA', q:['احتياجات الخامات لإنتاج 1000 عبوة','قائمة فحص GMP لدفعة جديدة','كيف أوثّق انحرافاً وCAPA؟']},
+  {k:'strategy', t:'المؤشرات والاستراتيجية', i:'🎯', sheets:['Strategic_Insights','Products','Customers','Sales_Invoices','Purchase_Invoices','Payments','Stock Movements'], exec:true, d:'KPIs، OKR، SWOT، قرارات تنفيذية', q:['أهم 3 قرارات هذا الأسبوع','تحليل SWOT من الأرقام الحالية','حدد OKR للربع القادم']},
+];
+const ROLE_AGENTS = { accounts:['accounting','financial','cash','costing','strategy'], warehouse:['inventory','production','logistics'], sales:['sales','marketing','logistics'], purchasing:['procurement','costing','logistics','inventory'] };
+function agentAllowed(a){ if(!S.user) return false; if(isAdmin()) return true; return (ROLE_AGENTS[S.user.role]||[]).includes(a.k) && a.sheets.some(s=>can(s)); }
+function visibleAgents(){ return AGENTS.filter(agentAllowed); }
+const chatStore = { load(){ try{ return JSON.parse(localStorage.getItem('hp_chats')||'{}'); }catch(e){ return {}; } }, save(o){ try{ localStorage.setItem('hp_chats', JSON.stringify(o)); }catch(e){} } };
+S.chats = chatStore.load(); S.voice = null; S.meeting = null;
+function chatOf(k){ if(!S.chats[k]) S.chats[k]=[]; return S.chats[k]; }
+function mdLite(s){ let h=esc(s); h=h.replace(/```action\s*([\s\S]*?)```/g,(m,j)=>`<div class="act-block" data-json="${j.trim()}"><b>⚡ إجراء مقترح</b><pre>${j.trim()}</pre><button type="button" class="btn sm act-send">إرسال كطلب اعتماد</button></div>`);
+  h=h.replace(/```[a-z]*\s*([\s\S]*?)```/g,'<pre>$1</pre>').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/^### (.+)$/gm,'<h4>$1</h4>').replace(/^## (.+)$/gm,'<h4>$1</h4>').replace(/^# (.+)$/gm,'<h4>$1</h4>').replace(/^\s*[-•] (.+)$/gm,'<li>$1</li>').replace(/(<li>.*<\/li>\n?)+/g,m=>'<ul>'+m+'</ul>').replace(/\n/g,'<br>'); return h; }
+function plainForSpeech(s){ return String(s||'').replace(/```[\s\S]*?```/g,' ').replace(/[*#_`>|]/g,' ').replace(/\s+/g,' ').trim().slice(0,900); }
+async function buildContext(a){ const ctx={}; let size=0; const LIMIT=80000;
+  const list=a.sheets.filter(s=>can(s)||(a.exec&&canExec()&&s==='Strategic_Insights'));
+  for(const s of list){ if(size>LIMIT) break; try{ const R=await rows(s); const trimmed=R.slice(-80).map(r=>{ const o={}; for(const [k,v] of Object.entries(r)){ if(k==='row_number'||k==='PIN_Code'||v===''||v===null) continue; o[k]=typeof v==='string'&&v.length>120?v.slice(0,120)+'…':v; } return o; }); const js=JSON.stringify(trimmed); if(size+js.length>LIMIT){ ctx[s]=trimmed.slice(-25); size+=JSON.stringify(ctx[s]).length; } else { ctx[s]=trimmed; size+=js.length; } ctx[s+'_total_rows']=R.length; }catch(e){} }
+  if(a.exec && canExec()){ try{ const d=await execData(); ctx['KPIs']=d.kpis||{}; ctx['Monthly']=(d.monthly||[]).slice(-6); }catch(e){} }
+  return ctx; }
+function agentPanel(k){ const a=AGENTS.find(x=>x.k===k); const v=$('#view'); if(!a||!agentAllowed(a)){ v.innerHTML='<div class="empty">لا توجد صلاحيات لهذا الوكيل</div>'; return; }
+  S.agent=k; const msgs=chatOf(k);
+  v.innerHTML=`<div class="agent-wrap"><div class="card agent-head"><div class="ag-id"><span class="ag-i">${a.i}</span><div><h3>وكيل ${esc(a.t)}</h3><div class="sub" style="margin:0">${esc(a.d)} · يقرأ: ${a.sheets.filter(s=>can(s)||(a.exec&&canExec())).map(s=>TABLES[s]?TABLES[s].t:s).join('، ')||'—'}</div></div></div>
+    <div class="acts ag-acts"><button type="button" class="btn sm" id="agVoice">🎙️ مكالمة صوتية</button><button type="button" class="btn sm" id="agMeet">📹 اجتماع مباشر</button><button type="button" class="btn danger sm" id="agUrgent">🚨 حالة عاجلة</button><button type="button" class="btn ghost sm" id="agClear">🗑️ محادثة جديدة</button></div></div>
+    <div class="card chat" id="chatBox">${msgs.length?'':`<div class="chat-empty"><p>ابدأ بسؤال أو اختر من الاقتراحات:</p><div class="chips">${a.q.map(q=>`<button type="button" class="chip" data-q="${esc(q)}">${esc(q)}</button>`).join('')}</div></div>`}<div id="chatMsgs">${msgs.map(m=>msgHtml(m)).join('')}</div></div>
+    <form class="chat-in" id="chatForm"><textarea id="chatTxt" rows="2" placeholder="اكتب سؤالك للوكيل… (Enter للإرسال، Shift+Enter لسطر جديد)"></textarea><button type="submit" class="btn" id="chatSend">إرسال</button></form></div>`;
+  const send=async(text,opts={})=>{ text=(text||'').trim(); if(!text) return; await sendToAgent(a, text, opts); };
+  $('#chatForm').addEventListener('submit',e=>{ e.preventDefault(); const t=$('#chatTxt').value; $('#chatTxt').value=''; send(t); });
+  $('#chatTxt').addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); $('#chatForm').requestSubmit(); } });
+  v.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>send(b.dataset.q)));
+  $('#agClear').addEventListener('click',()=>{ S.chats[k]=[]; chatStore.save(S.chats); agentPanel(k); });
+  $('#agVoice').addEventListener('click',()=>startVoice(a));
+  $('#agMeet').addEventListener('click',()=>startMeeting(a));
+  $('#agUrgent').addEventListener('click',()=>raiseUrgent(a));
+  bindActionButtons(); scrollChat();
+}
+function msgHtml(m){ return `<div class="msg ${m.role==='user'?'me':'ai'}"><div class="bub">${m.role==='user'?esc(m.content).replace(/\n/g,'<br>'):mdLite(m.content)}</div><div class="mt">${esc(m.ts||'')}${m.channel&&m.channel!=='chat'?' · '+(m.channel==='voice'?'🎙️ صوت':'📹 اجتماع'):''}</div></div>`; }
+function scrollChat(){ const b=$('#chatBox'); if(b) b.scrollTop=b.scrollHeight; }
+function bindActionButtons(){ document.querySelectorAll('.act-block .act-send').forEach(btn=>{ if(btn._b) return; btn._b=1; btn.addEventListener('click',async()=>{ const blk=btn.closest('.act-block'); let a; try{ a=JSON.parse(blk.dataset.json); }catch(e){ toast('تعذّر قراءة الإجراء'); return; } if(!a.action||!a.sheet){ toast('إجراء غير مكتمل'); return; } if(!confirm(`إرسال إجراء "${a.action}" على جدول ${a.sheet} كطلب اعتماد؟`)) return; btn.disabled=true; try{ const body={action:a.action==='add_movement'?'add_movement':a.action, sheet:a.sheet, row:a.row||{}}; if(a.row_number) body.row_number=a.row_number; const j=await api(body); btn.textContent=j.queued?'تم الإرسال للاعتماد ⏳':'تم التنفيذ ✅'; S.cache={}; S.exec=null; if(isAdmin()) refreshPending(); }catch(e){ btn.disabled=false; toast('خطأ: '+e.message,4500); } }); }); }
+async function sendToAgent(a, text, opts={}){ const msgs=chatOf(a.k); const channel=opts.channel||'chat'; msgs.push({role:'user',content:text,ts:nowLocal(),channel}); chatStore.save(S.chats);
+  const box=$('#chatMsgs'); if(box&&S.agent===a.k){ const e=$('#chatBox .chat-empty'); if(e) e.remove(); box.insertAdjacentHTML('beforeend', msgHtml(msgs[msgs.length-1])+`<div class="msg ai" id="typing"><div class="bub"><span class="spin d"></span> ${esc(a.t)} يفكّر…</div></div>`); scrollChat(); }
+  const sendBtn=$('#chatSend'); if(sendBtn) sendBtn.disabled=true;
+  try{ const context=await buildContext(a); const history=msgs.slice(-12).map(m=>({role:m.role,content:m.content}));
+    const j=await api({action:'agent', agent:a.k, message:text, history, context, channel, urgent:!!opts.urgent});
+    msgs.push({role:'assistant',content:j.reply,ts:nowLocal(),channel}); chatStore.save(S.chats);
+    const t=$('#typing'); if(t) t.remove(); if(box&&S.agent===a.k){ box.insertAdjacentHTML('beforeend', msgHtml(msgs[msgs.length-1])); bindActionButtons(); scrollChat(); }
+    if(opts.onReply) opts.onReply(j.reply); return j.reply;
+  }catch(e){ const t=$('#typing'); if(t) t.remove(); const m=e.message==='agent_error'?'الوكيل غير متاح — تأكد من ضبط مفتاح Anthropic في n8n':(e.message==='forbidden'?'ليس لديك صلاحية لهذا الوكيل':e.message); if(box) box.insertAdjacentHTML('beforeend',`<div class="msg ai"><div class="bub err">⚠️ ${esc(m)}</div></div>`); toast('خطأ: '+m,4500); if(opts.onError) opts.onError(m); }
+  finally{ if(sendBtn) sendBtn.disabled=false; } }
+
+/* ---- voice call (browser speech recognition + synthesis) ---- */
+const SR = window.SpeechRecognition||window.webkitSpeechRecognition;
+function speak(text){ return new Promise(res=>{ if(!('speechSynthesis' in window)){ res(); return; } try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(plainForSpeech(text)); u.lang='ar-EG'; const vs=speechSynthesis.getVoices(); const v=vs.find(x=>/^ar/i.test(x.lang)&&/eg|egypt/i.test(x.lang+x.name))||vs.find(x=>/^ar/i.test(x.lang)); if(v) u.voice=v; u.rate=1; u.onend=res; u.onerror=res; speechSynthesis.speak(u); }catch(e){ res(); } }); }
+function listenOnce(){ return new Promise((res,rej)=>{ if(!SR) return rej(new Error('nosr')); const r=new SR(); r.lang='ar-EG'; r.interimResults=true; r.maxAlternatives=1; let final=''; r.onresult=e=>{ let s=''; for(const x of e.results){ s+=x[0].transcript; if(x.isFinal) final=s; } const el=$('#vcHeard'); if(el) el.textContent=s; }; r.onerror=e=>rej(new Error(e.error||'sr')); r.onend=()=>res(final.trim()); r.start(); S.voice&&(S.voice.rec=r); }); }
+function startVoice(a, opts={}){ if(!SR){ toast('المتصفح لا يدعم التعرف على الصوت — استخدم Chrome أو Edge',5000); return; }
+  S.voice={a, on:true};
+  openModal(`<div class="vc"><div class="vc-av">${a.i}</div><h3>مكالمة مع وكيل ${esc(a.t)}</h3><div class="vc-st" id="vcSt">جارٍ الاستماع… تكلّم الآن</div><div class="vc-heard" id="vcHeard"></div><div class="vc-reply" id="vcReply"></div><div class="acts" style="justify-content:center"><button type="button" class="btn danger" id="vcEnd">📵 إنهاء المكالمة</button><button type="button" class="btn ghost" id="vcAgain" hidden>🎙️ تكلّم</button></div><p class="hint">تُسجَّل المحادثة في سجل التدقيق. الوكيل يرد بصوت المتصفح.</p></div>`);
+  const end=()=>{ if(S.voice){ S.voice.on=false; try{ S.voice.rec&&S.voice.rec.abort(); }catch(e){} } try{ speechSynthesis.cancel(); }catch(e){} S.voice=null; closeModal(); };
+  $('#vcEnd').addEventListener('click',end);
+  const alive=()=>{ if(S.voice&&S.voice.on&&$('#vcSt')) return true; if(S.voice){ try{ S.voice.rec&&S.voice.rec.abort(); }catch(e){} } S.voice=null; try{ speechSynthesis.cancel(); }catch(e){} return false; };
+  const loop=async()=>{ if(!alive()) return; const st=$('#vcSt'); const ag=$('#vcAgain'); try{ st.textContent='جارٍ الاستماع… تكلّم الآن'; $('#vcHeard').textContent=''; ag.hidden=true; const heard=await listenOnce(); if(!alive()) return; if(!heard){ st.textContent='لم أسمع شيئاً — اضغط "تكلّم" للمحاولة'; ag.hidden=false; return; }
+      st.textContent='الوكيل يفكّر…'; const reply=await sendToAgent(a, heard, {channel:'voice', urgent:!!opts.urgent}); if(!alive()) return; if(reply){ $('#vcReply').innerHTML=mdLite(reply); st.textContent='الوكيل يتحدث…'; await speak(reply); } if(alive()) loop(); }
+    catch(e){ if(!S.voice) return; st.textContent = e.message==='not-allowed'?'لم يُسمح باستخدام الميكروفون — فعّل الإذن ثم أعد المحاولة':'تعذّر الاستماع ('+e.message+') — اضغط "تكلّم"'; ag.hidden=false; } };
+  $('#vcAgain').addEventListener('click',loop); loop(); }
+
+/* ---- meeting room (Jitsi) with the agent in the side panel ---- */
+function startMeeting(a, opts={}){ const room=(opts.room||('HerbaPharm-'+a.k+'-'+Date.now().toString(36))).replace(/[^A-Za-z0-9\-]/g,''); const url='https://meet.jit.si/'+room; const name=encodeURIComponent((S.user&&(S.user.name||S.user.user))||'HerbaPharm');
+  S.meeting={a, room, url};
+  const wrap=document.createElement('div'); wrap.className='meet'; wrap.id='meet';
+  wrap.innerHTML=`<div class="meet-top"><b>📹 اجتماع مباشر — وكيل ${esc(a.t)}</b><span class="hint">الغرفة: ${esc(room)}</span><div class="acts"><button type="button" class="btn sm ghost" id="mtCopy">📋 نسخ رابط الدعوة</button><button type="button" class="btn sm danger" id="mtUrgent">🚨 تصعيد عاجل للأدمن</button><button type="button" class="btn sm" id="mtEnd">إنهاء</button></div></div>
+    <div class="meet-body"><iframe class="meet-frame" src="${esc(url)}#config.prejoinPageEnabled=false&config.startWithAudioMuted=false&userInfo.displayName=%22${name}%22&interfaceConfig.SHOW_JITSI_WATERMARK=false" allow="camera; microphone; display-capture; fullscreen; autoplay; clipboard-write"></iframe>
+    <div class="meet-side"><div class="meet-side-h">${a.i} الوكيل في الاجتماع</div><div class="chat" id="mtMsgs"></div><div class="acts"><button type="button" class="btn sm" id="mtMic">🎙️ اسأل بصوتك</button><label class="hint" style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="mtSpeak" checked> رد صوتي</label></div><form id="mtForm" class="chat-in"><textarea id="mtTxt" rows="2" placeholder="اسأل الوكيل أثناء الاجتماع…"></textarea><button class="btn sm" type="submit">إرسال</button></form></div></div>`;
+  document.body.appendChild(wrap); document.body.classList.add('meeting');
+  const box=$('#mtMsgs'); const add=(role,content)=>{ box.insertAdjacentHTML('beforeend',`<div class="msg ${role==='user'?'me':'ai'}"><div class="bub">${role==='user'?esc(content):mdLite(content)}</div></div>`); box.scrollTop=box.scrollHeight; bindActionButtons(); };
+  const ask=async(text)=>{ text=(text||'').trim(); if(!text) return; add('user',text); box.insertAdjacentHTML('beforeend','<div class="msg ai" id="mtTyping"><div class="bub"><span class="spin d"></span></div></div>'); try{ const context=await buildContext(a); const hist=chatOf(a.k); hist.push({role:'user',content:text,ts:nowLocal(),channel:'meeting'}); const j=await api({action:'agent', agent:a.k, message:text, history:hist.slice(-12).map(m=>({role:m.role,content:m.content})), context, channel:'meeting', urgent:!!opts.urgent}); hist.push({role:'assistant',content:j.reply,ts:nowLocal(),channel:'meeting'}); chatStore.save(S.chats); $('#mtTyping').remove(); add('assistant',j.reply); if($('#mtSpeak').checked) speak(j.reply); }catch(e){ const t=$('#mtTyping'); if(t) t.remove(); add('assistant','⚠️ '+(e.message==='agent_error'?'الوكيل غير متاح — راجع مفتاح Anthropic في n8n':e.message)); } };
+  $('#mtForm').addEventListener('submit',e=>{ e.preventDefault(); const t=$('#mtTxt').value; $('#mtTxt').value=''; ask(t); });
+  $('#mtTxt').addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); $('#mtForm').requestSubmit(); } });
+  $('#mtMic').addEventListener('click',async()=>{ if(!SR){ toast('المتصفح لا يدعم التعرف على الصوت'); return; } const b=$('#mtMic'); b.textContent='🔴 يستمع…'; b.disabled=true; try{ S.voice={a,on:true}; const heard=await listenOnce(); S.voice=null; if(heard) ask(heard); else toast('لم أسمع شيئاً'); }catch(e){ S.voice=null; toast('تعذّر الاستماع: '+e.message); } b.textContent='🎙️ اسأل بصوتك'; b.disabled=false; });
+  $('#mtCopy').addEventListener('click',async()=>{ try{ await navigator.clipboard.writeText(url); toast('تم نسخ رابط الاجتماع ✅'); }catch(e){ prompt('رابط الاجتماع:', url); } });
+  $('#mtUrgent').addEventListener('click',()=>raiseUrgent(a,{meeting:url}));
+  $('#mtEnd').addEventListener('click',()=>{ try{ speechSynthesis.cancel(); }catch(e){} wrap.remove(); document.body.classList.remove('meeting'); S.meeting=null; });
+  add('assistant', `أهلاً ${esc((S.user&&S.user.name)||'')} — أنا وكيل ${a.t}. انسخ رابط الدعوة وأرسله للأدمن أو الفريق، واسألني هنا أو بصوتك وسأرد داخل الاجتماع.`);
+}
+
+/* ---- urgent escalation → admin queue (+ optional meeting link) ---- */
+function raiseUrgent(a, opts={}){ const last=[...chatOf(a.k)].reverse().find(m=>m.role==='assistant'); const pre=opts.summary||(last?plainForSpeech(last.content).slice(0,400):'');
+  openModal(`<h3>🚨 حالة عاجلة — ${esc(a.t)}</h3><p class="hint" style="margin:0 0 10px">سيصل الطلب فوراً لطابور الأدمن مع موقعك ووقت الإرسال${opts.meeting?' ورابط الاجتماع الحالي':''}.</p><div class="fg"><div style="grid-column:1/-1"><label>وصف الحالة</label><textarea id="urgTxt" rows="4" placeholder="ما المشكلة؟ ما المطلوب من الأدمن؟">${esc(pre)}</textarea></div>${opts.meeting?'':`<label style="display:flex;gap:8px;align-items:center;grid-column:1/-1"><input type="checkbox" id="urgMeet" checked> إنشاء غرفة اجتماع فورية وإرفاق رابطها</label>`}<label style="display:flex;gap:8px;align-items:center;grid-column:1/-1"><input type="checkbox" id="urgAsk" checked> اطلب من الوكيل إجراءً فورياً الآن</label></div><div class="acts"><button type="button" class="btn danger" id="urgSend">إرسال التصعيد</button><button type="button" class="btn ghost" id="urgCancel">إلغاء</button></div>`);
+  $('#urgCancel').addEventListener('click',closeModal);
+  $('#urgSend').addEventListener('click',async()=>{ const summary=$('#urgTxt').value.trim(); if(!summary){ toast('اكتب وصف الحالة'); return; } const b=$('#urgSend'); b.disabled=true; b.innerHTML='<span class="spin"></span>';
+    const mkMeet=opts.meeting?false:$('#urgMeet').checked; const askAgent=$('#urgAsk').checked; const meeting=opts.meeting||(mkMeet?('https://meet.jit.si/HerbaPharm-URGENT-'+a.k+'-'+Date.now().toString(36)):'');
+    try{ await getGeo(); const j=await api({action:'urgent', agent:a.k, summary, meeting}); closeModal(); toast(`تم التصعيد ✅ رقم الحالة ${j.request_id}`,5000); if(isAdmin()) refreshPending();
+      if(mkMeet && !S.meeting) startMeeting(a,{room:meeting.split('/').pop(), urgent:true});
+      if(askAgent){ if(S.group!=='agents'||S.agent!==a.k) go('agents',a.k); sendToAgent(a, 'حالة عاجلة: '+summary+'\nأعطني الإجراء الفوري المطلوب الآن، ثم البدائل، ثم ما يحتاج اعتماد الأدمن.', {channel:'chat', urgent:true}); }
+    }catch(e){ b.disabled=false; b.textContent='إرسال التصعيد'; toast('خطأ: '+e.message,4500); } }); }
+
+/* ======================= public customer chat (Sisi Website Chat) ======================= */
+const CHAT_API = 'https://alielsisi.app.n8n.cloud/webhook/sisi-chat';
+(function(){
+  let sid=''; try{ sid=localStorage.getItem('hp_chat_sid')||''; }catch(e){} if(!sid){ sid='web-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8); try{ localStorage.setItem('hp_chat_sid',sid); }catch(e){} }
+  const btn=document.createElement('button'); btn.type='button'; btn.className='cw-btn'; btn.id='cwBtn'; btn.innerHTML='💬 <span>اسألنا</span>';
+  const box=document.createElement('div'); box.className='cw'; box.id='cw'; box.hidden=true;
+  box.innerHTML=`<div class="cw-h"><span style="font-size:22px">🤖</span><b>مساعد سيسي الذكي<small>للصيدليات والموزعين · رد فوري</small></b><button type="button" id="cwClose" aria-label="إغلاق">✕</button></div><div class="cw-m" id="cwMsgs"></div><form class="cw-f" id="cwForm"><input id="cwIn" placeholder="اكتب رسالتك…" autocomplete="off" maxlength="1500"><button class="btn sm" type="submit" id="cwSend">إرسال</button></form><div class="cw-note">مساعد آلي (AI) — لا يقدم نصائح طبية ولا أسعار؛ فريق المبيعات يتواصل معك.</div>`;
+  document.body.appendChild(btn); document.body.appendChild(box);
+  const msgs=box.querySelector('#cwMsgs'); let greeted=false, busy=false;
+  const add=(role,text)=>{ const d=document.createElement('div'); d.className='msg '+(role==='user'?'me':'ai'); d.innerHTML=`<div class="bub">${esc(text).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>')}</div>`; msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight; return d; };
+  const send=async(text)=>{ text=(text||'').trim(); if(!text||busy) return; busy=true; add('user',text); const t=add('ai','<span class="spin d"></span>'); t.querySelector('.bub').innerHTML='<span class="spin d"></span>'; box.querySelector('#cwSend').disabled=true;
+    try{ const r=await fetch(CHAT_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:sid, message:text, page:location.hash||'site'})}); const j=await r.json(); t.querySelector('.bub').innerHTML=esc(j.reply||'حصل خطأ بسيط، حاول مرة أخرى.').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>'); }
+    catch(e){ t.querySelector('.bub').innerHTML='تعذّر الاتصال بالمساعد حالياً — حاول بعد قليل.'; }
+    busy=false; box.querySelector('#cwSend').disabled=false; msgs.scrollTop=msgs.scrollHeight; };
+  const open=()=>{ box.hidden=false; btn.hidden=true; if(!greeted){ greeted=true; add('ai','أهلاً بحضرتك 👋 أنا مساعد الشات الذكي التابع لشركة سيسي إنترناشونال لتجارة الأدوية. أقدر أساعدك بمعلومات عن الشركة ومنتجاتنا، أو أسجل بياناتك عشان فريق المبيعات يتواصل معاك. أقدر أساعدك في إيه؟'); } setTimeout(()=>box.querySelector('#cwIn').focus(),50); };
+  btn.addEventListener('click',open); box.querySelector('#cwClose').addEventListener('click',()=>{ box.hidden=true; btn.hidden=false; });
+  box.querySelector('#cwForm').addEventListener('submit',e=>{ e.preventDefault(); const i=box.querySelector('#cwIn'); const v=i.value; i.value=''; send(v); });
+  // only on the public site (hide inside the ERP app)
+  const sync=()=>{ const onSite=!document.getElementById('site').hidden; btn.hidden=!onSite||!box.hidden; if(!onSite) box.hidden=true; };
+  new MutationObserver(sync).observe(document.getElementById('site'),{attributes:true,attributeFilter:['hidden']}); sync();
 })();
+
+/* ======================= G1. splash intro ======================= */
+(function(){
+  const sp=document.getElementById('splash'); if(!sp) return;
+  let done=false;
+  const end=()=>{ if(done) return; done=true; sp.classList.add('out'); setTimeout(()=>{ sp.hidden=true; document.dispatchEvent(new CustomEvent('hp:splash-done')); },420); };
+  sp.addEventListener('click',end); sp.addEventListener('touchstart',end,{passive:true});
+  document.addEventListener('keydown',e=>{ if(!done&&(e.key==='Enter'||e.key==='Escape'||e.key===' ')) end(); });
+  const rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(rm) sp.classList.add('rm');
+  setTimeout(end, rm?1300:3600);
+  window.__splashDone=()=>done;
+})();
+
+/* ======================= G2. first-run onboarding tour (coach marks) ======================= */
+const TOUR_KEY='hp_tour_v1_done';
+const kpiTile=lbl=>[...document.querySelectorAll('#view .kpi')].find(k=>{ const l=k.querySelector('.lbl'); return l&&l.textContent.trim().startsWith(lbl); })||null;
+/* data-driven: edit texts here. selector | find(): target element, tip text, placement hint (auto-flips to fit) */
+const TOUR_STEPS=[
+  {sel:'#tabs', tip:'من هنا تتنقل بين الأقسام: المبيعات، المخزون، الحسابات، التتبع.', place:'down'},
+  {find:()=>kpiTile('إجمالي الإيرادات'), tip:'المؤشرات الرئيسية بتتحدث مباشرة من الشيت مع كل تحديث.', place:'down'},
+  {find:()=>kpiTile('مجمل الربح'), tip:'الهامش محسوب بعد خصم تكلفة البضاعة المباعة (COGS).', place:'down'},
+  {sel:'#refreshBtn', tip:'اضغط هنا لجلب آخر البيانات.', place:'down'},
+  {sel:'#tabs .tab[data-g="tracking"]', tip:'مواقع الطلبات والتحصيلات والعملاء من GPS المندوبين.', place:'down'},
+  {sel:'#tabs .tab[data-g="jarvis"]', tip:'تقرير استراتيجي من الذكاء الاصطناعي؛ يتولّد من تطبيق HerbaPharm.', place:'down'},
+  {sel:'#logoutBtn', tip:'خروج آمن. تقدر تعيد الجولة من قائمة الملف الشخصي.', place:'down'},
+];
+const tourDone=()=>{ try{ return localStorage.getItem(TOUR_KEY)==='1'; }catch(e){ return false; } };
+const markTourDone=()=>{ try{ localStorage.setItem(TOUR_KEY,'1'); }catch(e){} };
+let TOUR=null;
+function startTour(force){
+  if(TOUR) return; if(!force && tourDone()) return;
+  const el=document.getElementById('tour'); if(!el) return;
+  TOUR={i:-1}; el.hidden=false; document.body.classList.add('touring');
+  const blur=el.querySelector('.tour-blur'), ring=el.querySelector('.tour-ring'), svg=el.querySelector('.tour-svg'), path=el.querySelector('.tour-line'), label=el.querySelector('.tour-label'), skip=el.querySelector('.tour-skip');
+  const vw=()=>window.innerWidth, vh=()=>window.innerHeight;
+  const targetOf=s=>{ let t=null; try{ t=s.find?s.find():document.querySelector(s.sel); }catch(e){ t=null; } if(!t||t.hidden) return null; const r=t.getBoundingClientRect(); if(!r.width&&!r.height) return null; return t; };
+  const rectOf=t=>{ let r=t.getBoundingClientRect(); if(t.id==='tabs'){ const kids=[...t.querySelectorAll('.tab')]; if(kids.length){ let u=null; for(const k of kids){ const kr=k.getBoundingClientRect(); if(u && (Math.max(u.right,kr.right)-Math.min(u.left,kr.left))>vw()*0.4) break; u=u?{left:Math.min(u.left,kr.left),right:Math.max(u.right,kr.right),top:Math.min(u.top,kr.top),bottom:Math.max(u.bottom,kr.bottom)}:{left:kr.left,right:kr.right,top:kr.top,bottom:kr.bottom}; } if(u) r={left:u.left,right:u.right,top:u.top,bottom:u.bottom,width:u.right-u.left,height:u.bottom-u.top}; } } return r; };
+  const draw=(step,t)=>{
+    const r=rectOf(t); const cx=(r.left+r.right)/2, cy=(r.top+r.bottom)/2; const R=Math.min(Math.hypot(r.width,r.height)/2+18, Math.min(vw(),vh())*0.42);
+    const m=`radial-gradient(circle at ${cx}px ${cy}px, transparent ${R}px, #000 ${R+1}px)`; blur.style.webkitMaskImage=m; blur.style.maskImage=m;
+    ring.style.cssText=`left:${cx-R}px;top:${cy-R}px;width:${R*2}px;height:${R*2}px`;
+    // L-line: 45° leg (~70px) then horizontal (~60px); direction auto-flips to keep the label on screen
+    label.innerHTML=`<b>tip:</b> <span>${esc(step.tip)}</span>`; label.style.cssText='visibility:hidden;left:0;top:0';
+    const lw=Math.min(label.offsetWidth, vw()-24), lh=label.offsetHeight;
+    const hseg=vw()<480?40:60;
+    const tryDir=(sx,sy,under)=>{ const d=70/Math.SQRT2; const p0={x:cx+sx*R/Math.SQRT2, y:cy+sy*R/Math.SQRT2}; const p1={x:p0.x+sx*d, y:p0.y+sy*d}; const p2={x:p1.x+sx*hseg, y:p1.y}; let lx,ly; if(!under){ lx=sx>0?p2.x+8:p2.x-8-lw; ly=p2.y-lh/2; } else { lx=Math.max(8,Math.min(p2.x-lw/2, vw()-8-lw)); ly=sy>0?p2.y+8:p2.y-8-lh; } const fits=lx>=8&&lx+lw<=vw()-8&&ly>=8&&ly+lh<=vh()-44; return {sx,sy,p0,p1,p2,lx,ly,fits}; };
+    const prefY=(step.place==='up'||cy>vh()*0.62)?-1:1, prefX=(cx<vw()/2)?1:-1;
+    const cands=[tryDir(prefX,prefY),tryDir(-prefX,prefY),tryDir(prefX,-prefY),tryDir(-prefX,-prefY),tryDir(prefX,prefY,true),tryDir(-prefX,prefY,true),tryDir(prefX,-prefY,true),tryDir(-prefX,-prefY,true)];
+    let c=cands.find(x=>x.fits)||cands[4];
+    if(!c.fits){ c.lx=Math.max(8,Math.min(c.lx,vw()-8-lw)); c.ly=Math.max(8,Math.min(c.ly,vh()-52-lh)); }
+    svg.setAttribute('viewBox',`0 0 ${vw()} ${vh()}`); svg.setAttribute('width',vw()); svg.setAttribute('height',vh());
+    path.setAttribute('d',`M${c.p0.x.toFixed(1)} ${c.p0.y.toFixed(1)} L${c.p1.x.toFixed(1)} ${c.p1.y.toFixed(1)} L${c.p2.x.toFixed(1)} ${c.p2.y.toFixed(1)}`);
+    const len=path.getTotalLength(); path.style.transition='none'; path.style.strokeDasharray=len; path.style.strokeDashoffset=len; label.classList.remove('on');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{ path.style.transition='stroke-dashoffset .4s ease-out'; path.style.strokeDashoffset='0'; setTimeout(()=>{ label.style.cssText=`left:${c.lx}px;top:${c.ly}px;max-width:${lw}px`; label.classList.add('on'); },380); }));
+  };
+  const show=async()=>{
+    let step=null, t=null;
+    while(TOUR){ TOUR.i++; if(TOUR.i>=TOUR_STEPS.length){ end(true); return; } step=TOUR_STEPS[TOUR.i]; t=targetOf(step); if(t) break; }
+    if(!TOUR) return;
+    try{ t.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'}); }catch(e){}
+    await new Promise(r=>setTimeout(r,60));
+    draw(step,t);
+  };
+  const end=(completed)=>{ if(!TOUR) return; TOUR=null; el.hidden=true; document.body.classList.remove('touring'); markTourDone(); window.removeEventListener('keydown',onKey,true); window.removeEventListener('resize',onResize); if(completed) toast('انتهت الجولة التعريفية ✅ — تقدر تعيدها من قائمة الملف الشخصي'); };
+  const onKey=e=>{ if(!TOUR) return; if(e.key==='Escape'){ e.preventDefault(); end(false); } else if(e.key==='Enter'||e.key==='ArrowRight'||e.key==='ArrowLeft'||e.key===' '){ e.preventDefault(); show(); } };
+  const onResize=()=>{ if(!TOUR) return; const step=TOUR_STEPS[TOUR.i]; const t=step&&targetOf(step); if(t) draw(step,t); };
+  window.addEventListener('keydown',onKey,true); window.addEventListener('resize',onResize);
+  el.onclick=e=>{ if(e.target.closest('.tour-skip')){ end(false); return; } show(); };
+  skip.onclick=e=>{ e.stopPropagation(); end(false); };
+  show();
+}
+function maybeStartTour(){
+  if(tourDone()||TOUR) return;
+  const t0=Date.now();
+  const ready=()=>{ const sp=document.getElementById('splash'); const splashGone=!sp||sp.hidden; const appOn=!document.getElementById('app').hidden; const kpiOrTimeout=!!document.querySelector('#view .kpi')||!canExec()||Date.now()-t0>9000; return splashGone&&appOn&&kpiOrTimeout; };
+  const tick=()=>{ if(tourDone()||TOUR) return; if(!S.user){ return; } if(ready()) setTimeout(()=>startTour(false),500); else setTimeout(tick,300); };
+  tick();
+}
+/* profile menu (name/role · جولة تعريفية · خروج) */
+(function(){
+  const btn=document.getElementById('profileBtn'), menu=document.getElementById('profileMenu'); if(!btn||!menu) return;
+  const close=()=>{ menu.hidden=true; btn.setAttribute('aria-expanded','false'); };
+  btn.addEventListener('click',e=>{ e.stopPropagation(); const open=menu.hidden; menu.hidden=!open; btn.setAttribute('aria-expanded',String(open)); if(open){ const who=document.getElementById('pmWho'); if(who&&S.user) who.innerHTML=`<b>${esc(S.user.name||S.user.user)}</b><br><span class="hint">${esc(ROLE_AR[S.user.role]||S.user.role)}</span>`; } });
+  document.addEventListener('click',e=>{ if(!menu.hidden&&!e.target.closest('#profileMenu')) close(); });
+  document.getElementById('tourBtn').addEventListener('click',()=>{ close(); if(S.group!=='overview') go('overview'); setTimeout(()=>startTour(true),350); });
+  document.getElementById('pmLogout').addEventListener('click',()=>{ close(); logout(false); });
+})();
+
+/* ======================= boot ======================= */
+$('#yr').textContent=new Date().getFullYear();
+if(S.token && S.user){ show('app'); boot(); } else if(location.hash==='#login'){ showLogin(); } else { showSite(); }
 </script>
+
 
 </body>
 </html>
