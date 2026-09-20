@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:,">
+<title>HerbaPharm ERP</title>
+<meta name="description" content="لوحة التحكم التنفيذية لشركة سيسي الدولية — مبيعات، مخزون، مالية، تتبع">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --ground:#f4f7f4; --surface:#fcfdfc; --surface-2:#eef3ee; --ink:#14201b; --ink-2:#4f5f57; --muted:#84928b;
+  --line:#dde5df; --line-2:#c9d4cc; --brand:#16a851; --brand-2:#0f8f43; --brand-ink:#ffffff; --gold:#b98a1f;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#4a3aa7; --s8:#e34948;
+  --good:#0ca30c; --good-text:#006300; --warn:#fab219; --serious:#ec835a; --critical:#d03b3b;
+  --shadow:0 1px 2px rgba(20,32,27,.06),0 8px 24px -12px rgba(20,32,27,.18);
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0f1412; --surface:#171d1a; --surface-2:#1f2825; --ink:#f3f6f4; --ink-2:#bcc7c0; --muted:#8a978f;
+    --line:#26302b; --line-2:#344039; --brand:#22b95d; --brand-2:#3fcc75; --brand-ink:#06140b; --gold:#d8a838;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+    --good-text:#0ca30c; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0f1412; --surface:#171d1a; --surface-2:#1f2825; --ink:#f3f6f4; --ink-2:#bcc7c0; --muted:#8a978f;
+  --line:#26302b; --line-2:#344039; --brand:#22b95d; --brand-2:#3fcc75; --brand-ink:#06140b; --gold:#d8a838;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767;
+  --good-text:#0ca30c; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:"IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.55;direction:rtl;font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:"Cairo","IBM Plex Sans Arabic",system-ui,sans-serif;margin:0;text-wrap:balance}
+button{font:inherit;cursor:pointer}
+a{color:var(--brand)}
+.num{font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+
+/* ---------- login ---------- */
+#login{position:fixed;inset:0;display:grid;place-items:center;background:var(--ground);z-index:50;padding:16px}
+#login[hidden]{display:none}
+.login-card{width:min(420px,100%);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:32px 28px;box-shadow:var(--shadow)}
+.brand-mark{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.logo{display:block;height:auto}
+.login-card .logo-hp{width:170px;margin:4px auto}
+.login-card .brand-mark{flex-direction:column;text-align:center;gap:4px}
+.login-card .brand-mark h1{font-size:24px}
+.login-card .brand-mark small{font-size:13px;line-height:1.6}
+.topbar .logo-hp{width:40px;border-radius:8px}
+.sisi-mark{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}
+.sisi-mark img{width:34px;height:auto}
+.leaf{width:44px;height:44px;border-radius:12px;background:var(--brand);display:grid;place-items:center;color:var(--brand-ink)}
+.brand-mark h1{font-size:22px;font-weight:800;letter-spacing:-.01em}
+.brand-mark small{display:block;color:var(--ink-2);font-weight:500;font-size:12.5px;font-family:"IBM Plex Sans Arabic",sans-serif}
+label{display:block;font-weight:600;font-size:13px;color:var(--ink-2);margin-bottom:6px}
+.field{margin-bottom:14px}
+input{width:100%;padding:11px 13px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface-2);color:var(--ink);font:inherit;font-size:15px}
+input:focus{outline:2px solid var(--brand);outline-offset:1px;border-color:var(--brand)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:10px;border:1px solid transparent;background:var(--brand);color:var(--brand-ink);font-weight:700;font-size:15px}
+.btn:hover{background:var(--brand-2)}
+.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-2);font-weight:600;font-size:13px;padding:8px 12px}
+.btn.ghost:hover{background:var(--surface-2)}
+.btn.full{width:100%;margin-top:6px}
+.err{color:var(--critical);font-weight:600;font-size:13px;min-height:20px;margin-top:10px}
+.hint{color:var(--muted);font-size:12px;margin-top:14px;line-height:1.6}
+
+/* ---------- shell ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1280px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.topbar .brand-mark{margin:0}
+.topbar .leaf{width:36px;height:36px;border-radius:10px}
+.topbar h1{font-size:18px}
+.spacer{flex:1}
+.status{display:flex;align-items:center;gap:8px;color:var(--ink-2);font-size:12.5px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--good)}
+.dot.busy{background:var(--warn);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.35}}
+@media (prefers-reduced-motion: reduce){.dot.busy{animation:none}}
+nav.tabs{max-width:1280px;margin:0 auto;padding:0 20px 10px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{border:1px solid var(--line);background:var(--surface-2);color:var(--ink-2);padding:7px 14px;border-radius:999px;font-weight:600;font-size:13px;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.tab:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+main{max-width:1280px;margin:0 auto;padding-block:18px 40px;padding-inline:20px}
+section.panel[hidden]{display:none}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:22px 0 12px}
+.sec-head h2{font-size:17px;font-weight:700}
+.sec-head .sub{color:var(--muted);font-size:12.5px}
+
+/* ---------- KPI tiles ---------- */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px 12px;display:flex;flex-direction:column;gap:4px;min-height:96px}
+.kpi .lbl{color:var(--ink-2);font-size:12.5px;font-weight:600}
+.kpi .val{font-family:"Cairo",sans-serif;font-size:24px;font-weight:800;letter-spacing:-.01em;line-height:1.15}
+.kpi .val small{font-size:12px;font-weight:600;color:var(--muted);margin-inline-start:4px;font-family:"IBM Plex Sans Arabic",sans-serif}
+.kpi .foot{color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:8px;margin-top:auto}
+.kpi.hero{grid-column:span 2;background:var(--brand);color:var(--brand-ink);border-color:transparent}
+.kpi.hero .lbl,.kpi.hero .foot,.kpi.hero .val small{color:inherit;opacity:.85}
+.kpi.hero .val{font-size:32px}
+@media (max-width:560px){.kpi.hero{grid-column:span 1}}
+.delta{font-weight:700}
+.delta.up{color:var(--good-text)} .delta.down{color:var(--critical)}
+.kpi.hero .delta{color:inherit}
+
+/* ---------- cards / charts ---------- */
+.grid{display:grid;gap:14px;grid-template-columns:repeat(12,1fr)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;min-width:0}
+.card h3{font-size:15px;font-weight:700;margin-bottom:2px}
+.card .sub{color:var(--muted);font-size:12px;margin-bottom:10px}
+.c12{grid-column:span 12}.c8{grid-column:span 8}.c6{grid-column:span 6}.c4{grid-column:span 4}
+@media (max-width:980px){.c8,.c6,.c4{grid-column:span 12}.c6.half{grid-column:span 6}}
+@media (max-width:600px){.c6.half{grid-column:span 12}}
+.viz{position:relative}
+.viz svg{display:block;width:100%;height:auto;overflow:visible}
+.viz text{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;fill:var(--muted);font-size:11px}
+.viz .grid-line{stroke:var(--line);stroke-width:1}
+.viz .axis{stroke:var(--line-2);stroke-width:1}
+.viz .lbl-strong{fill:var(--ink);font-weight:600}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:10px;height:10px;border-radius:3px;display:inline-block}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--ground);padding:6px 10px;border-radius:8px;font-size:12px;line-height:1.5;white-space:nowrap;transform:translate(-50%,calc(-100% - 10px));opacity:0;transition:opacity .12s;z-index:5}
+.tip.on{opacity:1}
+.hbar-row{display:grid;grid-template-columns:minmax(90px,150px) 1fr auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
+.hbar-row:last-child{border-bottom:0}
+.hbar-row .n{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbar{height:10px;background:var(--surface-2);border-radius:5px;overflow:hidden;position:relative}
+.hbar i{position:absolute;inset-block:0;inset-inline-start:0;border-radius:5px;background:var(--s1)}
+.hbar-row .v{font-weight:600;font-size:12.5px;color:var(--ink-2)}
+
+/* ---------- tables ---------- */
+.tbl-wrap{overflow-x:auto;margin-inline:-18px;padding-inline:18px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px}
+th{color:var(--muted);font-weight:600;font-size:12px;text-align:start;padding:8px 10px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:end}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.pill.good::before{background:var(--good)} .pill.warn::before{background:var(--warn)} .pill.serious::before{background:var(--serious)} .pill.crit::before{background:var(--critical)} .pill.info::before{background:var(--s1)}
+.empty{color:var(--muted);padding:18px 0;text-align:center;font-size:13px}
+
+/* ---------- jarvis ---------- */
+.jarvis{background:linear-gradient(135deg,var(--surface),var(--surface-2));border:1px solid var(--line)}
+.jarvis .head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.jarvis .badge{background:var(--gold);color:#1a1200;font-weight:800;font-size:11px;padding:3px 8px;border-radius:6px;letter-spacing:.04em}
+.jarvis .headline{font-family:"Cairo",sans-serif;font-size:19px;font-weight:800;line-height:1.35;margin:4px 0 12px}
+.jarvis dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:0}
+.jarvis dt{font-weight:700;font-size:13px;color:var(--brand);margin-bottom:3px}
+.jarvis dd{margin:0;font-size:13.5px;color:var(--ink-2);white-space:pre-wrap;max-width:65ch}
+
+/* ---------- map ---------- */
+.map{position:relative;background:var(--surface-2);border-radius:12px;overflow:hidden;aspect-ratio:16/9;max-width:100%;min-height:280px}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+.map .pt{cursor:pointer}
+.map-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin-top:12px}
+.map-item{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12.5px;background:var(--surface)}
+.map-item .k{width:10px;height:10px;border-radius:50%;margin-top:5px;flex:none}
+.map-item b{display:block;font-size:13px}
+.map-item .m{color:var(--muted)}
+.map-item a{font-size:12px}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chip{border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.chip[aria-pressed="true"]{background:var(--surface-2);color:var(--ink);border-color:var(--ink-2)}
+.chip .sw{border-radius:50%}
+footer{max-width:1280px;margin:0 auto;padding:0 20px 24px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.skeleton{color:var(--muted);text-align:center;padding:60px 0;font-size:14px}
+</style>
+
+</head>
+<body>
+<div id="login">
+  <form class="login-card" id="loginForm" autocomplete="on">
+    <div class="brand-mark">
+      <h1>HerbaPharm ERP</h1>
+      <img class="logo logo-hp" src="data:image/png;base64,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" alt="Herbapharm" width="300" height="269">
+      <small>شركة سيسي الدولية للتجارة الدوائية<br>Sisi International Company</small>
+    </div>
+    <div class="field"><label for="u">اسم المستخدم</label><input id="u" name="username" autocomplete="username" required></div>
+    <div class="field"><label for="p">كلمة المرور</label><input id="p" name="password" type="password" autocomplete="current-password" required></div>
+    <button class="btn full" type="submit" id="loginBtn">تسجيل الدخول</button>
+    <div class="err" id="loginErr" role="alert"></div>
+    <p class="hint">الدخول مقيّد لإدارة الشركة. البيانات تُقرأ مباشرة من نظام الشركة عند كل تحديث.</p>
+  </form>
+</div>
+
+<div id="app" hidden>
+  <header class="topbar">
+    <div class="topbar-in">
+      <div class="brand-mark">
+        <img class="logo logo-hp" src="data:image/png;base64,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" alt="Herbapharm" width="320" height="287">
+        <div><h1>HerbaPharm ERP</h1></div>
+      </div>
+      <div class="spacer"></div>
+      <div class="status"><span class="dot" id="dot"></span><span id="statusTxt">—</span></div>
+      <button class="btn ghost" id="refreshBtn" type="button">تحديث</button>
+      <button class="btn ghost" id="logoutBtn" type="button">خروج</button>
+    </div>
+    <nav class="tabs" role="tablist" id="tabs">
+      <button class="tab" role="tab" data-panel="overview" aria-selected="true">نظرة عامة</button>
+      <button class="tab" role="tab" data-panel="sales" aria-selected="false">المبيعات والعملاء</button>
+      <button class="tab" role="tab" data-panel="inventory" aria-selected="false">المخزون والمشتريات</button>
+      <button class="tab" role="tab" data-panel="finance" aria-selected="false">الحسابات والمالية</button>
+      <button class="tab" role="tab" data-panel="tracking" aria-selected="false">التتبع والمواقع</button>
+      <button class="tab" role="tab" data-panel="jarvis" aria-selected="false">جارفيس الاستراتيجي</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="skeleton" id="loading">جارٍ قراءة البيانات من نظام الشركة…</div>
+
+    <section class="panel" id="panel-overview" hidden>
+      <div class="kpis" id="kpiRow"></div>
+      <div class="sec-head"><h2>الأداء الشهري</h2><span class="sub">الإيرادات مقابل تكلفة البضاعة المباعة والمشتريات — ج.م</span></div>
+      <div class="grid">
+        <div class="card c8"><h3>الإيرادات والتكلفة والمشتريات</h3><div class="sub">حسب الشهر</div><div class="viz" id="chartMonthly"></div></div>
+        <div class="card c4"><h3>حالة أوامر البيع</h3><div class="sub">عدد الطلبات لكل حالة</div><div id="chartOrders"></div></div>
+        <div class="card c6"><h3>أعلى المنتجات إيراداً</h3><div class="sub">الإيراد وهامش الربح الإجمالي لكل منتج</div><div id="chartTopProducts"></div></div>
+        <div class="card c6"><h3>أعمار المستحقات على العملاء</h3><div class="sub">المبالغ غير المسددة حسب مدة التأخير — ج.م</div><div class="viz" id="chartAging"></div></div>
+      </div>
+      <div class="sec-head"><h2>يحتاج انتباهك</h2><span class="sub" id="attnSub"></span></div>
+      <div class="grid">
+        <div class="card c6"><h3>طلبات قيد التنفيذ</h3><div class="sub">أوامر بيع لم تُسلَّم بعد</div><div class="tbl-wrap" id="tblPendingOrders"></div></div>
+        <div class="card c6"><h3>نواقص المخزون</h3><div class="sub">منتجات وصلت الحد الأدنى أو أقل</div><div class="tbl-wrap" id="tblLowStock"></div></div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-sales" hidden>
+      <div class="kpis" id="kpiSales"></div>
+      <div class="grid" style="margin-top:14px">
+        <div class="card c8"><h3>فواتير غير مسددة</h3><div class="sub">مرتبة حسب المبلغ المتبقي</div><div class="tbl-wrap" id="tblUnpaid"></div></div>
+        <div class="card c4"><h3>تصنيف العملاء</h3><div class="sub">عدد العملاء لكل نوع</div><div id="chartCustTypes"></div></div>
+        <div class="card c12"><h3>أهم العملاء</h3><div class="sub">إجمالي الفواتير والتحصيلات والرصيد المستحق</div><div class="tbl-wrap" id="tblCustomers"></div></div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-inventory" hidden>
+      <div class="kpis" id="kpiInv"></div>
+      <div class="grid" style="margin-top:14px">
+        <div class="card c6"><h3>قيمة المخزون حسب الفئة</h3><div class="sub">بتكلفة الشراء — ج.م</div><div id="chartStockCat"></div></div>
+        <div class="card c6"><h3>أوامر شراء مفتوحة</h3><div class="sub">حسب الحالة</div><div class="tbl-wrap" id="tblPO"></div></div>
+        <div class="card c6"><h3>باتشات قريبة من انتهاء الصلاحية</h3><div class="sub">خلال 180 يوماً</div><div class="tbl-wrap" id="tblExpiring"></div></div>
+        <div class="card c6"><h3>آخر حركات المخزن</h3><div class="sub">دخول وخروج</div><div class="tbl-wrap" id="tblMoves"></div></div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-finance" hidden>
+      <div class="kpis" id="kpiFin"></div>
+      <div class="grid" style="margin-top:14px">
+        <div class="card c8"><h3>التدفق النقدي الشهري</h3><div class="sub">التحصيلات مقابل المدفوعات — ج.م</div><div class="viz" id="chartCash"></div></div>
+        <div class="card c4"><h3>هيكل الربحية</h3><div class="sub">من الإيراد إلى مجمل الربح</div><div class="viz" id="chartProfit"></div></div>
+        <div class="card c12"><h3>آخر السندات</h3><div class="sub">قبض وصرف</div><div class="tbl-wrap" id="tblPayments"></div></div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-tracking" hidden>
+      <div class="grid">
+        <div class="card c12">
+          <h3>خريطة النشاط والمواقع</h3><div class="sub">مواقع الطلبات والفواتير والتحصيلات والعملاء المسجلة من التطبيق (GPS)</div>
+          <div class="filters" id="mapFilters"></div>
+          <div class="map" id="map"></div>
+          <div class="map-list" id="mapList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-jarvis" hidden>
+      <div class="grid"><div class="card c12 jarvis" id="jarvisCard"></div></div>
+    </section>
+  </main>
+  <footer><span>آخر تحديث: <span id="lastUpdated">—</span></span><span class="sisi-mark"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANcAAADcCAMAAADUZMREAAAAYFBMVEUMezkOez4Oez4YRocYRYUOblQYRYYOez4YRYbtHC3sHS8PN3zsHS8OfEDuHTAOfEAaNpIOfUAGl0sIkjUA/wAAAP//AFUPgEEPgUF/AAAAAAAOfD4ZR4kPgUHuHjAOfkAmQRWvAAAAIHRSTlMbn14iXhSf0NAZYQigXdWjCNMHBwEBA9CjAgD9+v79/BxepesAABqlSURBVHja3V0Le6M6ki1JCHBs4keSO7MmtP7/vxy9VXoAwpDuvsvON9vjJIajqjr1lIDnz12nt7fL5fL+6y3/gfxY/ujt9H8/dW/4SVy/zPWWovrlr/e3078Q17t5+Ev86eX91y+M7F+H61nEdfmVXG9/N65TrlGXAq6TF5QHdvprcUkieH9/v6TGYnG9/4M+s8Z1OZ28nV3+TlwSlJdBDOytIJALUr634l+dTn8FrreIBk6VuC4nrZPv+R+dDiHJvbhOCQ1Ea1/C5UleIdP+7b2wGJe90OBYWDG7nRY+Cw9/ihTvn/eicv5mXE6r3oyNJRpUdMxvvxbd8unXX4DrFJFApjxFXLGIM7d8Ocar7cNl1v7dPnBlwBFJLAVwOsipwRFqeDr9o9yRumKSvpQdVCyyopZenn8Brl/v72WTcY65wDfvRd/gJLw7BjlCD5Prcspw+U9UcmKEegp+7+14cR3DGymweQdmBfsW5SuXw1ljP8+/l4CdZnFdosfOaOUgkj/AL78vCuw0A9Q+92VOvvsj4aPjqHi5Mwd2+hWFh+lP3w/LXPbHvYrfDRn4wH4Bl2dQySCzantA4nJsvnxKcc1aUNF/XY7LoA/KK09R5n9ZqASkruE9uIXjWOMYXMoVnbJ4EfPlZd4ikbd7O7DgAftFdXFr7F0telRreVnVwKcqPxBrHIIr1AD8w77VrMYpCyYPLXfsxvW2EG68tkJvfwWurB74to9LD2GNQ/zXZYYGXqz/HFMmrcTFbkt0eEi13bHO4lc0zaG4WM9WKoi6O/LP/kLk+6J1su/v9nYcLvl1zfO3XKdFibP++7s/Flf7/PMXV7DYgXoo16n/+vOw2u/vb3aofclv5H8cl4JVbQ51uJr6hfqxq9kCq5YPfxtxLD3Cd3s+HtcfJg5NhfWwVnDdgm737I/D2vIEi7iavm3YzxgYbOKhEhWy5kVcXFmqXCaF7QgDg0/03XQvZ0gJNq/hOjdt/22utt1vYECQiIDuhKXXnL1qX2cWsO01MN6hexG6EVYb6e2tXXuidT5kDlu7Dxjt0F27LbjaFAJrjRbt53nWbHMfhYsQhHHkm1gjhqV1sP1+1b7WlGGjeY0IFxm3fVMGq2crDA3btLxOFaHwrSAowti9nKefW/Mc7VG4DLA6UypYD50G9G+yx0Ergzj3y88Cm3ipkhNp4bGJ4IEZX8alTaupiOyg6JBnHr+pZETaZebz0QWTAjHR13XQrG2zEihAeVGaXdRHR8hpI5gUmV7Dpendchc2r3MdLpVuf/d7wiYqIDevLjgvMcKruBruA/Gz89El64C5ddnjhnkuDxJMigoxvuYwWNtkiZMKiQv+B2YCeW2fryojCJIFUQEXmV6UVynRbWYeFJZi+VdFxseUOGD0IuSjEN3n/qIA8z662cLze5SRj6lAaKBAOo2vu684z3U+epv/agx/nF/BlRIHmRxSxRq7cd20V3Y+eqtfflkZoUuJowu4xnF80X0l5uV99PZ4wyrjVpFlAQWMniqk5EZBDzCvZjEDm7cvmZs0rcnfblvv201xYCup3TKJQjiOfLd5fffL+QXM4Oldmvz9SmUjmJPjCidAqsRVoPlNxM/MwzW8Mo5iCtA3vvq2bV6IPKSLGuL/7XBpNczDR4CN5vW9IT7kbcCjAUnZvZgbxxGg5Ef7vxVrSFzp73/SzbhS07rFdTdIk4B+D55cPs6fWVxKDQs0T+lW3shMi8V5JmTs1xzQOZF6iHVNojEUyDtRwsXJ1riKlaL1dtZem92hvLmGKeI8ZVRgeHEsuS9K9y9lUpKGg0P5ECuhckYnLAUqgLn7gu6IaaZbVACGsiuujJ4+yTCLiyCvLKkCvPPKgkdcgXsCgZcF1vMFv2Gip0plJF3RGgchkXxglJ1Tz9x9xdk1eTmHiXoIO/PKqCqI1kZgqRAnPauGsdp9dCSS9Iu2xhQ3tCt+3jj0mjINKT5HFNz6CJ4bLZy6RGdxP0J0L9GxrWwH5ljMKyt0kYuS0QNmcw/SiCuhefkFD7xM8IqoWhtMBIEt5ZVV1UJSSqYUQXjAyhcrXNCJAi6C6qUvFUyZKVp8t80ZUf1SXllFHTAKKCWWwcC0mMA5r8R9URz5gxD8VVTM+ObmlTi6GJ2SqYOSvNzzqxhDF6CsGkbuK85AyaK48rt/ObNyHBcq0ltwASFFgeVPo1XOfqxkp6jdOa8oEqE4oaHTkoPmY8pQZ2tWgd8C1W/CNY5lgWV5osYlQuykbI06caEvgdh9L3J8wfZ0J6TBWW/bv4CLTjOkPmXk3E3ekJT6yUeCzuEKv/wp42O+qNCRxmaryvrUyfLz8yVcpCIr8VwRnLHCZZUQS4gKBIVOi6QBopBms/o6gIogz6wpkaHSJEpBXTy5ZaGuZjXOUAjxrIFwSW0NCgAz1bcHl3fjlKrUZ4MQ4l/lprYx45O1VxLCahi9YoEl9zQo1K9x8/u8c6wRoOBHhYKVev1Td91YdQQHSCHCtY0koP9A8d00kg8VxBIEOLmpxSVNSdOFAOe8cHyF/4rO9o4ksGK4XIErRqSLNSxNSMAsqrxGm0lIbwNh5WNNtFonLcb8C7waevfFfbapVXmeNDjtRnlb/XfV8yzqy849Kj61OItBBKefGygdKEfVTwhLHz0XdaGgiTxG6p2Xd184R5MYI2+dlHEAKNEfQVcbFoPxZr2v1bTlaBczMgzcLTJ5hFSE5riEBGQAelSu96WNlSKmRV4tylyeg7/xx5wRzuDqQyTCZsYHFDVwoxVX766IfxxQps0zXIXLUYV8RJ96Qtzpu0YPLxnnanREubstuHThsGdJhFXI7PkHJ2IKFv7ReWBKYEgTPU2IFJfVPZyhQewA09SSKpvuKHBV1lrVQ0Xpng+ZnwluZ8YHdJTXSQOO+FYu9GTG1NSS41LNnLjsX5vow1saZh1adPKShLu1Toyb5FIEATjUuuFIv+CUje8ij1SMTq/C0y3goj4nI4F0KMozs7zHkqlY4HrGMKcz5JfNmBCbnc55mPhOiKheBLp2AU6xvJbwZVxc4DwGF1F5SSRA9IrKm9M1SLrR0uB4Q4/QzrC8vb+87jTXTwOMTGPURJ7jDfe7bu2jWqPUz6IFDfrmxb5Zgx2vpHXD6JCmM5l5wcPT+5VQXtJPDQz0ggJKLIuwfObsCESIIC4g04ymSRomV3jO4pKQWj8i0Bb6KWlzUiaTfLk06oDpf1hO/FjCZUjDLL76t6ALmUHR1jFClUtq39tYmTRqZAXyRI1VFGaynF8C0zZlqzAhzM3clwsZjfMKxPM0bc31IBCuEX2cey8nM4KjOQIKnaXmaz6bLMyHW63i2GpgDpfOxIIaKvcQog4h5jrPqLYBafbgXJPjPF2oh1JFlCXy8HcDWrJqk0ReH2Ce98MnzGVcNgTmhovkJ5/IGc7VM8cg1HT+w+mfbzy0BVyFuqEK1o0t0LFo1mC7WpzE2X8ZF7X6+HjGwwGK72dTEZl12jRCSxuSfsMtCm2VAAu1vzbxzNQ4DiAy2Cjbmm1rEf3/zcPN4TK+3aohaCdhxPVIQ+cs7jbISDau431uII6WlxbonOuZGBWqWX/vAwLzyLCAC7kxkwrT4OAXSAO0Jx8JyYOOGyIObjw1q6rbaC6exIy/D+EeDilWcGmXZRwDDzHgsMTtJoibCg/h9I83jEd5SisTysVakM6fpCLQxeXEKRZdxqVUyWgt9Zq84k+oXtrS2jaFWB28w2bLLkNGMVdY7LxGT72GixoXZ5spdBTjamolDVwUYylWaGiBHfJYmRb65MPyiMUj0cRlXMpEEHka1z6sGwQdhtq8UqVebdP0ezdCRRGhpBmxooaD8EUBbZ0TOfToFrCletaWt/klBRReqYlCrKghhEkOfp1qqmj1T6J/7smxnHkNUfN3KXp7rFE7vgAFHaQ8g5P5EmzeA1nD1aZRSIIr6AdfbgzM5yaFqwvO2UbBq3ZDolr+2jKAh1MusHEfbqu6K11h4mpcwju6QYixatKSej8j0+fVqYE1XL72rt0HX1vScculczEhqrRQMa4M95UuZgH988zk/51TXGwRl0yDpzuoguz6WO4WTTRouEkxRQ0XKgaVgBTNJE+iyoTqas3VyAvUplD9z16VbRjj7FyIDg0TP9Z1ZZO8qIFVO8es4y71nylhjfY7uyD/qM2rXDrorCmNb9JEMYS2S82l8yBVp0zpKxlyrcOlzVQGMNe6EHmLxJyXq/XIyrJk8nlPf//GpIGpPaB9oy/pi0E1vtQ/9aWUtBBEDteuo3Vruk0TC3MqK4HUfbzPBiY+/pUA0985n4szsB/Vt97IidkY2BqyhQnndgHX2reuG0G3EZgY6u7NV+6typ+9F9wmXFVDdJvJvm5vEb8vB8a6ddK7zXyruLCEhqnKwum00TfX4eqiiL9UR+tdiCtjjVVc4cto5XbPjy0mVj9GCSMOVemzUNC1BqbG2mBdq0JQ1n1UPkG1Jk4bxijp5Bg+269k69SN+u+zjDD6NWPUNKC8O/gq4qGauGVnkY8Lh3GKAq+z2zHOer+jBtaKBbq8CkC27LKDWk3cNkaptoMIgKtIyvjMj9FYYO1XOm+jWmRtplRTpyptG/xMpSZu3T9KhQtVh6Qw6vfJyufXWwxxw8WOySZHYKnCnf4P3fYEh5IGKqkLNabzEXMhi3IWzJce1HdWSqQi9Aqr511qNHFLqcZs9QA9jiCSxILN7cv2oPq2NFseGpVwv9Zq4noAvGl3thvUhut1qArAbwjU2vYoICuaw2GDJmLSWOVlOt03jTQDc9rHeI16r+ghWsvVzgNyXcNqMAWbXJ3D1VedQEFFmcAAp35Qq4n4/JR1TvqsbD2HZ2qXBPZA9cd8ytDC/Q8qcZOQ9PHF4ij6qg903A3A56yvx/M8fBXX0891FFhDLtN14L5lXFxXaXV3n3UCmltZ0kRMGqEyyOl9ruCpjhVwId1w/Q9a4CYeycY6xD15tFm4oYauCIWFxhtXAQ71uxtIuSs267qoUwMY7gvUbwaV1CiiaqvQuGqTSQSwW+7z8gaYoSvp5pVrnpM+lREboVnUP6+JiATc1DMM3bTk0XR3cVSjo3FPyQWFMbToe7ja7ZG0H/h9ciUWt6cVisVYi0zePmjrfACM6GVSTTCgnfyKshLaXImbwEd3GJG4vkJIIelvZn6+yU9zg7sqAgl3Vz6z40vCN8goCvznAmBEGmZwjKpirphx+mD1X5Wc9YOMaekgHJHXW2PL522avAh01a0CtwO57Ju1XFXLXgWnAkr92ZLrMhKVsloIQNX2ARPukG5Uxl6SKmfh9D+W4Grm2rHc7wSIyR4+0uRkSsynGHYEBBa37vUjFn/wuKfjBcxhITLx7JfPs61uZYvzMLjer3oHhPmZKPBCQRNDqSaMUbksSG9tuF95lp5Uhcjc7AbjGNe5rThYLj0VBIZRT+13RLoC3HvFI+hZlZfjwrT9DBSkK1F8l9ZgeWVKYzWxb7B96T7z6q5lmp0KoulZ6PRBFKkh00S8kSN8qkxH5UNTXlnWG0/XslqngzZ4B+QF2i+vqGwGofYhoCOD4IAURS943kQTZ2xPL4sI/t0+SWjpQJWokv2VzM4D+I03DFEGDFQa0YcrCtjdTwNmTDJOeVOBFgNgQeeKBQLFY+5PtW8B5zwf+lFSgXIvqnS/ueb3Bp8q0qBuih4HGburjGHcwmW1ROkLpvQxHcPFciEzUZZElWWMYFpd3LAVl7pqFJ4siSrgapJOUd+jmTZ3fzXB7ndYS80bsigxRRad1ZOValL1HAtxDLVNUjUD2ZFxysayzwVRlXDprURJ2qx7sK5fZZqW5aobXLMoEFLR4OOxoiVAsgo9k6AfavLMWyKNO5VtcY7IFKrsuS9lch+cJISblTdyU/fng1Z5c6VTNh5YmOF7hBw1ikD0n6ur68iV2taA3z4AYW3xqDv/ntvvDyZ0XKlsALnrLVjCmKy9He/0tj2j9Poq7EbhWDo+Di9whvl7GSVRE1Lwu5mKs0GXqYqpjSo8rogmAe9MX2K+r0KHYUD2onDZreYfQBW6MfNhgSZcg5yU4mFheEm5drxZSqqsnhi2FilJ93qlcRj1xbKAdyOu2IsZ3gXsLTmHgRTQuYOIhECtyRBnKBEoIQ1py1DH19F+/NmoMAS8DduDy0wOQjiOB/WIOB+Io+PIX1E0EKq3ahtIUgRQKlYoxiV2f/fqM3JU1eWv49KVDjNBWK4RSU8+6Elck7kNrljggvLR6J2ExBcCUb9Jve7dGhYa24HL0qHecjc/qwKcDjrqM9oHnjTofyQ5wGMtEFW/rxxXdVlYGVu7oIc6lmryIg+XF8j/EJM5Prqa/EESDsUl9vXFfDgLFHaumxgnko4C3Aocfuazt7A5THakI72iYTR9TsjocNEjRz0h2nWld0QYdVYpe7R/Y2lyN+/roZkctAVHj7q4Ao5JmanwW+W7A9+uQvyZMSaECrlCPGqz/AqDrK9u3RzTdujT5wcR3ukKG8gYp6l1ZRqOE1eYtjQ8w+9+RaNpbLb4wgAoSMs1wBr09iYOLq5QgT32znowcITjxKW/bAgD9TK/M8rfEZockzefCKeTYVGJIxa14jdtviggN3bm58X3oDM1IG631Zj9t54FVOEodQrnpaP1IdNCFi8JW2J7zcFcOC6nkxtvX+sLcB5nxH5k1+8wIuuea0kTs/phtALn2W2/wIewudXzh6/Y+rYK/S8tFvSJryFw3IMyAQa1FSIZ5XO+jKv9qsGVHcLflPbHygiUdKG+CW56K5yGxX05UJpLXnP3J0mrWjJ1sJxO28jL7cZWYUn52duFs7tSXG22JCzPHm1oa/NW7nZh8BGd7CX802WlJOqOhFUj1n4jmDmsZPIBvE0BFAmW396hlGtWEzfjoiJkz+Z2D3eokgbod0CZH+ufxQOepssCdsRcn9ZGHBx8XGzIsoUgRS1sNSe+iKvJ2CJNxx3h250LgzveRtU/zcFEeDABHIiwf9QsiBKh94lWS8X8pIfZeDLHiRlv8PSDdLOl881o0M3FBv5UVGrnkR/uQBgSVduNVMOPzN91PD434Gm2Ppo9jhk1Nv49D8XaOyyLJyUSrqtu8lZXyvPiNrh1tyVD+SEVcek6bASA0AkLW6Z4sggwdOaooLQz5o9JndHEzC9H/Ff4I9UYQMktqGqLt3Wjf/6MOWkp4AoA4BvWFg0JP+icXWqyEKoiEM7OUjfE7pCpitk5bH8qayIUjHG5HZZwo0l7bYuETvFZhyqVtzW/qEbqd2drjvj0TssamPrK2bH21h7a4KZoeF/a4VVQWxcTnldfBEOdYbtGHoSTKPzuJ48k1LSV9wa0WZKEaTkIBlx2Wyw6OKlp2Ln4KhUoLIcM5zk3Bwsu9sN8DVBE0rATYn5Xvdc8L9DOMbqgvq/QpR1OMV1LscY5PemqL77WMj9TsLVHWsYJWCGFgwwWR8foWdHo+U7fdPdnJMRbzamI2hFTxdQlY7id0K7jci/jiBNm1mZ/yn3d3oYDfLBU94kCY+qeG2VVjmLCKSR6PQgNEwKVU7I3I7yePStwqWJ+m5z5xfITfQ33ySjHVkudsTlKV8dJuIhcdVK72JDUP++Ai/WTuNpaI73bvcqVefjtWYVrrnHbJHVLlce6oJQTEZ+KCmg3qN6erIa5tfJ5eY3+lHrbkPVbpGVkrc8ue/0FF9WZ4Dl+dSAnVxlo+yYIdUbhHJX5wDSViK/1Ek8bdp+vIz0XC06+r/IAXWCFn8Y1H4qF84JGd5rUw1Kl0klApXknFuo+Fm77Fff8jk8Gwjly0/4QrtlXpNF74nNcV0f3kuwPfQrqCNRCn7ohWRtBZrKS9odwyey5ULJTR5sZBhnDzlmvk541w85y16J1vSPP9o54ijMN7bYXaGzS3+LLxMDkzqOfJ8aw/LEBlgGoCPMaTqqhwT7czahDqdNwbn/gPcVpEJ18rMpFkPg1czCYawhNaYfIZCVpvxgUWZDyIYfnH3ivNAr31waNHB/o+oYXTziYMhKgVb105Ku8vYdvAbYNV8VrfW25hUTmhGeUHcloqGDGI+p6JlsktjzFwioZMQoawwmkgztwHosjIkh1msNd1DrgSGLLLXFYlE5aZOvXcEku6MgAkezSQhuYWr8vY6gO571uU88tAON9/+p7ObPERkWJX8srSvkDtxCmsTRgzfXocfSegMoSuD+Akvc73jea8DrfeKgKqHb4YwY/Jf9dHb37yicz9MsaG90fYa/zRhQ6abPd9V7LjZfaL3kr9ueadYNYD3Z5ogK/D1fxhrbxyHbwoZ2NbRi/mbLAb4VVnA5/Vr6bHmq++/UXnO27tLqUNHH9jRpQR0HzL4ppm/Pv1URW9ar1GnpVr3FrZ3ZSsdpNVkdpYh2sJ+znrJ9EpjUx6aBWvdZlf7/7oFdr+epZHB8lmvhV+baa5xF9fMOVLds5xMHDXq15TeSVqnHMfMJNIev34TJlyz6aSntWblf4KVw6It7lBczZweo4JPxW7Hnv/JtwNV5crGGvED/mh6Tf0axHFz+FC4+I1Fr2QrUp7k+9pInH4MITIk2l2nzxSNeiSldcg31FE4/BhZ8jLfQxdvsquoe+nS108Vj1XtBEOFpcaTYa4gN1POtM3JDVF+LaslyD5k/gitUmekiUi8Z0cEYpFM8KrokAt7tGOFpcpjKrT7jnFvIZZQZNCb6S3XmBR164jsCVPESD27/f0dNjYBhXn89l7T3G9fhkQhkY6pE22KK+sT+IMDZ/Ha4m0SJlLTaGjSxK4UVrgB89U7s2Hfz5/bhufWFI5+YlxDF590i4TSzKSBHZXvM6AFeeETXh4H78tIoBeYglIhm1kWNeraL9BlyFoiLz786JV908rQPGEh1F8WG/v5QCR7DGOYPaljJ2y4AWWD6ypMfbzT6T3RWi/fJibZP7aWlW574QRLAQ1jJ/XCEqC5p5mAOS70MP20aLzwtt9hZRxjc7JzR6btypLUeUFH4El5qeLVBaE4VUSkCxAt/UUafsmLLdz+CSBlYoXiJmb75ritF/G66ZCfAmzmb+hbjKk4ss8Vj/Plwq1Tov43r+bHsGnr/vStKRpm3Y/wtct75vf1df8H/XE2TaeskqJwAAAABJRU5ErkJggg==" alt="Sisi International Company" width="293" height="300"> شركة سيسي الدولية — Sisi International Company</span></footer>
+</div>
+
+<script>
+const API = 'https://alielsisi.app.n8n.cloud/webhook/sisi-dashboard';
+const $ = s => document.querySelector(s);
+const fmt = n => Math.round(n||0).toLocaleString('en');
+const fmtK = n => { n=n||0; const a=Math.abs(n); if(a>=1e6) return (n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M'; if(a>=1e4) return (n/1e3).toFixed(1).replace(/\.0$/,'')+'K'; return fmt(n); };
+const money = n => `<span class="num">${fmt(n)}</span> <small>ج.م</small>`;
+const esc = s => String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SERIES = ['--s1','--s2','--s3','--s4','--s5','--s6','--s7','--s8'].map(v=>`var(${v})`);
+let TOKEN = null, DATA = null, mapKinds = new Set(['order','invoice','payment','customer']);
+
+async function sha256(str){ const b=new TextEncoder().encode(str); const h=await crypto.subtle.digest('SHA-256',b); return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
+function store(k,v){ try{ v===null?sessionStorage.removeItem(k):sessionStorage.setItem(k,v);}catch(e){} }
+function load(k){ try{ return sessionStorage.getItem(k);}catch(e){ return null; } }
+
+async function api(action){
+  const r = await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action,token:TOKEN,user:load('hp_user')||''})});
+  if(r.status===401) throw new Error('unauthorized');
+  if(!r.ok) throw new Error('server '+r.status);
+  return r.json();
+}
+
+/* ---------- login ---------- */
+$('#loginForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const u=$('#u').value.trim(), p=$('#p').value; const btn=$('#loginBtn'); const err=$('#loginErr');
+  err.textContent=''; btn.disabled=true; btn.textContent='جارٍ التحقق…';
+  try{
+    TOKEN = await sha256(u+':'+p);
+    const d = await api('kpis');
+    store('hp_token',TOKEN); store('hp_user',u);
+    enter(d);
+  }catch(ex){
+    TOKEN=null;
+    err.textContent = ex.message==='unauthorized' ? 'اسم المستخدم أو كلمة المرور غير صحيحة.' : 'تعذّر الاتصال بالخادم. حاول مرة أخرى.';
+  }finally{ btn.disabled=false; btn.textContent='تسجيل الدخول'; }
+});
+$('#logoutBtn').addEventListener('click',()=>{ TOKEN=null; DATA=null; store('hp_token',null); $('#app').hidden=true; $('#login').hidden=false; $('#p').value=''; });
+$('#refreshBtn').addEventListener('click',()=>refresh());
+
+function enter(d){ $('#login').hidden=true; $('#app').hidden=false; render(d); }
+async function refresh(){
+  setStatus('busy','جارٍ التحديث…');
+  try{ const d=await api('kpis'); render(d); }
+  catch(ex){ if(ex.message==='unauthorized'){ $('#logoutBtn').click(); } else setStatus('err','فشل التحديث'); }
+}
+function setStatus(state,txt){ const dot=$('#dot'); dot.className='dot'+(state==='busy'?' busy':''); if(state==='err') dot.style.background='var(--critical)'; else dot.style.background=''; $('#statusTxt').textContent=txt; }
+
+/* ---------- tabs ---------- */
+$('#tabs').addEventListener('click',e=>{ const t=e.target.closest('.tab'); if(!t) return; showPanel(t.dataset.panel); });
+function showPanel(name){
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected', String(t.dataset.panel===name)));
+  document.querySelectorAll('section.panel').forEach(s=>s.hidden = s.id!=='panel-'+name);
+  store('hp_tab',name);
+}
+
+/* ---------- render ---------- */
+function render(d){
+  DATA=d; const k=d.kpis;
+  $('#loading').hidden=true;
+  setStatus('ok','متصل · '+(load('hp_user')||''));
+  $('#lastUpdated').textContent = new Date(d.generated_at).toLocaleString('ar-EG',{dateStyle:'medium',timeStyle:'short'});
+
+  const mm=d.monthly, cur=mm[mm.length-1]||{}, prev=mm[mm.length-2]||null;
+  const delta=(a,b)=> b? Math.round((a-b)/b*100):null;
+  const dRev=prev?delta(cur.revenue,prev.revenue):null;
+
+  $('#kpiRow').innerHTML = [
+    tile('إجمالي الإيرادات',money(k.revenue),`${k.invoices} فاتورة`, dRev!==null?deltaHtml(dRev,'عن الشهر السابق'):'', 'hero'),
+    tile('مجمل الربح',money(k.grossProfit),`هامش <span class="num">${k.grossMargin.toFixed(1)}%</span>`,'تكلفة البضاعة المباعة '+fmtK(k.cogs)),
+    tile('تكلفة البضاعة المباعة (COGS)',money(k.cogs),`<span class="num">${(k.revenue?k.cogs/k.revenue*100:0).toFixed(1)}%</span> من الإيراد`,''),
+    tile('مستحقات على العملاء',money(k.receivables),`${k.unpaidInvoices} فاتورة غير مسددة`, k.receivables>0?'<span class="pill warn">تحصيل مطلوب</span>':'<span class="pill good">لا مستحقات</span>'),
+    tile('قيمة المخزون',money(k.inventoryValue),`${k.products} منتج`, `قيمة بيعية ${fmtK(k.inventoryRetail)}`),
+    tile('طلبات قيد التنفيذ',`<span class="num">${k.pendingOrders}</span> <small>من ${k.orders}</small>`,'أوامر بيع', k.lowStockCount?`<span class="pill crit">${k.lowStockCount} نواقص مخزون</span>`:'<span class="pill good">المخزون سليم</span>'),
+  ].join('');
+  $('#attnSub').textContent = `${k.pendingOrders} طلب مفتوح · ${k.lowStockCount} منتج ناقص · ${k.unpaidInvoices} فاتورة غير مسددة`;
+
+  $('#kpiSales').innerHTML=[
+    tile('الإيرادات',money(k.revenue),`${k.invoices} فاتورة`,''),
+    tile('المحصَّل',money(k.collected),`<span class="num">${(k.revenue?k.collected/k.revenue*100:0).toFixed(0)}%</span> نسبة التحصيل`,''),
+    tile('المستحقات',money(k.receivables),`${k.unpaidInvoices} فاتورة`,''),
+    tile('العملاء',`<span class="num">${k.customers}</span>`,'عميل نشط',''),
+    tile('متوسط الفاتورة',money(k.invoices?k.revenue/k.invoices:0),'لكل فاتورة بيع',''),
+  ].join('');
+  $('#kpiInv').innerHTML=[
+    tile('قيمة المخزون (تكلفة)',money(k.inventoryValue),`${k.products} منتج`,''),
+    tile('قيمة المخزون (بيع)',money(k.inventoryRetail),`ربح كامن ${fmtK(k.inventoryRetail-k.inventoryValue)}`,''),
+    tile('نواقص المخزون',`<span class="num">${k.lowStockCount}</span>`,'منتج تحت الحد الأدنى',''),
+    tile('إجمالي المشتريات',money(k.purchases),'فواتير الموردين',''),
+    tile('مستحق للموردين',money(k.payables),`${k.suppliers} مورد`,''),
+  ].join('');
+  $('#kpiFin').innerHTML=[
+    tile('التحصيلات النقدية',money(k.cashIn),'سندات قبض',''),
+    tile('المدفوعات النقدية',money(k.cashOut),'سندات صرف',''),
+    tile('صافي التدفق النقدي',money(k.netCash),k.netCash>=0?'فائض':'عجز', k.netCash>=0?'<span class="pill good">إيجابي</span>':'<span class="pill serious">سالب</span>'),
+    tile('مجمل الربح',money(k.grossProfit),`هامش <span class="num">${k.grossMargin.toFixed(1)}%</span>`,''),
+    tile('مستحقات − التزامات',money(k.receivables-k.payables),'صافي المركز مع الأطراف',''),
+  ].join('');
+
+  monthlyChart(d.monthly); agingChart(d.aging); cashChart(d.monthly); profitChart(k);
+  hbars('#chartOrders', Object.entries(d.ordersByStatus).map(([n,v],i)=>({n,v,color:SERIES[i%8]})), v=>v+' طلب');
+  hbars('#chartTopProducts', d.topProducts.slice(0,6).map(p=>({n:p.name,v:p.revenue,color:SERIES[0],extra:`ربح ${fmtK(p.profit)}`})), v=>fmtK(v)+' ج.م');
+  hbars('#chartCustTypes', Object.entries(d.customerTypes).map(([n,v],i)=>({n,v,color:SERIES[i%8]})), v=>v+' عميل');
+  hbars('#chartStockCat', Object.entries(d.stockByCategory).sort((a,b)=>b[1]-a[1]).map(([n,v],i)=>({n,v,color:SERIES[2]})), v=>fmtK(v)+' ج.م');
+
+  table('#tblPendingOrders',['الطلب','العميل','المنتج','الكمية','القيمة','المسؤول','الحالة'], d.pendingOrders.map(o=>[o.order,o.customer,o.product,num(o.qty),num(fmt(o.value)),o.assignee||'—',pill(o.status)]));
+  table('#tblLowStock',['المنتج','الرصيد','الحد الأدنى','المورد'], d.lowStock.map(p=>[p.name,num(p.stock),num(p.min),p.supplier||'—']));
+  table('#tblUnpaid',['الفاتورة','التاريخ','العميل','الإجمالي','المتبقي','التأخير','الحالة'], d.unpaid.map(u=>[u.invoice,num(u.date),u.customer,num(fmt(u.total)),num(fmt(u.due)),num((u.days??'—')+' يوم'),pill(u.status)]));
+  table('#tblCustomers',['العميل','النوع','إجمالي الفواتير','التحصيلات','الرصيد المستحق'], d.topCustomers.map(c=>[c.name,c.type||'—',num(fmt(c.invoiced)),num(fmt(c.collected)),c.due>0?`<span class="num" style="color:var(--critical);font-weight:600">${fmt(c.due)}</span>`:num('0')]));
+  table('#tblPO',['أمر الشراء','التاريخ','المورد','المنتج','الكمية','التكلفة','الحالة'], d.openPO.map(o=>[o.po,num(o.date),o.supplier,o.product,num(o.qty),num(fmt(o.cost)),pill(o.status)]));
+  table('#tblExpiring',['المنتج','الباتش','الصلاحية','الكمية','متبقي'], d.expiring.map(e=>[e.product,e.batch,num(e.expiry),num(e.qty),`<span class="pill ${e.days<60?'crit':e.days<120?'serious':'warn'}">${e.days} يوم</span>`]));
+  table('#tblMoves',['الحركة','الوقت','المنتج','النوع','الكمية','المخزن','المستخدم'], d.recentMoves.map(m=>[m.id,num(m.at),m.product,pill(m.type),num(m.qty),m.warehouse||'—',m.user||'—']));
+  table('#tblPayments',['السند','التاريخ','النوع','الطرف','المبلغ','الطريقة'], d.recentPayments.map(p=>[p.id,num(p.date),pill(p.type),p.party,num(fmt(p.amount)),p.method||'—']));
+
+  renderJarvis(d.jarvis); renderMap(d.tracking);
+  const t=load('hp_tab'); showPanel(t && document.getElementById('panel-'+t) ? t : 'overview');
+}
+const num = s => `<span class="num">${esc(s)}</span>`;
+function tile(lbl,val,foot1,foot2,cls=''){ return `<div class="kpi ${cls}"><div class="lbl">${lbl}</div><div class="val">${val}</div><div class="foot"><span>${foot1||''}</span><span>${foot2||''}</span></div></div>`; }
+function deltaHtml(p,label){ return `<span class="delta ${p>=0?'up':'down'}">${p>=0?'▲':'▼'} <span class="num">${Math.abs(p)}%</span></span> ${label}`; }
+function pill(s){ s=String(s||'—'); const c=/مدفوع|مكتمل|تم|دخول|قبض|تحصيل/.test(s)?'good':/جزئ|قيد|جديد|معلق|معلّق|شحن/.test(s)?'warn':/غير|متأخر|ملغ|خروج|صرف|دفع/.test(s)?'serious':'info'; return `<span class="pill ${c}">${esc(s)}</span>`; }
+function table(sel,heads,rows){ const el=$(sel); if(!rows.length){ el.innerHTML='<div class="empty">لا توجد بيانات حالياً</div>'; return; } el.innerHTML=`<table><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`; }
+function hbars(sel,items,fmtV){ const el=$(sel); if(!items.length){ el.innerHTML='<div class="empty">لا توجد بيانات</div>'; return; } const max=Math.max(...items.map(i=>i.v),1); el.innerHTML=items.map(i=>`<div class="hbar-row" title="${esc(i.n)}: ${esc(fmtV(i.v))}"><div class="n">${esc(i.n)}</div><div class="hbar"><i style="width:${Math.max(2,i.v/max*100)}%;background:${i.color}"></i></div><div class="v"><span class="num">${esc(fmtV(i.v))}</span>${i.extra?` <span style="color:var(--muted);font-weight:500">· ${esc(i.extra)}</span>`:''}</div></div>`).join(''); }
+
+/* ---------- SVG charts ---------- */
+const AR_MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const mLabel = m => { const [y,mo]=m.split('-'); return AR_MONTHS[+mo-1]+' '+y.slice(2); };
+function groupedBars(sel, months, series, fmtV){
+  const el=$(sel); if(!months.length){ el.innerHTML='<div class="empty">لا توجد بيانات شهرية بعد</div>'; return; }
+  const W=720,H=280,pl=54,pr=12,pt=14,pb=34; const iw=W-pl-pr, ih=H-pt-pb;
+  const max=Math.max(1,...series.flatMap(s=>months.map(m=>m[s.key]||0)))*1.12;
+  const ticks=5; const ty=[...Array(ticks+1)].map((_,i)=>max/ticks*i);
+  const gw=iw/months.length, bw=Math.min(28,(gw*0.7)/series.length), gap=2;
+  let g=''; ty.forEach(v=>{ const y=pt+ih-v/max*ih; g+=`<line class="grid-line" x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}"/><text x="${pl-8}" y="${y+4}" text-anchor="end">${fmtK(v)}</text>`; });
+  let bars='';
+  months.forEach((m,i)=>{ const cx=pl+gw*i+gw/2; const total=series.length*bw+(series.length-1)*gap; series.forEach((s,j)=>{ const v=m[s.key]||0; const h=v/max*ih; const x=cx-total/2+j*(bw+gap); const y=pt+ih-h; bars+=`<rect data-i="${i}" data-j="${j}" x="${x}" y="${y}" width="${bw}" height="${Math.max(h,0)}" rx="4" fill="${s.color}" style="clip-path:inset(0 0 -4px 0 round 4px 4px 0 0)"/>`; }); bars+=`<text x="${cx}" y="${H-10}" text-anchor="middle" class="lbl-strong">${mLabel(m.month)}</text>`; });
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="رسم أعمدة شهري">${g}<line class="axis" x1="${pl}" x2="${W-pr}" y1="${pt+ih}" y2="${pt+ih}"/>${bars}</svg><div class="tip" id="tip-${sel.slice(1)}"></div><div class="legend">${series.map(s=>`<span><i class="sw" style="background:${s.color}"></i>${s.label}</span>`).join('')}</div>`;
+  const tip=el.querySelector('.tip'); const svg=el.querySelector('svg');
+  svg.addEventListener('mousemove',e=>{ const r=e.target.closest('rect'); if(!r){tip.classList.remove('on');return;} const m=months[+r.dataset.i], s=series[+r.dataset.j]; tip.innerHTML=`<b>${mLabel(m.month)}</b><br>${s.label}: ${fmtV(m[s.key]||0)}`; const b=el.getBoundingClientRect(); tip.style.left=(e.clientX-b.left)+'px'; tip.style.top=(e.clientY-b.top)+'px'; tip.classList.add('on'); });
+  svg.addEventListener('mouseleave',()=>tip.classList.remove('on'));
+}
+function monthlyChart(mm){ groupedBars('#chartMonthly', mm, [{key:'revenue',label:'الإيرادات',color:SERIES[0]},{key:'cogs',label:'تكلفة البضاعة المباعة',color:SERIES[1]},{key:'purchases',label:'المشتريات',color:SERIES[2]}], v=>fmt(v)+' ج.م'); }
+function cashChart(mm){ groupedBars('#chartCash', mm, [{key:'collected',label:'التحصيلات',color:SERIES[2]},{key:'paid_out',label:'المدفوعات',color:SERIES[1]}], v=>fmt(v)+' ج.م'); }
+function agingChart(aging){
+  const el=$('#chartAging'); const keys=['0-30','31-60','61-90','90+']; const labels={'0-30':'حتى 30 يوماً','31-60':'31–60 يوماً','61-90':'61–90 يوماً','90+':'أكثر من 90 يوماً'};
+  const colors={'0-30':'var(--good)','31-60':'var(--warn)','61-90':'var(--serious)','90+':'var(--critical)'};
+  const total=keys.reduce((a,k)=>a+(aging[k]||0),0);
+  if(!total){ el.innerHTML='<div class="empty">لا توجد مستحقات متأخرة — ممتاز</div>'; return; }
+  el.innerHTML=keys.map(k=>{ const v=aging[k]||0; return `<div class="hbar-row"><div class="n">${labels[k]}</div><div class="hbar"><i style="width:${Math.max(v?2:0,v/total*100)}%;background:${colors[k]}"></i></div><div class="v"><span class="num">${fmt(v)}</span> <span style="color:var(--muted)">(${Math.round(v/total*100)}%)</span></div></div>`; }).join('')+`<div class="legend" style="margin-top:10px"><span>الإجمالي المستحق: <b class="num">${fmt(total)}</b> ج.م</span></div>`;
+}
+function profitChart(k){
+  const el=$('#chartProfit'); const rows=[{n:'الإيرادات',v:k.revenue,c:SERIES[0]},{n:'تكلفة البضاعة المباعة',v:k.cogs,c:SERIES[1]},{n:'مجمل الربح',v:k.grossProfit,c:SERIES[2]}];
+  const max=Math.max(1,...rows.map(r=>Math.abs(r.v)));
+  el.innerHTML=rows.map(r=>`<div class="hbar-row"><div class="n">${r.n}</div><div class="hbar" style="height:14px"><i style="width:${Math.abs(r.v)/max*100}%;background:${r.c}"></i></div><div class="v"><span class="num">${fmt(r.v)}</span></div></div>`).join('')+`<div class="legend" style="margin-top:12px"><span>هامش الربح الإجمالي: <b class="num">${k.grossMargin.toFixed(1)}%</b></span></div>`;
+}
+
+/* ---------- jarvis ---------- */
+function renderJarvis(j){
+  const el=$('#jarvisCard');
+  if(!j){ el.innerHTML=`<div class="head"><span class="badge">JARVIS</span><h3>المستشار الاستراتيجي</h3></div><p class="empty" style="text-align:start">لم يُنشأ تقرير استراتيجي بعد. من تطبيق HerbaPharm اضغط «Generate Strategy Report» وسيظهر التقرير هنا بعد دقائق.</p>`; return; }
+  const secs=[['أهم عائق تشغيلي',j.top_bottleneck],['استراتيجيات النمو',j.growth_strategies],['توزيع الموارد',j.resource_allocation],['الاحتياجات التشغيلية',j.operational_needs],['تقييم المخاطر',j.risk_assessment],['إجراءات موصى بها',j.recommended_actions]].filter(s=>s[1]);
+  el.innerHTML=`<div class="head"><span class="badge">JARVIS</span><h3>التقرير الاستراتيجي الأخير</h3><span class="sub" style="margin:0">${esc(j.report_id)} · ${esc(j.generated_at)}</span></div><div class="headline">${esc(j.headline)}</div><dl>${secs.map(s=>`<div><dt>${s[0]}</dt><dd>${esc(s[1])}</dd></div>`).join('')}</dl>`;
+}
+
+/* ---------- map ---------- */
+const KIND={order:{l:'طلبات',c:SERIES[0]},invoice:{l:'فواتير',c:SERIES[2]},payment:{l:'تحصيلات/مدفوعات',c:SERIES[1]},customer:{l:'عملاء',c:SERIES[6]}};
+function renderMap(points){
+  const f=$('#mapFilters'); f.innerHTML=Object.entries(KIND).map(([k,v])=>`<button type="button" class="chip" data-k="${k}" aria-pressed="${mapKinds.has(k)}"><i class="sw" style="background:${v.c}"></i>${v.l} <span class="num">(${points.filter(p=>p.kind===k).length})</span></button>`).join('');
+  f.onclick=e=>{ const b=e.target.closest('.chip'); if(!b) return; const k=b.dataset.k; mapKinds.has(k)?mapKinds.delete(k):mapKinds.add(k); renderMap(points); };
+  const pts=points.filter(p=>mapKinds.has(p.kind));
+  const map=$('#map'); const list=$('#mapList');
+  if(!pts.length){ map.innerHTML='<div class="empty" style="position:absolute;inset:0;display:grid;place-items:center">لا توجد مواقع مسجلة لهذا التصنيف</div>'; list.innerHTML=''; return; }
+  const lats=pts.map(p=>p.lat), lngs=pts.map(p=>p.lng);
+  let minLat=Math.min(...lats),maxLat=Math.max(...lats),minLng=Math.min(...lngs),maxLng=Math.max(...lngs);
+  const padLat=Math.max((maxLat-minLat)*0.15,0.02), padLng=Math.max((maxLng-minLng)*0.15,0.02); minLat-=padLat;maxLat+=padLat;minLng-=padLng;maxLng+=padLng;
+  const W=800,H=450; const cos=Math.cos((minLat+maxLat)/2*Math.PI/180);
+  const sx=W/((maxLng-minLng)*cos), sy=H/(maxLat-minLat); const s=Math.min(sx,sy);
+  const ox=(W-(maxLng-minLng)*cos*s)/2, oy=(H-(maxLat-minLat)*s)/2;
+  const X=lng=>ox+(lng-minLng)*cos*s, Y=lat=>oy+(maxLat-lat)*s;
+  let grid=''; for(let i=1;i<8;i++){ grid+=`<line x1="${W/8*i}" x2="${W/8*i}" y1="0" y2="${H}" stroke="var(--line)" stroke-width="1"/>`; } for(let i=1;i<5;i++){ grid+=`<line x1="0" x2="${W}" y1="${H/5*i}" y2="${H/5*i}" stroke="var(--line)" stroke-width="1"/>`; }
+  const dots=pts.map((p,i)=>`<g class="pt" data-i="${i}"><circle cx="${X(p.lng)}" cy="${Y(p.lat)}" r="9" fill="${KIND[p.kind].c}" fill-opacity=".18"/><circle cx="${X(p.lng)}" cy="${Y(p.lat)}" r="5" fill="${KIND[p.kind].c}" stroke="var(--surface)" stroke-width="2"/></g>`).join('');
+  const labels=pts.slice(0,12).map(p=>`<text x="${X(p.lng)+9}" y="${Y(p.lat)-8}" font-size="11" fill="var(--ink-2)" font-weight="600" style="direction:rtl">${esc(p.title||p.label)}</text>`).join('');
+  map.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${dots}${labels}</svg><div class="tip" id="mapTip"></div><div style="position:absolute;inset-inline-start:10px;bottom:8px;font-size:11px;color:var(--muted)">شمال ↑ · خريطة مبسطة من إحداثيات GPS المسجلة</div>`;
+  const tip=$('#mapTip'); const svg=map.querySelector('svg');
+  svg.addEventListener('mousemove',e=>{ const g=e.target.closest('.pt'); if(!g){tip.classList.remove('on');return;} const p=pts[+g.dataset.i]; tip.innerHTML=`<b>${esc(p.title)}</b><br>${esc(p.label)} · ${esc(p.sub)}<br><span style="opacity:.7">${esc(p.at||'')}</span>`; const b=map.getBoundingClientRect(); tip.style.left=(e.clientX-b.left)+'px'; tip.style.top=(e.clientY-b.top)+'px'; tip.classList.add('on'); });
+  svg.addEventListener('mouseleave',()=>tip.classList.remove('on'));
+  list.innerHTML=pts.slice().sort((a,b)=>String(b.at).localeCompare(String(a.at))).slice(0,24).map(p=>`<div class="map-item"><span class="k" style="background:${KIND[p.kind].c}"></span><div><b>${esc(p.title)}</b><span class="m">${esc(p.label)} · ${esc(p.sub)}</span><br><span class="m num">${esc(p.at||'')}</span> · <a href="https://www.google.com/maps?q=${p.lat},${p.lng}" target="_blank" rel="noopener">افتح في الخرائط</a></div></div>`).join('');
+}
+
+/* ---------- boot ---------- */
+(async()=>{
+  const t=load('hp_token'); if(!t) return;
+  TOKEN=t; $('#login').hidden=true; $('#app').hidden=false; setStatus('busy','جارٍ التحميل…');
+  try{ render(await api('kpis')); }catch(ex){ TOKEN=null; store('hp_token',null); $('#app').hidden=true; $('#login').hidden=false; }
+})();
+</script>
+
+</body>
+</html>
